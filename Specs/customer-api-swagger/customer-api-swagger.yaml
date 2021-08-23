@@ -25,7 +25,7 @@ paths:
 
   /customers/:
     post:
-      summary: Create a new customer.
+      summary: Create a new customer. (EDITED)
       description: |
       tags: ['Customers']
       operationId: createCustomer
