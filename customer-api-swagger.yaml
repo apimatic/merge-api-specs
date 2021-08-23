@@ -1,0 +1,614 @@
+swagger: '2.0'
+info:
+  version: V1
+  title: Yapstone Customer APIs
+  description: APIs for onboarding and managing  customers.
+
+produces:
+ - application/json
+consumes:
+ - application/json
+
+basePath: /customer-api/api/v1
+
+securityDefinitions:
+  Bearer:
+    type: "apiKey"
+    name: "Authorization"
+    in: "header"
+
+tags:
+  - name: Customers
+    description: |
+
+paths:
+
+  /customers/:
+    post:
+      summary: Create a new customer.
+      description: |
+      tags: ['Customers']
+      operationId: createCustomer
+      parameters:
+        - name: x-yapstone-ipaddress
+          in: header
+          description: IP address
+        - name: x-yapstone-fpsid
+          in: header
+          description: Device Finger print id.
+        - name: request
+          in: body
+          schema:
+            $ref: '#/definitions/CustomerResource'
+          required: true
+      responses:
+        201:
+          description: Created
+          schema:
+            $ref: '#/definitions/CustomerResource'
+        409:
+          description: Conflict
+          schema:
+            $ref: '#/definitions/Errors'
+        422:
+          description: Unprocessable Entity
+          schema:
+            $ref: '#/definitions/Errors'
+        default:
+          description: Unexpected Error
+          schema:
+            $ref: '#/definitions/Errors'
+      security:
+        - Bearer: []
+
+  /customers/{customerId}:
+    get:
+      summary: Fetch a customer.
+      description: |
+      tags: ['Customers']
+      operationId: getCustomer
+      parameters:
+        - name: customerId
+          in: path
+          type: string
+          required: true
+      responses:
+        200:
+          description: OK
+          schema:
+            $ref: '#/definitions/CustomerResource'
+        404:
+          description: Not Found
+          schema:
+            $ref: '#/definitions/Errors'
+        default:
+          description: Unexpected Error
+          schema:
+            $ref: '#/definitions/Errors'
+      security:
+        - Bearer: []
+
+    put:
+      summary: Modify a customer.
+      description: |
+      tags: ['Customers']
+      operationId: updateCustomer
+      consumes:
+        - application/json-patch+json
+      parameters:
+        - name: x-yapstone-ipaddress
+          in: header
+          description: IP address
+        - name: x-yapstone-fpsid
+          in: header
+          description: Device Finger print id.
+        - name: customerId
+          in: path
+          type: string
+          required: true
+        - name: request
+          in: body
+          schema:
+            $ref: '#/definitions/CustomerResource'
+          required: true
+      responses:
+        200:
+          description: OK
+          schema:
+            $ref: '#/definitions/CustomerResource'
+        404:
+          description: Not Found
+          schema:
+            $ref: '#/definitions/Errors'
+        409:
+          description: Conflict
+          schema:
+            $ref: '#/definitions/Errors'
+        422:
+          description: Unprocessable Entity
+          schema:
+            $ref: '#/definitions/Errors'
+        default:
+          description: Unexpected Error
+          schema:
+            $ref: '#/definitions/Errors'
+      security:
+        - Bearer: []
+
+    delete:
+      summary: Delete a customer.
+      description: |
+      tags: ['Customers']
+      operationId: deleteCustomer
+      parameters:
+        - name: customerId
+          in: path
+          type: string
+          required: true
+      responses:
+        200:
+          description: OK
+          schema:
+            $ref: '#/definitions/DeactivateResponse'
+        '401':
+          description: unauthorized
+          schema:
+            $ref: '#/definitions/Errors'
+        '404':
+          description: not found
+          schema:
+            $ref: '#/definitions/Errors'
+        '422':
+          description: unprocessable entity
+          schema:
+            $ref: '#/definitions/Errors'
+        '500':
+          description: internal service error
+          schema:
+            $ref: '#/definitions/Errors'
+      security:
+        - Bearer: []
+
+  /admin/customers/{customerId}:
+    get:
+      summary: Fetch a customer.
+      description: |
+      tags: ['Customers-Admin']
+      operationId: getCustomerForInternalUse
+      parameters:
+        - name: customerId
+          in: path
+          type: string
+          required: true
+      responses:
+        200:
+          description: OK
+          schema:
+            $ref: '#/definitions/CustomerAdminResource'
+          '401':
+            description: unauthorized
+            schema:
+              $ref: '#/definitions/Errors'
+          '404':
+            description: not found
+            schema:
+              $ref: '#/definitions/Errors'
+          '422':
+            description: unprocessable entity
+            schema:
+              $ref: '#/definitions/Errors'
+          '500':
+            description: internal service error
+            schema:
+              $ref: '#/definitions/Errors'
+      security:
+        - Bearer: []
+
+  /customers/{customerId}/marketplace:
+    get:
+      summary: Fetch a customer with maketPlace.
+      description: |
+      tags: ['Search']
+      operationId: getCustomerMarketplace
+      parameters:
+        - name: customerId
+          in: path
+          type: string
+          required: true
+      responses:
+        200:
+          description: OK
+          schema:
+            $ref: '#/definitions/CustomerMarketplaceResource'
+          '401':
+            description: unauthorized
+            schema:
+              $ref: '#/definitions/Errors'
+          '404':
+            description: not found
+            schema:
+              $ref: '#/definitions/Errors'
+          '422':
+            description: unprocessable entity
+            schema:
+              $ref: '#/definitions/Errors'
+          '500':
+            description: internal service error
+            schema:
+              $ref: '#/definitions/Errors'
+      security:
+        - Bearer: []
+
+
+parameters:
+  offset:
+    description: |
+      Offset the list of returned results by this amount. Default is zero.
+    name: offset
+    in: query
+    type: integer
+    format: int32
+    default: 0
+  limit:
+    description: |
+      Number of items to retrieve.
+    name: limit
+    in: query
+    type: integer
+    format: int32
+    default: 20
+  fingerprint:
+    name: x-yapstone-fpsid
+    in: header
+    required: false
+    type: string
+
+definitions:
+
+  NameResource:
+    type: object
+    description: The name of the person. It will consist of first, middle, last, additionalLast, honorificPrefix, and honorificSuffix.
+    properties:
+      honorificPrefix:
+        type: string
+        description: The persons title.
+        enum:
+          - MR
+          - MRS
+          - MS
+          - MISS
+          - DR
+      first:
+        type: string
+        description: The persons first name.
+      middle:
+        type: string
+      last:
+        type: string
+        description: The persons last name.
+      additionalLast:
+        type: string
+        description: The 2nd last name of the person.
+      honorificSuffix:
+        type: string
+        description: The persons title.
+
+  GovernmentIdentificationResource:
+    type: object
+    description: The goverment identification information.
+    properties:
+      type:
+        $ref: '#/definitions/governmentIdType'
+      displayText:
+        type: string
+        description: The display info for the identification.
+      govIdDataToken:
+        type: string
+        description: The key to vault that contains the data associated with the government id. This key will be generated when the identification is created at YapStone.
+      number:
+        type: string
+        description: The number associated with the identification.
+      expiration:
+        type: string
+        format: date
+      country:
+        type: string
+        description: The 3-letter ISO country code of the identification issuer.
+      state:
+        type: string
+        description: The state or province of the identification issuer.
+
+  governmentIdType:
+    type: string
+    description: The type of identification.
+    enum:
+      - LAST_FOUR_SSN
+
+  PhoneResource:
+    type: object
+    description: The phone number.
+    properties:
+      number:
+        type: string
+        description: The phone number.
+      extension:
+        type: string
+        description: The phone extension.
+
+  AddressResource:
+    type: object
+    description: The address of the customer.
+    properties:
+      street1:
+        type: string
+        description: The street address line 1.
+      street2:
+        type: string
+        description: The street address line 2.
+      street3:
+        type: string
+        description: The street address line 3.
+      street4:
+        type: string
+        description: The street address line 4.
+      city:
+        type: string
+        description: The name of the city.
+      state:
+        type: string
+        description: The state or province where the address resides.
+      postalCode:
+        type: string
+        description: The postal code of the address.
+      countryCode:
+        type: string
+        description: The 3-letter countryCode of the address.
+
+  Request:
+    type: object
+    x-abstract-class: true
+    discriminator: request
+    properties:
+      metadata:
+        $ref: '#/definitions/ObjectNode'
+
+  CustomerAdminResource:
+    allOf:
+      - $ref: '#/definitions/CustomerResource'
+      - type: object
+        description: Customer Data with Additional details
+        properties:
+          partyId:
+            type: string
+            description: The party id for the customer.
+
+  CustomerResource:
+    type: object
+    properties:
+      id:
+        type: string
+        description: The resource identifier for the customer.
+      name:
+        description: The name of the person.
+        $ref: '#/definitions/NameResource'
+      phone:
+        $ref: '#/definitions/PhoneResource'
+        description: The phone number.
+      email:
+        type: string
+        format: email
+        description: The email address.
+      address:
+        $ref: '#/definitions/AddressResource'
+      govIdentification:
+        $ref: '#/definitions/GovernmentIdentificationResource'
+      dateOfBirth:
+        type: string
+        format: date
+      metadata:
+         $ref: '#/definitions/ObjectNode'
+      consents:
+        type: array
+        items:
+          $ref: '#/definitions/ConsentResource'
+      externalId:
+        type: string
+        description: The Mktplaces unique identifier for the Customer.
+      status:
+        $ref: '#/definitions/entityProductStatusResource'
+      businessName:
+        type: string
+        description: The name of the business.
+      businessType:
+        type: string
+        description: The type of business unit (sole_prop, corp, llc)
+        enum:
+          - SOLE_PROPRIETOR
+          - PARTNERSHIP
+          - LLC
+          - S_CORP
+          - CORPORATION
+
+  CustomerMarketplaceResource:
+    type: object
+    properties:
+      customer:
+        description: The customer resource.
+        $ref: '#/definitions/customer'
+      marketplace:
+        $ref: '#/definitions/marketplaceResource'
+        description: The marketplace resource.
+
+  marketplaceResource:
+    type: object
+    properties:
+      id:
+        type: string
+        description: The marketplace Id.
+      name:
+        type: string
+        description: The marketplace name.
+      phone:
+        $ref: '#/definitions/PhoneResource'
+        description: The Marketplace phone number.
+      email:
+        type: string
+        format: email
+        description: The Marketplace email address.
+      address:
+        description: The Marketplace Address.
+        $ref: '#/definitions/AddressResource'
+
+
+  customer:
+    type: object
+    properties:
+      id:
+        type: string
+        description: The customer Id.
+      name:
+        type: string
+        $ref: '#/definitions/NameResource'
+        description: The customer name.
+
+  ConsentResource:
+    type: object
+    properties:
+      timeOfConsent:
+        type: string
+        format: date-time
+        description: The timestamp in ISO 8601 format when the user consented.
+      type:
+        $ref: '#/definitions/ConsentType'
+      version:
+        type: integer
+        format: int32
+        description: The version of the consent if there is one.
+      accepted:
+        type: boolean
+        description: Indicates the acceptance of the T&Cs.
+
+  ConsentType:
+    type: string
+    enum:
+      - AGE
+
+  entityProductStatusResource:
+    type: object
+    description: The status of the entity.
+    properties:
+      payout:
+        description: The status of the entity with respect to the payout product.
+        $ref: '#/definitions/statusResource'
+
+  statusResource:
+    type: object
+    description: The status of the Customer.
+    properties:
+      verificationStatus:
+        type: string
+        description: The verification status of the Customer.
+        enum:
+          - VERIFICATION_NOT_STARTED
+          - DECLINED
+          - UNVERIFIED
+          - VERIFIED
+          - VERIFICATION_IN_PROGRESS
+          - DEACTIVATED
+          - VALIDATED
+      requiredActions:
+        type: array
+        items:
+          $ref: '#/definitions/actionResource'
+      reasons:
+        type: array
+        items:
+          type: string
+
+  # action
+  actionResource:
+    type: object
+    description: The action that must be taken on the entity.
+    properties:
+      actionCode:
+        type: string
+        description: The name of the type of action that must be taken.
+      description:
+        type: string
+        description: A detailed description of the action that must be performed.
+      entityId:
+        type: string
+        description: id for the enitity that requires the action.
+      entityType:
+        type: string
+        description: the type of entity for the required action.
+
+  CreateCustomerRequest:
+    type: object
+    allOf:
+      - $ref: '#/definitions/CustomerResource'
+
+  UpdateCustomerRequest:
+    type: object
+    allOf:
+      - $ref: '#/definitions/CustomerResource'
+
+  Page:
+    type: object
+    x-abstract-class: true
+    discriminator: page
+    properties:
+      meta:
+        type: object
+        properties:
+          offset:
+            type: integer
+            format: int64
+          size:
+            type: integer
+            format: int64
+
+
+  CustomerPage:
+    type: object
+    allOf:
+      - $ref: '#/definitions/Page'
+      - properties:
+          data:
+            type: array
+            items:
+              $ref: '#/definitions/CustomerResource'
+
+  Errors:
+    type: object
+    properties:
+      errors:
+        type: array
+        items:
+          type: object
+          properties:
+            errorCode:
+              type: string
+            message:
+              type: string
+
+  ObjectNode:
+    type: object
+
+  # delete response
+  DeactivateResponse:
+    type: object
+    description: The deactivate response contains if the deactivation was successful and entity IDs for associated entities (in case of cascade delete).
+    properties:
+      message:
+        type: string
+      cascadedContracts:
+        type: array
+        description: "List of contracts successfully de-activated due to cascade, otherwise empty"
+        items:
+          type: string
+      failedContracts:
+        type: array
+        description: "List of contracts failed to de-activate while cascade, otherwise empty"
+        items:
+          type: string

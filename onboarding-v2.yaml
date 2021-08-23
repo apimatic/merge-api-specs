@@ -1,0 +1,5849 @@
+swagger: '2.0'
+info:
+  version: '2.0.0'
+  title: Yapstone Staged On-Boarding Services
+  description: Set of API's that allow clients to onboard with Yapstone.
+
+basePath: /so-api/api/v2
+x-base-path-prefix: /v2
+
+consumes:
+  - application/json
+produces:
+  - application/json
+
+securityDefinitions:
+  Bearer:
+    type: "apiKey"
+    name: "Authorization"
+    in: "header"
+
+paths:
+  # Individual Applicant Resources
+  /individual-applicants:
+    get:
+      tags: ['individual-applicants']
+      description: Get all Individual Applicant Resources the actor has access to in the system.
+      operationId: getIndividualApplicants
+      parameters:
+        - $ref: '#/parameters/externalIdRequired'
+        - $ref: '#/parameters/page'
+        - $ref: '#/parameters/size'
+      responses:
+        '200':
+          description: ok
+          schema:
+            $ref: '#/definitions/IndividualApplicantsResource'
+        '401':
+          description: unauthorized
+          schema:
+            $ref: '#/definitions/Errors'
+        '422':
+          description: unprocessable
+          schema:
+            $ref: '#/definitions/Errors'
+        '500':
+          description: internal service error
+          schema:
+            $ref: '#/definitions/Errors'
+
+    post:
+      tags: ['individual-applicants']
+      description: Creates an Applicant Resource in the system.
+      operationId: createIndividualApplicant
+      parameters:
+        - name: applicant
+          in: body
+          description: The Applicant Resource to be created.
+          required: true
+          schema:
+            $ref: '#/definitions/IndividualApplicantRequest'
+        - $ref: '#/parameters/fingerprintSessionId'
+        - $ref: '#/parameters/idempotentKey'
+      responses:
+        '201':
+          description: ok
+          schema:
+            $ref: '#/definitions/IndividualApplicantResource'
+        '422':
+          description: unprocessable entity
+          schema:
+            $ref: '#/definitions/Errors'
+        '401':
+          description: unauthorized
+          schema:
+            $ref: '#/definitions/Errors'
+        '409':
+          description: Conflict
+          schema:
+            $ref: '#/definitions/Errors'
+        '500':
+          description: internal service error
+          schema:
+            $ref: '#/definitions/Errors'
+
+  /individual-applicants/{applicantId}:
+    delete:
+      tags: ['individual-applicants']
+      description: Deactivates the Individual Applicant Resource in the system.
+      operationId: deactivateApplicant
+      parameters:
+        - name: applicantId
+          in: path
+          required: true
+          description: The unique id of the Individual Applicant Resource.
+          type: string
+      responses:
+        '200':
+          description: ok
+          schema:
+            $ref: '#/definitions/DeactivateResponse'
+        '401':
+          description: unauthorized
+          schema:
+            $ref: '#/definitions/Errors'
+        '404':
+          description: not found
+          schema:
+            $ref: '#/definitions/Errors'
+        '422':
+          description: unprocessable entity
+          schema:
+            $ref: '#/definitions/Errors'
+        '500':
+          description: internal service error
+          schema:
+            $ref: '#/definitions/Errors'
+
+    put:
+      tags: ['individual-applicants']
+      description: Updates the Individual Applicant Resource.
+      operationId: updateIndividualApplicant
+      consumes:
+        - application/json-patch+json
+      parameters:
+        - name: applicantId
+          in: path
+          required: true
+          description: The unique id of the Individual Applicant Resource.
+          type: string
+        - name: individualApplicantUpdateRequest
+          in: body
+          description: The Applicant Request Resource to be updated.
+          required: true
+          schema:
+            $ref: '#/definitions/IndividualApplicantUpdateRequest'
+        - $ref: '#/parameters/fingerprintSessionId'
+        - $ref: '#/parameters/idempotentKey'
+      responses:
+        '200':
+          description: ok
+          schema:
+            $ref: '#/definitions/IndividualApplicantResource'
+        '422':
+          description: unprocessable entity
+          schema:
+            $ref: '#/definitions/Errors'
+        '401':
+          description: unauthorized
+          schema:
+            $ref: '#/definitions/Errors'
+        '404':
+          description: not found
+          schema:
+            $ref: '#/definitions/Errors'
+        '500':
+          description: internal service error
+          schema:
+            $ref: '#/definitions/Errors'
+
+    get:
+      tags: ['individual-applicants']
+      description: Retrieves an Individual Applicant Resource from the system for the given applicantId.
+      operationId: getIndividualApplicant
+      parameters:
+        - name: applicantId
+          in: path
+          required: true
+          description: The unique id of the Individual Applicant Resource.
+          type: string
+      responses:
+        '200':
+          description: ok
+          schema:
+            $ref: '#/definitions/IndividualApplicantResource'
+        '401':
+          description: unauthorized
+          schema:
+            $ref: '#/definitions/Errors'
+        '404':
+          description: not found
+          schema:
+            $ref: '#/definitions/Errors'
+        '500':
+          description: internal service error
+          schema:
+            $ref: '#/definitions/Errors'
+
+  # Business Applicant Resources
+  /business-applicants:
+    get:
+      tags: ['business-applicants']
+      description: Get all Business Applicant Resources the actor has access to in the system.
+      operationId: getBusinessApplicants
+      parameters:
+        - $ref: '#/parameters/externalIdRequired'
+        - $ref: '#/parameters/page'
+        - $ref: '#/parameters/size'
+      responses:
+        '200':
+          description: ok
+          schema:
+            $ref: '#/definitions/BusinessApplicantsResource'
+        '401':
+          description: unauthorized
+          schema:
+            $ref: '#/definitions/Errors'
+        '422':
+          description: unprocessable
+          schema:
+            $ref: '#/definitions/Errors'
+        '500':
+          description: internal service error
+          schema:
+            $ref: '#/definitions/Errors'
+
+    post:
+      tags: ['business-applicants']
+      description: Creates a Business Applicant Resource in the system.
+      operationId: createBusinessApplicant
+      parameters:
+        - name: applicant
+          in: body
+          description: The Business Applicant Resource to be created.
+          required: true
+          schema:
+            $ref: '#/definitions/BusinessApplicantRequest'
+        - $ref: '#/parameters/fingerprintSessionId'
+        - $ref: '#/parameters/idempotentKey'
+      responses:
+        '201':
+          description: created
+          schema:
+            $ref: '#/definitions/BusinessApplicantResource'
+        '422':
+          description: unprocessable entity
+          schema:
+            $ref: '#/definitions/Errors'
+        '401':
+          description: unauthorized
+          schema:
+            $ref: '#/definitions/Errors'
+        '409':
+          description: Conflict
+          schema:
+            $ref: '#/definitions/Errors'
+        '500':
+          description: internal service error
+          schema:
+            $ref: '#/definitions/Errors'
+
+  /business-applicants/{applicantId}:
+    get:
+      tags: ['business-applicants']
+      description: Retrieves an Business Applicant Resource from the system for the given applicantId.
+      operationId: getBusinessApplicant
+      parameters:
+        - name: applicantId
+          in: path
+          required: true
+          description: The unique id of the Business Applicant Resource.
+          type: string
+      responses:
+        '200':
+          description: ok
+          schema:
+            $ref: '#/definitions/BusinessApplicantResource'
+        '401':
+          description: unauthorized
+          schema:
+            $ref: '#/definitions/Errors'
+        '404':
+          description: not found
+          schema:
+            $ref: '#/definitions/Errors'
+        '500':
+          description: internal service error
+          schema:
+            $ref: '#/definitions/Errors'
+
+    put:
+      tags: ['business-applicants']
+      description: Updates the Business Applicant Resource.
+      operationId: updateBusinessApplicant
+      consumes:
+        - application/json-patch+json
+      parameters:
+        - name: applicantId
+          in: path
+          required: true
+          description: The unique id of the BusinessApplicant Resource.
+          type: string
+        - name: businessApplicantRequest
+          in: body
+          description: The Business Applicant Resource to be created after updation.
+          required: true
+          schema:
+            $ref: '#/definitions/BusinessApplicantUpdateRequest'
+        - $ref: '#/parameters/fingerprintSessionId'
+        - $ref: '#/parameters/idempotentKey'
+      responses:
+        '200':
+          description: ok
+          schema:
+            $ref: '#/definitions/BusinessApplicantResource'
+        '422':
+          description: unprocessable entity
+          schema:
+            $ref: '#/definitions/Errors'
+        '401':
+          description: unauthorized
+          schema:
+            $ref: '#/definitions/Errors'
+        '404':
+          description: not found
+          schema:
+            $ref: '#/definitions/Errors'
+        '500':
+          description: internal service error
+          schema:
+            $ref: '#/definitions/Errors'
+
+    delete:
+      tags: ['business-applicants']
+      description: Deactivates the Business Applicant Resource in the system.
+      operationId: deactivateBusinessApplicant
+      parameters:
+        - name: applicantId
+          in: path
+          required: true
+          description: The unique id of the Applicant Resource.
+          type: string
+      responses:
+        '200':
+          description: ok
+          schema:
+            $ref: '#/definitions/DeactivateResponse'
+        '401':
+          description: unauthorized
+          schema:
+            $ref: '#/definitions/Errors'
+        '404':
+          description: not found
+          schema:
+            $ref: '#/definitions/Errors'
+        '422':
+          description: unprocessable entity
+          schema:
+            $ref: '#/definitions/Errors'
+        '500':
+          description: internal service error
+          schema:
+            $ref: '#/definitions/Errors'
+
+  # Merchant Resources
+  /merchants/{merchantId}:
+    get:
+      tags: ['merchants']
+      description: Retrieves an merchant type with its metadata from the system for the given merchantId.
+      operationId: getMerchant
+      parameters:
+        - name: merchantId
+          in: path
+          required: true
+          description: The unique id of the merchant.
+          type: string
+      responses:
+        '200':
+          description: ok
+          schema:
+            $ref: '#/definitions/MerchantResource'
+        '401':
+          description: unauthorized
+          schema:
+            $ref: '#/definitions/Errors'
+        '404':
+          description: not found
+          schema:
+            $ref: '#/definitions/Errors'
+        '500':
+          description: internal service error
+          schema:
+            $ref: '#/definitions/Errors'
+
+  # Asset Resources
+  /assets:
+    get:
+      tags: ['assets']
+      description: Get Asset Resources the actor has access to in the system.
+      operationId: getAssets
+      parameters:
+        - $ref: '#/parameters/page'
+        - $ref: '#/parameters/size'
+        - $ref: '#/parameters/externalId'
+      responses:
+        '200':
+          description: ok
+          schema:
+            $ref: '#/definitions/AssetsResource'
+        '401':
+          description: unauthorized
+          schema:
+            $ref: '#/definitions/Errors'
+        '422':
+          description: unprocessable
+          schema:
+            $ref: '#/definitions/Errors'
+        '500':
+          description: internal service error
+          schema:
+            $ref: '#/definitions/Errors'
+
+    post:
+      tags: ['assets']
+      description: Creates an Asset Resource in the system.
+      operationId: createAsset
+      parameters:
+        - name: assetRequest
+          in: body
+          description: The Asset Request Resource to be created.
+          required: true
+          schema:
+            $ref: '#/definitions/AssetRequest'
+        - $ref: '#/parameters/fingerprintSessionId'
+        - $ref: '#/parameters/idempotentKey'
+      responses:
+        '201':
+          description: created
+          schema:
+            $ref: '#/definitions/AssetResource'
+        '422':
+          description: unprocessable entity
+          schema:
+            $ref: '#/definitions/Errors'
+        '401':
+          description: unauthorized
+          schema:
+            $ref: '#/definitions/Errors'
+        '409':
+          description: Conflict
+          schema:
+            $ref: '#/definitions/Errors'
+        '500':
+          description: internal service error
+          schema:
+            $ref: '#/definitions/Errors'
+
+  /assets/{assetId}:
+    get:
+      tags: ['assets']
+      description: Retrieves an Asset Resource from the system for the given assetId.
+      operationId: getAsset
+      parameters:
+        - $ref: '#/parameters/assetId'
+      responses:
+        '200':
+          description: ok
+          schema:
+            $ref: '#/definitions/AssetResource'
+        '401':
+          description: unauthorized
+          schema:
+            $ref: '#/definitions/Errors'
+        '404':
+          description: not found
+          schema:
+            $ref: '#/definitions/Errors'
+        '500':
+          description: internal service error
+          schema:
+            $ref: '#/definitions/Errors'
+
+    put:
+      tags: ['assets']
+      description: Updates the Asset Resource.
+      operationId: updateAsset
+      consumes:
+        - application/json-patch+json
+      parameters:
+        - $ref: '#/parameters/assetId'
+        - name: assetRequest
+          in: body
+          description: The Asset Request Resource to be created.
+          required: true
+          schema:
+            $ref: '#/definitions/AssetUpdateRequest'
+        - $ref: '#/parameters/fingerprintSessionId'
+        - $ref: '#/parameters/idempotentKey'
+      responses:
+        '200':
+          description: ok
+          schema:
+            $ref: '#/definitions/AssetResource'
+        '422':
+          description: unprocessable entity
+          schema:
+            $ref: '#/definitions/Errors'
+        '401':
+          description: unauthorized
+          schema:
+            $ref: '#/definitions/Errors'
+        '404':
+          description: not found
+          schema:
+            $ref: '#/definitions/Errors'
+        '500':
+          description: internal service error
+          schema:
+            $ref: '#/definitions/Errors'
+
+    delete:
+      tags: ['assets']
+      description: Deactivates the Asset Resource in the system.
+      operationId: deactivateAsset
+      parameters:
+        - $ref: '#/parameters/assetId'
+      responses:
+        '200':
+          description: ok
+          schema:
+            $ref: '#/definitions/DeactivateResponse'
+        '401':
+          description: unauthorized
+          schema:
+            $ref: '#/definitions/Errors'
+        '404':
+          description: not found
+          schema:
+            $ref: '#/definitions/Errors'
+        '422':
+          description: unprocessable entity
+          schema:
+            $ref: '#/definitions/Errors'
+        '500':
+          description: internal service error
+          schema:
+            $ref: '#/definitions/Errors'
+
+  # Payout-Instrument Resources
+  /payout-instruments:
+    get:
+      tags: ['payout-instruments']
+      description: Get all Payout Instrument Resources the actor has access to in the system.
+      operationId: getPayoutInstruments
+      parameters:
+        - $ref: '#/parameters/page'
+        - $ref: '#/parameters/size'
+      responses:
+        '200':
+          description: ok
+          schema:
+            $ref: '#/definitions/PayoutInstrumentsResource'
+        '401':
+          description: unauthorized
+          schema:
+            $ref: '#/definitions/Errors'
+        '422':
+          description: unprocessable
+          schema:
+            $ref: '#/definitions/Errors'
+        '500':
+          description: internal service error
+          schema:
+            $ref: '#/definitions/Errors'
+
+    post:
+      tags: ['payout-instruments']
+      description: Creates an Payout Instrument Resource in the system.
+      operationId: createPayoutInstrument
+      parameters:
+        - name: payoutInstrumentRequest
+          in: body
+          description: The Payout Instrument Request Resource to be created.
+          required: true
+          schema:
+            $ref: '#/definitions/PayoutInstrumentRequest'
+        - $ref: '#/parameters/fingerprintSessionId'
+        - $ref: '#/parameters/idempotentKey'
+      responses:
+        '201':
+          description: created
+          schema:
+            $ref: '#/definitions/PayoutInstrumentResource'
+        '422':
+          description: unprocessable entity
+          schema:
+            $ref: '#/definitions/Errors'
+        '401':
+          description: unauthorized
+          schema:
+            $ref: '#/definitions/Errors'
+        '500':
+          description: internal service error
+          schema:
+            $ref: '#/definitions/Errors'
+
+  /payout-instruments/managedBy/{managedBy}:
+    get:
+      tags: ['payout-instruments']
+      description: Retrieves Instrument Resources from the system for the given managedBy.
+      operationId: getInstrumentUsingManagedBy
+      parameters:
+        - $ref: '#/parameters/managedBy'
+      responses:
+        '200':
+          description: ok
+          schema:
+            $ref: '#/definitions/PayoutInstrumentsResource'
+        '401':
+          description: unauthorized
+          schema:
+            $ref: '#/definitions/Errors'
+        '404':
+          description: not found
+          schema:
+            $ref: '#/definitions/Errors'
+        '500':
+          description: internal service error
+          schema:
+            $ref: '#/definitions/Errors'
+
+  /payout-instruments/{payoutInstrumentId}:
+    get:
+      tags: ['payout-instruments']
+      description: Retrieves an Payout Instrument Resource from the system for the given payoutInstrumentId.
+      operationId: getPayoutInstrument
+      parameters:
+        - $ref: '#/parameters/payoutInstrumentId'
+      responses:
+        '200':
+          description: ok
+          schema:
+            $ref: '#/definitions/PayoutInstrumentResource'
+        '401':
+          description: unauthorized
+          schema:
+            $ref: '#/definitions/Errors'
+        '404':
+          description: not found
+          schema:
+            $ref: '#/definitions/Errors'
+        '500':
+          description: internal service error
+          schema:
+            $ref: '#/definitions/Errors'
+
+    # Update PayoutInstrument resource
+    put:
+      tags: ['payout-instruments']
+      description: Updates the PayoutInstrument Resource.
+      operationId: updatePayoutInstrument
+      consumes:
+        - application/json-patch+json
+      parameters:
+        - $ref: '#/parameters/payoutInstrumentId'
+        - name: payoutInstrumentUpdateRequest
+          in: body
+          description: The PayoutInstrument Request Resource to be updated.
+          required: true
+          schema:
+            $ref: '#/definitions/PayoutInstrumentUpdateRequest'
+        - $ref: '#/parameters/fingerprintSessionId'
+        - $ref: '#/parameters/idempotentKey'
+      responses:
+        '200':
+          description: ok
+          schema:
+            $ref: '#/definitions/PayoutInstrumentResource'
+        '422':
+          description: unprocessable entity
+          schema:
+            $ref: '#/definitions/Errors'
+        '401':
+          description: unauthorized
+          schema:
+            $ref: '#/definitions/Errors'
+        '404':
+          description: not found
+          schema:
+            $ref: '#/definitions/Errors'
+        '500':
+          description: internal service error
+          schema:
+            $ref: '#/definitions/Errors'
+
+    delete:
+      tags: ['payout-instruments']
+      description: Deactivates the Payout Instrument Resource in the system.
+      operationId: deactivatePayoutInstrument
+      parameters:
+        - $ref: '#/parameters/payoutInstrumentId'
+      responses:
+        '200':
+          description: ok
+          schema:
+            $ref: '#/definitions/DeactivateResponse'
+        '401':
+          description: unauthorized
+          schema:
+            $ref: '#/definitions/Errors'
+        '404':
+          description: not found
+          schema:
+            $ref: '#/definitions/Errors'
+        '422':
+          description: unprocessable entity
+          schema:
+            $ref: '#/definitions/Errors'
+        '500':
+          description: internal service error
+          schema:
+            $ref: '#/definitions/Errors'
+
+  /payout-instruments/verifyCard:
+    post:
+      tags: ['payout-instruments']
+      description: Verifies an payment card
+      operationId: verifyCard
+      parameters:
+        - name: verifyRequest
+          in: body
+          description: The Instrument Request Resource to be verified.
+          required: true
+          schema:
+            $ref: '#/definitions/VerifyCardRequest'
+        - $ref: '#/parameters/idempotentKey'
+      responses:
+        '201':
+          description: created
+          schema:
+            $ref: '#/definitions/VerifyCardResponse'
+        '422':
+          description: unprocessable entity
+          schema:
+            $ref: '#/definitions/Errors'
+        '401':
+          description: unauthorized
+          schema:
+            $ref: '#/definitions/Errors'
+        '500':
+          description: internal service error
+          schema:
+            $ref: '#/definitions/Errors'
+
+  # Instrument Resources
+  /instruments:
+    get:
+      tags: ['instruments']
+      description: Get all Payout Instrument Resources the actor has access to in the system.
+      operationId: getInstruments
+      parameters:
+        - $ref: '#/parameters/page'
+        - $ref: '#/parameters/size'
+      responses:
+        '200':
+          description: ok
+          schema:
+            $ref: '#/definitions/PayoutInstrumentsResource'
+        '401':
+          description: unauthorized
+          schema:
+            $ref: '#/definitions/Errors'
+        '422':
+          description: unprocessable
+          schema:
+            $ref: '#/definitions/Errors'
+        '500':
+          description: internal service error
+          schema:
+            $ref: '#/definitions/Errors'
+
+    post:
+      tags: ['instruments']
+      description: Creates an Payout Instrument Resource in the system.
+      operationId: createInstrument
+      parameters:
+        - name: payoutInstrumentRequest
+          in: body
+          description: The Payout Instrument Request Resource to be created.
+          required: true
+          schema:
+            $ref: '#/definitions/PayoutInstrumentRequest'
+        - $ref: '#/parameters/fingerprintSessionId'
+        - $ref: '#/parameters/idempotentKey'
+      responses:
+        '201':
+          description: created
+          schema:
+            $ref: '#/definitions/PayoutInstrumentResource'
+        '422':
+          description: unprocessable entity
+          schema:
+            $ref: '#/definitions/Errors'
+        '401':
+          description: unauthorized
+          schema:
+            $ref: '#/definitions/Errors'
+        '500':
+          description: internal service error
+          schema:
+            $ref: '#/definitions/Errors'
+
+  /instruments/{instrumentId}:
+    get:
+      tags: ['instruments']
+      description: Retrieves an Payout Instrument Resource from the system for the given payoutInstrumentId.
+      operationId: getInstrument
+      parameters:
+        - $ref: '#/parameters/instrumentId'
+      responses:
+        '200':
+          description: ok
+          schema:
+            $ref: '#/definitions/PayoutInstrumentResource'
+        '401':
+          description: unauthorized
+          schema:
+            $ref: '#/definitions/Errors'
+        '404':
+          description: not found
+          schema:
+            $ref: '#/definitions/Errors'
+        '500':
+          description: internal service error
+          schema:
+            $ref: '#/definitions/Errors'
+
+    # Update PayoutInstrument resource
+    put:
+      tags: ['instruments']
+      description: Updates the PayoutInstrument Resource.
+      operationId: updateInstrument
+      consumes:
+        - application/json-patch+json
+      parameters:
+        - $ref: '#/parameters/instrumentId'
+        - name: payoutInstrumentUpdateRequest
+          in: body
+          description: The PayoutInstrument Request Resource to be updated.
+          required: true
+          schema:
+            $ref: '#/definitions/PayoutInstrumentUpdateRequest'
+        - $ref: '#/parameters/fingerprintSessionId'
+        - $ref: '#/parameters/idempotentKey'
+      responses:
+        '200':
+          description: ok
+          schema:
+            $ref: '#/definitions/PayoutInstrumentResource'
+        '422':
+          description: unprocessable entity
+          schema:
+            $ref: '#/definitions/Errors'
+        '401':
+          description: unauthorized
+          schema:
+            $ref: '#/definitions/Errors'
+        '404':
+          description: not found
+          schema:
+            $ref: '#/definitions/Errors'
+        '500':
+          description: internal service error
+          schema:
+            $ref: '#/definitions/Errors'
+
+    delete:
+      tags: ['instruments']
+      description: Deactivates the Payout Instrument Resource in the system.
+      operationId: deactivateInstrument
+      parameters:
+        - $ref: '#/parameters/instrumentId'
+      responses:
+        '200':
+          description: ok
+          schema:
+            $ref: '#/definitions/DeactivateResponse'
+        '401':
+          description: unauthorized
+          schema:
+            $ref: '#/definitions/Errors'
+        '404':
+          description: not found
+          schema:
+            $ref: '#/definitions/Errors'
+        '422':
+          description: unprocessable entity
+          schema:
+            $ref: '#/definitions/Errors'
+        '500':
+          description: internal service error
+          schema:
+            $ref: '#/definitions/Errors'
+
+
+  /instruments/managedBy/{managedBy}:
+    get:
+      tags: ['instruments']
+      description: Retrieves Instrument Resources from the system for the given managedBy.
+      operationId: getInstrumentUsingManagedBy
+      parameters:
+        - $ref: '#/parameters/managedBy'
+      responses:
+        '200':
+          description: ok
+          schema:
+            $ref: '#/definitions/PayoutInstrumentsResource'
+        '401':
+          description: unauthorized
+          schema:
+            $ref: '#/definitions/Errors'
+        '404':
+          description: not found
+          schema:
+            $ref: '#/definitions/Errors'
+        '500':
+          description: internal service error
+          schema:
+            $ref: '#/definitions/Errors'
+
+  /instruments/verifyCard:
+    post:
+      tags: ['instruments']
+      description: Verifies an payment card
+      operationId: verifyCard
+      parameters:
+        - name: verifyRequest
+          in: body
+          description: The Instrument Request Resource to be verified.
+          required: true
+          schema:
+            $ref: '#/definitions/VerifyCardRequest'
+        - $ref: '#/parameters/idempotentKey'
+      responses:
+        '201':
+          description: created
+          schema:
+            $ref: '#/definitions/VerifyCardResponse'
+        '422':
+          description: unprocessable entity
+          schema:
+            $ref: '#/definitions/Errors'
+        '401':
+          description: unauthorized
+          schema:
+            $ref: '#/definitions/Errors'
+        '500':
+          description: internal service error
+          schema:
+            $ref: '#/definitions/Errors'
+
+  # Marketplace Product Resources
+  /marketplace-products/{productId}:
+    get:
+      tags: ['marketplace-products']
+      summary: Retrieves a MarketPlace Product
+      description: Retrieves a MarketPlace Product
+      operationId: getMarketplaceProduct
+      parameters:
+        - $ref: '#/parameters/productId'
+      responses:
+        '200':
+          description: ok
+          schema:
+            $ref: '#/definitions/MarketplaceProductResource'
+        '401':
+          description: unauthorized
+          schema:
+            $ref: '#/definitions/Errors'
+        '404':
+          description: not found
+          schema:
+            $ref: '#/definitions/Errors'
+        '422':
+          description: unprocessable
+          schema:
+            $ref: '#/definitions/Errors'
+        '500':
+          description: internal service error
+          schema:
+            $ref: '#/definitions/Errors'
+
+    put:
+      tags: ['marketplace-products']
+      summary: Update selctive MarketPlace Product details
+      description: Update selctive MarketPlace Product details
+      operationId: updateMarketplaceProduct
+      consumes:
+        - application/json-patch+json
+      parameters:
+        - $ref: '#/parameters/productId'
+        - name: marketplaceProductResource
+          in: body
+          description: The Marketplace product resource object with fields to be updated.
+          required: true
+          schema:
+            $ref: '#/definitions/MarketplaceProductResource'
+        - $ref: '#/parameters/fingerprintSessionId'
+        - $ref: '#/parameters/idempotentKey'
+      responses:
+        '200':
+          description: ok
+          schema:
+            $ref: '#/definitions/MarketplaceProductResource'
+        '401':
+          description: unauthorized
+          schema:
+            $ref: '#/definitions/Errors'
+        '404':
+          description: not found
+          schema:
+            $ref: '#/definitions/Errors'
+        '422':
+          description: unprocessable
+          schema:
+            $ref: '#/definitions/Errors'
+        '500':
+          description: internal service error
+          schema:
+            $ref: '#/definitions/Errors'
+
+  # Payout Product Resources
+  /payout-products/{productId}:
+    get:
+      tags: ['payout-products']
+      summary: Retrieves a Payout Product
+      description: Retrieves a Payout Product
+      operationId: getPayoutProduct
+      parameters:
+        - $ref: '#/parameters/productId'
+      responses:
+        '200':
+          description: ok
+          schema:
+            $ref: '#/definitions/PayoutProductResource'
+        '401':
+          description: unauthorized
+          schema:
+            $ref: '#/definitions/Errors'
+        '404':
+          description: not found
+          schema:
+            $ref: '#/definitions/Errors'
+        '422':
+          description: unprocessable
+          schema:
+            $ref: '#/definitions/Errors'
+        '500':
+          description: internal service error
+          schema:
+            $ref: '#/definitions/Errors'
+
+  # Contracts Resources
+  /contracts:
+    post:
+      tags: ['contracts']
+      description: Creates an Contract Resource in the system.
+      operationId: createContract
+      produces:
+        - application/json
+      parameters:
+        - name: contractRequest
+          in: body
+          description: The Contract Request Resource to be created.
+          required: true
+          schema:
+            $ref: '#/definitions/ContractCreateRequest'
+        - $ref: '#/parameters/fingerprintSessionId'
+        - $ref: '#/parameters/idempotentKey'
+      responses:
+        '201':
+          description: created
+          schema:
+            $ref: '#/definitions/ContractResource'
+        '422':
+          description: unprocessable entity
+          schema:
+            $ref: '#/definitions/Errors'
+        '401':
+          description: unauthorized
+          schema:
+            $ref: '#/definitions/Errors'
+        '409':
+          description: Conflict
+          schema:
+            $ref: '#/definitions/Errors'
+        '500':
+          description: internal service error
+          schema:
+            $ref: '#/definitions/Errors'
+
+    get:
+      tags: ['contracts']
+      summary: Retrieves all of contracts
+      description: Retrieves all of the Contracts
+      operationId: getAllContracts
+      parameters:
+        - in: query
+          name: applicantId
+          description: applicantId
+          type: string
+        - in: query
+          name: assetId
+          description: assetId
+          type: string
+        - in: query
+          name: payoutInstrumentId
+          description: payoutInstrumentId
+          type: string
+        - in: query
+          name: product
+          description: filter by provided product
+          type: string
+          enum:
+            - MARKETPLACE
+            - PAYOUT
+        - in: query
+          name: offset
+          type: integer
+          description: offset
+          default: 0
+        - in: query
+          name: limit
+          type: integer
+          description: limit
+          default: 1000
+
+      responses:
+        '200':
+          description: ok
+          schema:
+            $ref: '#/definitions/ContractResources'
+        '401':
+          description: unauthorized
+          schema:
+            $ref: '#/definitions/Errors'
+        '404':
+          description: not found
+          schema:
+            $ref: '#/definitions/Errors'
+        '422':
+          description: unprocessable
+          schema:
+            $ref: '#/definitions/Errors'
+        '500':
+          description: internal service error
+          schema:
+            $ref: '#/definitions/Errors'
+
+
+  /contracts/{contractId}:
+    get:
+      tags: ['contracts']
+      description: Retrieves an Contract Resource from the system for the given contractId.
+      operationId: getContract
+      produces:
+        - application/json
+      parameters:
+        - $ref: '#/parameters/contractId'
+      responses:
+        '200':
+          description: ok
+          schema:
+            $ref: '#/definitions/ContractResource'
+        '401':
+          description: unauthorized
+          schema:
+            $ref: '#/definitions/Errors'
+        '404':
+          description: not found
+          schema:
+            $ref: '#/definitions/Errors'
+        '500':
+          description: internal service error
+          schema:
+            $ref: '#/definitions/Errors'
+    put:
+      tags: ['contracts']
+      description: Updates the Contract Resource.
+      operationId: updateContract
+      consumes:
+        - application/json-patch+json
+      parameters:
+        - $ref: '#/parameters/contractId'
+        - name: contractRequest
+          in: body
+          description: The Contract Resource to be created after updation.
+          required: true
+          schema:
+            $ref: '#/definitions/ContractUpdateRequest'
+        - $ref: '#/parameters/fingerprintSessionId'
+        - $ref: '#/parameters/idempotentKey'
+      responses:
+        '200':
+          description: ok
+          schema:
+            $ref: '#/definitions/ContractResource'
+        '422':
+          description: unprocessable entity
+          schema:
+            $ref: '#/definitions/Errors'
+        '401':
+          description: unauthorized
+          schema:
+            $ref: '#/definitions/Errors'
+        '404':
+          description: not found
+          schema:
+            $ref: '#/definitions/Errors'
+        '500':
+          description: internal service error
+          schema:
+            $ref: '#/definitions/Errors'
+
+  /contracts/{contractId}/marketplaces:
+    post:
+      tags: ['contracts']
+      description: Add a new market place in a given contract.
+      operationId: addMarketplaceProduct
+      produces:
+        - application/json
+      parameters:
+        - $ref: '#/parameters/contractId'
+        - name: marketplaceProduct
+          in: body
+          description: The market place details
+          required: true
+          schema:
+            $ref: '#/definitions/MarketplaceProductAdd'
+        - $ref: '#/parameters/fingerprintSessionId'
+        - $ref: '#/parameters/idempotentKey'
+      responses:
+        '201':
+          description: created
+          schema:
+            $ref: '#/definitions/MarketplaceProductResource'
+        '401':
+          description: unauthorized
+          schema:
+            $ref: '#/definitions/Errors'
+        '404':
+          description: not found
+          schema:
+            $ref: '#/definitions/Errors'
+        '500':
+          description: internal service error
+          schema:
+            $ref: '#/definitions/Errors'
+
+  /contracts/{contractId}/marketplaces/{assetId}:
+    get:
+      tags: ['contracts']
+      description: Retrieves an Marketplace Resource from the system for the given contractId and assetId.
+      operationId: getMarketplaceProductByAssetId
+      produces:
+        - application/json
+      parameters:
+        - $ref: '#/parameters/contractId'
+        - $ref: '#/parameters/assetId'
+      responses:
+        '200':
+          description: ok
+          schema:
+            $ref: '#/definitions/MarketplaceProductResource'
+        '422':
+          description: unprocessable entity
+          schema:
+            $ref: '#/definitions/Errors'
+        '401':
+          description: unauthorized
+          schema:
+            $ref: '#/definitions/Errors'
+        '404':
+          description: not found
+          schema:
+            $ref: '#/definitions/Errors'
+        '500':
+          description: internal service error
+          schema:
+            $ref: '#/definitions/Errors'
+
+    put:
+      tags: ['contracts']
+      description: Updates the Marketplace Resource in a given Contract Resource.
+      operationId: updateMarketplaceProduct
+      consumes:
+        - application/json-patch+json
+      parameters:
+        - $ref: '#/parameters/contractId'
+        - $ref: '#/parameters/assetId'
+        - name: marketplaceProductUpdate
+          in: body
+          description: The Market Resource to be updated.
+          required: true
+          schema:
+            $ref: '#/definitions/MarketplaceProductUpdate'
+        - $ref: '#/parameters/fingerprintSessionId'
+        - $ref: '#/parameters/idempotentKey'
+      responses:
+        '200':
+          description: ok
+          schema:
+            $ref: '#/definitions/MarketplaceProductResource'
+        '422':
+          description: unprocessable entity
+          schema:
+            $ref: '#/definitions/Errors'
+        '401':
+          description: unauthorized
+          schema:
+            $ref: '#/definitions/Errors'
+        '404':
+          description: not found
+          schema:
+            $ref: '#/definitions/Errors'
+        '500':
+          description: internal service error
+          schema:
+            $ref: '#/definitions/Errors'
+
+    delete:
+      tags: ['contracts']
+      description: deactivate the Marketplace Product Resource.
+      operationId: deactivateMarketplaceProduct
+      consumes:
+        - application/json
+      parameters:
+        - $ref: '#/parameters/contractId'
+        - $ref: '#/parameters/assetId'
+        - name: deactivateRequest
+          in: body
+          description: The details of the deactivation process.
+          required: true
+          schema:
+            $ref: '#/definitions/DeactivateRequest'
+      responses:
+        '204':
+          description: no content
+        '401':
+          description: unauthorized
+          schema:
+            $ref: '#/definitions/Errors'
+        '404':
+          description: not found
+          schema:
+            $ref: '#/definitions/Errors'
+        '500':
+          description: internal service error
+          schema:
+            $ref: '#/definitions/Errors'
+
+  /contracts/{contractId}/payouts:
+    post:
+      tags: ['payouts']
+      description: Add a payout product in a given contract.
+      operationId: addPayoutProduct
+      produces:
+        - application/json
+      parameters:
+        - $ref: '#/parameters/contractId'
+        - name: payoutProductAdd
+          in: body
+          description: The payout instruments list
+          required: true
+          schema:
+            $ref: '#/definitions/PayoutProductAdd'
+        - $ref: '#/parameters/fingerprintSessionId'
+        - $ref: '#/parameters/idempotentKey'
+      responses:
+        '201':
+          description: created
+          schema:
+            $ref: '#/definitions/PayoutProductResource'
+        '401':
+          description: unauthorized
+          schema:
+            $ref: '#/definitions/Errors'
+        '404':
+          description: not found
+          schema:
+            $ref: '#/definitions/Errors'
+        '500':
+          description: internal service error
+          schema:
+            $ref: '#/definitions/Errors'
+
+  /contracts/{contractId}/payouts/{payoutInstrumentId}:
+    get:
+      tags: ['payouts']
+      description: Retrieves an Payout Resource from the system for the given contractId and payoutInstrumentId.
+      operationId: getPayoutProductByInstrumentId
+      produces:
+        - application/json
+      parameters:
+        - $ref: '#/parameters/contractId'
+        - $ref: '#/parameters/payoutInstrumentId'
+      responses:
+        '200':
+          description: ok
+          schema:
+            $ref: '#/definitions/PayoutProductResource'
+        '401':
+          description: unauthorized
+          schema:
+            $ref: '#/definitions/Errors'
+        '404':
+          description: not found
+          schema:
+            $ref: '#/definitions/Errors'
+        '500':
+          description: internal service error
+          schema:
+            $ref: '#/definitions/Errors'
+
+    put:
+      tags: ['payouts']
+      description: Updates the Payout product in the Contract Resource.
+      operationId: updatePayoutProduct
+      consumes:
+        - application/json-patch+json
+      parameters:
+        - $ref: '#/parameters/contractId'
+        - $ref: '#/parameters/payoutInstrumentId'
+        - name: payoutProductResource
+          in: body
+          description: The Payout Resource to be updated.
+          required: true
+          schema:
+            $ref: '#/definitions/PayoutProductResource'
+        - $ref: '#/parameters/fingerprintSessionId'
+        - $ref: '#/parameters/idempotentKey'
+      responses:
+        '200':
+          description: ok
+          schema:
+            $ref: '#/definitions/PayoutProductResource'
+        '422':
+          description: unprocessable entity
+          schema:
+            $ref: '#/definitions/Errors'
+        '401':
+          description: unauthorized
+          schema:
+            $ref: '#/definitions/Errors'
+        '404':
+          description: not found
+          schema:
+            $ref: '#/definitions/Errors'
+        '500':
+          description: internal service error
+          schema:
+            $ref: '#/definitions/Errors'
+
+    delete:
+      tags: ['payouts']
+      description: deactivate the Payout Product Resource.
+      operationId: deactivatePayoutProduct
+      consumes:
+        - application/json
+      parameters:
+        - $ref: '#/parameters/contractId'
+        - $ref: '#/parameters/payoutInstrumentId'
+        - name: deactivateRequest
+          in: body
+          description: The details of the deactivation process.
+          required: true
+          schema:
+            $ref: '#/definitions/DeactivateRequest'
+      responses:
+        '204':
+          description: no content
+        '401':
+          description: unauthorized
+          schema:
+            $ref: '#/definitions/Errors'
+        '404':
+          description: not found
+          schema:
+            $ref: '#/definitions/Errors'
+        '500':
+          description: internal service error
+          schema:
+            $ref: '#/definitions/Errors'
+
+  /customers/:
+    post:
+      summary: Create a new customer.
+      description: Creates an Customer Resource in the system.
+      tags: ['customers']
+      operationId: createCustomer
+      parameters:
+        - name: x-yapstone-ipaddress
+          in: header
+          description: IP address
+          type: string
+        - name: x-yapstone-fpsid
+          in: header
+          description: Device Finger print id.
+          type: string
+        - name: X-YapStone-IdempotentKey
+          in: header
+          description: IdempotentKey id.
+          type: string
+        - name: request
+          in: body
+          schema:
+            $ref: '#/definitions/CustomerResource'
+          required: true
+      responses:
+        201:
+          description: Created
+          schema:
+            $ref: '#/definitions/CustomerResource'
+        409:
+          description: Conflict
+          schema:
+            $ref: '#/definitions/CustomerErrors'
+        422:
+          description: Unprocessable Entity
+          schema:
+            $ref: '#/definitions/CustomerErrors'
+        default:
+          description: Unexpected Error
+          schema:
+            $ref: '#/definitions/CustomerErrors'
+      security:
+        - Bearer: []
+
+  /customers/{customerId}:
+    get:
+      summary: Fetch a customer.
+      description: |
+      tags: ['customers']
+      operationId: getCustomer
+      parameters:
+        - name: customerId
+          in: path
+          type: string
+          required: true
+      responses:
+        200:
+          description: OK
+          schema:
+            $ref: '#/definitions/CustomerResource'
+        404:
+          description: Not Found
+          schema:
+            $ref: '#/definitions/CustomerErrors'
+        default:
+          description: Unexpected Error
+          schema:
+            $ref: '#/definitions/CustomerErrors'
+      security:
+        - Bearer: []
+
+    put:
+      summary: Modify a customer.
+      description: Modify a Customer.
+      tags: ['customers']
+      operationId: updateCustomer
+      consumes:
+        - application/json-patch+json
+      parameters:
+        - name: x-yapstone-ipaddress
+          in: header
+          description: IP address
+          type: string
+        - name: x-yapstone-fpsid
+          in: header
+          description: Device Finger print id.
+          type: string
+        - name: X-YapStone-IdempotentKey
+          in: header
+          description: IdempotentKey id.
+          type: string
+        - name: customerId
+          in: path
+          type: string
+          required: true
+        - name: request
+          in: body
+          schema:
+            $ref: '#/definitions/CustomerResource'
+          required: true
+      responses:
+        200:
+          description: OK
+          schema:
+            $ref: '#/definitions/CustomerResource'
+        404:
+          description: Not Found
+          schema:
+            $ref: '#/definitions/CustomerErrors'
+        409:
+          description: Conflict
+          schema:
+            $ref: '#/definitions/CustomerErrors'
+        422:
+          description: Unprocessable Entity
+          schema:
+            $ref: '#/definitions/CustomerErrors'
+        default:
+          description: Unexpected Error
+          schema:
+            $ref: '#/definitions/CustomerErrors'
+      security:
+        - Bearer: []
+
+    delete:
+      summary: Delete a customer.
+      description: |
+      tags: ['customers']
+      operationId: deleteCustomer
+      parameters:
+        - name: customerId
+          in: path
+          type: string
+          required: true
+      responses:
+        200:
+          description: OK
+          schema:
+            $ref: '#/definitions/CustomerDeactivateResponse'
+        '401':
+          description: unauthorized
+          schema:
+            $ref: '#/definitions/CustomerErrors'
+        '404':
+          description: not found
+          schema:
+            $ref: '#/definitions/CustomerErrors'
+        '422':
+          description: unprocessable entity
+          schema:
+            $ref: '#/definitions/CustomerErrors'
+        '500':
+          description: internal service error
+          schema:
+            $ref: '#/definitions/CustomerErrors'
+      security:
+        - Bearer: []
+
+  /customers/{customerId}/marketplace:
+    get:
+      summary: Fetch a customer with maketPlace.
+      description: |
+      tags: ['customers']
+      operationId: getCustomerMarketplace
+      parameters:
+        - name: customerId
+          in: path
+          type: string
+          required: true
+      responses:
+        200:
+          description: OK
+          schema:
+            $ref: '#/definitions/CustomerMarketplaceResource'
+        '401':
+          description: unauthorized
+          schema:
+            $ref: '#/definitions/CustomerErrors'
+        '404':
+          description: not found
+          schema:
+            $ref: '#/definitions/CustomerErrors'
+        '422':
+          description: unprocessable entity
+          schema:
+            $ref: '#/definitions/CustomerErrors'
+        '500':
+          description: internal service error
+          schema:
+            $ref: '#/definitions/CustomerErrors'
+      security:
+        - Bearer: []
+
+  /admin/customers/{customerId}:
+    get:
+      summary: Fetch a customer.
+      description: |
+      tags: ['customers-admin']
+      operationId: getCustomerForInternalUse
+      parameters:
+        - name: customerId
+          in: path
+          type: string
+          required: true
+      responses:
+        200:
+          description: OK
+          schema:
+            $ref: '#/definitions/CustomerAdminResource'
+        '401':
+          description: unauthorized
+          schema:
+            $ref: '#/definitions/Errors'
+        '404':
+          description: not found
+          schema:
+            $ref: '#/definitions/Errors'
+        '422':
+          description: unprocessable entity
+          schema:
+            $ref: '#/definitions/Errors'
+        '500':
+          description: internal service error
+          schema:
+            $ref: '#/definitions/Errors'
+      security:
+        - Bearer: []
+
+  # Asset Resources
+  /history/{entityId}:
+    get:
+      tags: ['history']
+      description: Retrieves a History Resource from the system for the given entityId.
+      operationId: getHistory
+      parameters:
+        - name: entityId
+          in: path
+          required: true
+          description: The unique id of the History Resource.
+          type: string
+      responses:
+        '200':
+          description: ok
+          schema:
+            $ref: '#/definitions/EntityHistoryResource'
+        '401':
+          description: unauthorized
+          schema:
+            $ref: '#/definitions/Errors'
+        '404':
+          description: not found
+          schema:
+            $ref: '#/definitions/Errors'
+        '500':
+          description: internal service error
+          schema:
+            $ref: '#/definitions/Errors'
+  #Admin Resources
+  /admin/individual-applicants/{applicantId}:
+    put:
+      tags: ['admin']
+      description: Updates admin specific fields for the given individual applicant id.
+      operationId: updateIndividualApplicantAdminFields
+      consumes:
+        - application/json-patch+json
+      parameters:
+        - name: applicantId
+          in: path
+          required: true
+          description: The unique id of the Individual Aplicant.
+          type: string
+        - name: individualApplicantAdminFieldsResource
+          in: body
+          description: The internal fields to be updated by admin.
+          required: true
+          schema:
+            $ref: '#/definitions/IndividualApplicantAdminFieldsResource'
+        - $ref: '#/parameters/idempotentKey'
+
+      responses:
+        '200':
+          description: ok
+          schema:
+            $ref: '#/definitions/IndividualApplicantAdminResource'
+        '422':
+          description: unprocessable entity
+          schema:
+            $ref: '#/definitions/Errors'
+        '401':
+          description: unauthorized
+          schema:
+            $ref: '#/definitions/Errors'
+        '404':
+          description: not found
+          schema:
+            $ref: '#/definitions/Errors'
+        '500':
+          description: internal service error
+          schema:
+            $ref: '#/definitions/Errors'
+    get:
+      tags: ['admin']
+      description: Retrieves admin specific fields for the given individual applicant id.
+      operationId: getIndividualApplicant
+      parameters:
+        - name: applicantId
+          in: path
+          required: true
+          description: The unique id of the Individual Aplicant.
+          type: string
+      responses:
+        '200':
+          description: ok
+          schema:
+            $ref: '#/definitions/IndividualApplicantAdminResource'
+        '422':
+          description: unprocessable entity
+          schema:
+            $ref: '#/definitions/Errors'
+        '401':
+          description: unauthorized
+          schema:
+            $ref: '#/definitions/Errors'
+        '404':
+          description: not found
+          schema:
+            $ref: '#/definitions/Errors'
+        '500':
+          description: internal service error
+          schema:
+            $ref: '#/definitions/Errors'
+
+  /admin/business-applicants/{applicantId}:
+    put:
+      tags: ['admin']
+      description: Updates admin specific fields for the given business applicant id.
+      operationId: updateBusinessApplicantAdminFields
+      consumes:
+        - application/json-patch+json
+      parameters:
+        - name: applicantId
+          in: path
+          required: true
+          description: The unique id of the Contract Resource.
+          type: string
+        - name: businessApplicantAdminFieldsResource
+          in: body
+          description: The internal fields to be updated by admin.
+          required: true
+          schema:
+            $ref: '#/definitions/BusinessApplicantAdminFieldsResource'
+        - $ref: '#/parameters/idempotentKey'
+      responses:
+        '200':
+          description: ok
+          schema:
+            $ref: '#/definitions/BusinessApplicantAdminResource'
+        '422':
+          description: unprocessable entity
+          schema:
+            $ref: '#/definitions/Errors'
+        '401':
+          description: unauthorized
+          schema:
+            $ref: '#/definitions/Errors'
+        '404':
+          description: not found
+          schema:
+            $ref: '#/definitions/Errors'
+        '500':
+          description: internal service error
+          schema:
+            $ref: '#/definitions/Errors'
+
+    get:
+      tags: ['admin']
+      description: Retrieves admin specific fields for the given individual applicant id.
+      operationId: getBusinessApplicant
+      parameters:
+        - name: applicantId
+          in: path
+          required: true
+          description: The unique id of the Individual Aplicant.
+          type: string
+      responses:
+        '200':
+          description: ok
+          schema:
+            $ref: '#/definitions/BusinessApplicantAdminResource'
+        '422':
+          description: unprocessable entity
+          schema:
+            $ref: '#/definitions/Errors'
+        '401':
+          description: unauthorized
+          schema:
+            $ref: '#/definitions/Errors'
+        '404':
+          description: not found
+          schema:
+            $ref: '#/definitions/Errors'
+        '500':
+          description: internal service error
+          schema:
+            $ref: '#/definitions/Errors'
+
+  /admin/instruments/{instrumentId}:
+    get:
+      tags: ['admin']
+      description: Retrieves an Payout Instrument Resource from the system for the given instrumentId.
+      operationId: getInstrument
+      parameters:
+        - $ref: '#/parameters/instrumentId'
+      responses:
+        '200':
+          description: ok
+          schema:
+            $ref: '#/definitions/PayoutInstrumentResource'
+        '401':
+          description: unauthorized
+          schema:
+            $ref: '#/definitions/Errors'
+        '404':
+          description: not found
+          schema:
+            $ref: '#/definitions/Errors'
+        '500':
+          description: internal service error
+          schema:
+            $ref: '#/definitions/Errors'
+
+  /admin/entity/{entityId}/preference/{preferenceName}:
+    get:
+      tags: ['admin']
+      description: Retrieves an Preference Resource from the system for the given entityId and preferenceName, for PFCPreference AssetId is acceptable as entityId.
+      operationId: getPreference
+      parameters:
+        - $ref: '#/parameters/entityId'
+        - $ref: '#/parameters/preferenceName'
+      responses:
+        '200':
+          description: ok
+          schema:
+            $ref: '#/definitions/Preference'
+        '401':
+          description: unauthorized
+          schema:
+            $ref: '#/definitions/Errors'
+        '404':
+          description: not found
+          schema:
+            $ref: '#/definitions/Errors'
+        '500':
+          description: internal service error
+          schema:
+            $ref: '#/definitions/Errors'
+
+  /admin/preference:
+    post:
+      tags: ['admin']
+      description: Create a new Preference by accepting preference details.
+      operationId: createPreference
+      consumes:
+        - application/json
+      produces:
+        - application/json
+      parameters:
+        - name: request
+          in: body
+          required: true
+          schema:
+            $ref: '#/definitions/Preference'
+      responses:
+        '201':
+          description: Created
+          schema:
+            $ref: '#/definitions/Preference'
+        '400':
+          description: 'Bad Request'
+          schema:
+            $ref: '#/definitions/Errors'
+        '409':
+          description: Conflict
+          schema:
+            $ref: '#/definitions/Errors'
+        '422':
+          description: 'Unprocessable Entity'
+          schema:
+            $ref: '#/definitions/Errors'
+        default:
+          description: 'Unexpected Error'
+          schema:
+            $ref: '#/definitions/Errors'
+      security:
+        - Bearer: []
+    put:
+      tags: ['admin']
+      summary: 'API to update a preference'
+      description: Update existing Preference by accepting preference details.
+      operationId: updatePreference
+      consumes:
+        - application/json
+      produces:
+        - application/json
+      parameters:
+        - name: request
+          in: body
+          required: true
+          schema:
+            $ref: '#/definitions/Preference'
+      responses:
+        '200':
+          description: Success
+          schema:
+            $ref: '#/definitions/Preference'
+        '400':
+          description: 'Bad Request'
+          schema:
+            $ref: '#/definitions/Errors'
+        '409':
+          description: Conflict
+          schema:
+            $ref: '#/definitions/Errors'
+        '422':
+          description: 'Unprocessable Entity'
+          schema:
+            $ref: '#/definitions/Errors'
+        default:
+          description: 'Unexpected Error'
+          schema:
+            $ref: '#/definitions/Errors'
+      security:
+        - Bearer: []
+
+  /offerings/:
+    post:
+      summary: Create new offerings by accepting the asset and Instrument IDs.
+      description: Create new offerings for a given asset.
+      tags: ['Offerings']
+      operationId: createOfferings
+      parameters:
+        - name: request
+          in: body
+          schema:
+            $ref: '#/definitions/OfferingRequest'
+        - $ref: '#/parameters/idempotentKey'
+          required: true
+      responses:
+        201:
+          description: Created
+          schema:
+            $ref: '#/definitions/OfferingResponse'
+        409:
+          description: Conflict
+          schema:
+            $ref: '#/definitions/Errors'
+        422:
+          description: Unprocessable Entity
+          schema:
+            $ref: '#/definitions/Errors'
+        default:
+          description: Unexpected Error
+          schema:
+            $ref: '#/definitions/Errors'
+      security:
+        - Bearer: []
+    patch:
+      summary: Modify an offering.
+      description: |
+      tags: ['Offerings']
+      operationId: patchOffering
+      consumes:
+        - application/json-patch+json
+      parameters:
+        - name: request
+          in: body
+          schema:
+            $ref: '#/definitions/OfferingRequest'
+        - $ref: '#/parameters/idempotentKey'
+          required: true
+      responses:
+        200:
+          description: OK
+          schema:
+            $ref: '#/definitions/OfferingResponse'
+        404:
+          description: Not Found
+          schema:
+            $ref: '#/definitions/Errors'
+        409:
+          description: Conflict
+          schema:
+            $ref: '#/definitions/Errors'
+        422:
+          description: Unprocessable Entity
+          schema:
+            $ref: '#/definitions/Errors'
+        default:
+          description: Unexpected Error
+          schema:
+            $ref: '#/definitions/Errors'
+      security:
+        - Bearer: []
+    put:
+      summary: Put an offering.
+      description: |
+      tags: ['Offerings']
+      operationId: updateOffering
+      consumes:
+        - application/json-patch+json
+      parameters:
+        - name: request
+          in: body
+          schema:
+            $ref: '#/definitions/OfferingRequest'
+        - $ref: '#/parameters/idempotentKey'
+          required: true
+      responses:
+        200:
+          description: OK
+          schema:
+            $ref: '#/definitions/OfferingResponse'
+        404:
+          description: Not Found
+          schema:
+            $ref: '#/definitions/Errors'
+        409:
+          description: Conflict
+          schema:
+            $ref: '#/definitions/Errors'
+        422:
+          description: Unprocessable Entity
+          schema:
+            $ref: '#/definitions/Errors'
+        default:
+          description: Unexpected Error
+          schema:
+            $ref: '#/definitions/Errors'
+      security:
+        - Bearer: []
+  /offerings/{offeringId}:
+    get:
+      summary: Fetch an Offering using ID.
+      description: |
+      tags: ['Offerings']
+      operationId: getOfferingById
+      parameters:
+        - name: offeringId
+          in: path
+          type: string
+          required: true
+      responses:
+        200:
+          description: OK
+          schema:
+            $ref: '#/definitions/OfferingResponse'
+        404:
+          description: Not Found
+          schema:
+            $ref: '#/definitions/Errors'
+        default:
+          description: Unexpected Error
+          schema:
+            $ref: '#/definitions/Errors'
+      security:
+        - Bearer: []
+
+
+    delete:
+      summary: Delete an Offering.
+      description: |
+      tags: ['Offerings']
+      operationId: deleteOffering
+      parameters:
+        - name: offeringId
+          in: path
+          type: string
+          required: true
+      responses:
+        200:
+          description: OK
+          schema:
+            $ref: '#/definitions/OfferingResponse'
+        '401':
+          description: unauthorized
+          schema:
+            $ref: '#/definitions/Errors'
+        '404':
+          description: not found
+          schema:
+            $ref: '#/definitions/Errors'
+        '422':
+          description: unprocessable entity
+          schema:
+            $ref: '#/definitions/Errors'
+        '500':
+          description: internal service error
+          schema:
+            $ref: '#/definitions/Errors'
+      security:
+        - Bearer: []
+  /search/assetListing/{assetListingId}/offerings:
+    get:
+      description: Get all the offerings for a given assetListing
+      tags: ['Search']
+      operationId: getOfferingsByAssetListing
+      parameters:
+        - name: assetListingId
+          type: string
+          in: path
+          required: true
+      responses:
+        200:
+          description: Success
+          schema:
+            $ref: '#/definitions/OfferingResponse'
+        default:
+          description: Unexpected Error
+          schema:
+            $ref: '#/definitions/Errors'
+  /search/offerings/{entityId}:
+    get:
+      summary: Fetch an Offering using ID.
+      description: |
+      tags: ['Search']
+      operationId: getOfferingByEntityId
+      parameters:
+        - name: entityId
+          in: path
+          type: string
+          required: true
+      responses:
+        200:
+          description: OK
+          schema:
+            $ref: '#/definitions/OfferingResponse'
+        404:
+          description: Not Found
+          schema:
+            $ref: '#/definitions/Errors'
+        default:
+          description: Unexpected Error
+          schema:
+            $ref: '#/definitions/Errors'
+      security:
+        - Bearer: []
+  /search/asset/externalRefs:
+    get:
+      tags: ['Search']
+      description: |
+        Find Asset Listing by external ref
+      operationId: getAssetByExternalRef
+      parameters:
+        - name: externalRefStr
+          in: query
+          required: true
+          type: string
+      responses:
+        200:
+          description: Success
+          schema:
+            $ref: '#/definitions/AssetResource'
+        '409':
+          description: Conflict
+          schema:
+            $ref: '#/definitions/Errors'
+        '404':
+          description: not found
+          schema:
+            $ref: '#/definitions/Errors'
+        default:
+          description: Unexpected Error
+          schema:
+            $ref: '#/definitions/Errors'
+      security:
+        - Bearer: []
+
+parameters:
+  contractId:
+    name: contractId
+    in: path
+    required: true
+    description: The unique id of the Contract Resource.
+    type: string
+  assetId:
+    name: assetId
+    in: path
+    required: true
+    description: The unique id of the Asset Resource.
+    type: string
+  externalId:
+    name: externalId
+    in: query
+    description: The identifier used by an external client.
+    type: string
+  externalIdRequired:
+    name: externalId
+    in: query
+    required: true
+    description: The identifier used by an external client.
+    type: string
+    x-validation-required-message: '{OB0018}'
+  page:
+    name: page
+    in: query
+    description: page number
+    type: integer
+    format: int32
+  payoutInstrumentId:
+    name: payoutInstrumentId
+    in: path
+    required: true
+    description: The unique id of the  Payout Instrument Resource.
+    type: string
+  instrumentId:
+    name: instrumentId
+    in: path
+    required: true
+    description: The unique id of the Instrument Resource.
+    type: string
+  productId:
+    in : path
+    name: productId
+    required: true
+    description: The unique id of Product Resource.
+    type: string
+  fingerprintSessionId:
+    name: x-yapstone-fpsid
+    in: header
+    required: false
+    type: string
+  idempotentKey:
+    name: X-YapStone-IdempotentKey
+    in: header
+    required: false
+    type: string
+  size:
+    name: size
+    in: query
+    description: Maximum number of records to return per page
+    type: integer
+    format: int32
+  managedBy:
+    name: managedBy
+    in: path
+    required: true
+    description: The id of the  ManagedBy for getting Payout Instrument Resource.
+    type: string
+  entityId:
+    name: entityId
+    in: path
+    required: true
+    description: The unique id of the Entity.
+    type: string
+  preferenceName:
+    name: preferenceName
+    in: path
+    required: true
+    description: The preferenceName of the preference.
+    type: string
+
+definitions:
+
+  Page:
+    description: Pagination support
+    properties:
+      limit:
+        type: integer
+        format: int32
+        readOnly: true
+        description: Number of items to retrieve
+      offset:
+        type: integer
+        format: int32
+        readOnly: true
+        description: Position in pagination
+      count:
+        type: integer
+        format: int32
+        readOnly: true
+        description: Number of items available
+
+  MetaPage:
+    description: Response metadata
+    properties:
+      page:
+        $ref: '#/definitions/Page'
+
+  # entity resource set
+  EntitiesResource:
+    type: object
+    description: Set of all resources
+    properties:
+      meta:
+        $ref: '#/definitions/Meta'
+    required:
+      - meta
+
+  # action
+  ActionResource:
+    type: object
+    description: The action that must be taken on the entity.
+    properties:
+      actionCode:
+        type: string
+        description: The name of the type of action that must be taken.
+      description:
+        type: string
+        description: A detailed description of the action that must be performed.
+      entityId:
+        type: string
+        description: id for the enitity that requires the action.
+      entityType:
+        type: string
+        description: the type of entity for the required action.
+      type:
+        type: string
+        description: the type of check that triggered the required action.
+
+  #expiration
+  ExpirationDateResource:
+    type: object
+    description: Card Expiration Date.
+    properties:
+      year:
+        type: string
+        description: card expiration year
+        minLength: 4
+      month:
+        type: string
+        description: card expiration month
+        minLength: 2
+
+
+  # address
+  AddressResource:
+    type: object
+    description: The address of the application, asset, bank, etc.
+    required:
+      - countryCode
+      - street1
+      - city
+      - state
+      - postalCode
+    properties:
+      street1:
+        type: string
+        description: The street address line 1.
+        maxLength: 2048
+        minLength: 1
+        x-validation-pattern-message: '{OB0119}'
+        x-validation-max-length-message: '{OB0106}'
+      street2:
+        type: string
+        description: The street address line 2.
+        maxLength: 2048
+        x-validation-max-length-message: '{OB0106}'
+      street3:
+        type: string
+        description: The street address line 3.
+        maxLength: 2048
+        x-validation-max-length-message: '{OB0106}'
+      street4:
+        type: string
+        description: The street address line 4.
+        maxLength: 2048
+        x-validation-max-length-message: '{OB0106}'
+      city:
+        type: string
+        description: The name of the city.
+        minLength: 2
+        maxLength: 255
+        x-validation-min-max-length-message: '{OB0108}'
+      state:
+        type: string
+        description: The state or province where the address resides(required for USA and CAN).
+        maxLength: 255
+        minLength: 2
+        x-validation-min-max-length-message: '{OB0108}'
+      postalCode:
+        type: string
+        description: The postal code of the address.
+        maxLength: 64
+        minLength: 1
+        pattern: ".*[^\\s].*"
+        x-validation-pattern-message: '{OB0119}'
+        x-validation-min-max-length-message: '{OB0109}'
+      countryCode:
+        type: string
+        description: The 3-letter countryCode of the address.
+        maxLength: 3
+        minLength: 3
+        x-validation-annotation-iso3-country: true
+        x-validation-annotation-iso3-country-message: '{OB0102}'
+        x-validation-min-max-length-message: '{OB0118}'
+        x-validation-required-message: '{OB0018}'
+
+  # merchant resource
+  MerchantResource:
+    type: object
+    description: The merchant resource contains information of merchant's type and its metadata.
+    required:
+      - merchantId
+      - merchantType
+    properties:
+      merchantId:
+        type: string
+        description: The unique id of the Merchant Resource.
+        x-validation-required-message: '{OB0018}'
+      merchantType:
+        type: string
+        description: The type of the Merchant Resource.
+        enum:
+          - INDIVIDUAL
+          - BUSINESS
+        x-validation-required-message: '{OB0018}'
+      businessParty:
+        type: object
+        description: Information about the business merchant.
+        $ref: '#/definitions/BusinessApplicantResource'
+      individualParty:
+        type: object
+        description: Information about the individual merchant.
+        $ref: '#/definitions/IndividualApplicantResource'
+
+  # applicant resource
+  ApplicantResource:
+    type: object
+    x-abstract-class: true
+    discriminator: "applicantResource"
+    x-is-discriminator-property: false
+    description: The Applicant resource contains information about the person.
+    required:
+      - type
+      - language
+      - brand
+    properties:
+      id:
+        type: string
+        description: The resource identifier for the applicant.
+        x-validation-required-message: '{OB0018}'
+        readOnly: true
+      status:
+        description: The current status of the resource.
+        $ref: '#/definitions/EntityProductStatusResource'
+        x-validation-required-message: '{OB0018}'
+        readOnly: true
+      operationalStatus:
+        description: The Operational Statuses for the applicant
+        $ref: '#/definitions/ApplicantOperationalStatus'
+        x-validation-required-message: '{OB0018}'
+        readOnly: true
+      type:
+        type: string
+        x-validation-required-message: '{OB0018}'
+      externalId:
+        type: string
+        pattern: ".*[^\\s].*"
+        maxLength: 255
+        minLength: 1
+        x-validation-min-max-length-message: '{OB0116}'
+        x-validation-pattern-message: '{OB0119}'
+        description: The partners externalId id for the Applicant.
+      mktPlaceApplicant:
+        description: Marketplace specific information about the applicant.
+        $ref: '#/definitions/MarketPlaceApplicantResource'
+      socialNetworks:
+        type: array
+        description: A list of social networks the applicant belongs to.
+        items:
+          $ref: '#/definitions/SocialNetworkResource'
+      language:
+        type: string
+        description: supported language
+        x-validation-required-message: '{OB0018}'
+        x-validation-annotation-iso-language: true
+        x-validation-annotation-iso-language-message: '{OB0037}'
+      brand:
+        type: string
+        description: brand id
+        x-validation-required-message: '{OB0018}'
+      consents:
+        type: array
+        items:
+          $ref: '#/definitions/ApplicantConsentResource'
+      reportingTag:
+        type: string
+        description: The reportingTag for the applicant.
+        maxLength: 100
+        minLength: 2
+      noPostBooking:
+        type: boolean
+        default: false
+        description: At the time of creation, value is defaulted to False.
+      products:
+        type: array
+        description: Products requested by marketplace.
+        items:
+          $ref: '#/definitions/Product'
+      proCategory:
+        description: professional category of the applicant.
+        $ref: '#/definitions/ProCategoryResource'
+      primaryInstrument:
+        description:  The primary instrument of the applicant. By default, all the applicant level offerings will be linked to this instrument.
+        type: string
+      billingInstrument:
+        type: string
+        description: The Billing Instrument.
+
+
+  IndividualApplicantResource:
+    allOf:
+      - $ref: '#/definitions/ApplicantResource'
+      - required:
+          - individualProfile
+      - properties:
+          individualProfile:
+            x-validation-required-message: '{OB0018}'
+            description: Information about the applicant.
+            $ref: '#/definitions/ProfileResource'
+
+  IndividualApplicantsResource:
+    allOf:
+      - $ref: '#/definitions/EntitiesResource'
+      - type: object
+      - description: Set of all individual applicant resources
+      - properties:
+          results:
+            type: array
+            uniqueItems: true
+            items:
+              $ref: '#/definitions/IndividualApplicantResource'
+      - required:
+          - results
+
+  IndividualApplicantAdminResource:
+    allOf:
+      - $ref: '#/definitions/IndividualApplicantResource'
+      - properties:
+          autoGraduated:
+            type: boolean
+            description: value for graduation policy
+          payoutControl:
+            $ref: '#/definitions/PayoutControlResource'
+
+  # individual applicant request
+  IndividualApplicantRequest:
+    type: object
+    description: The Applicant Resource request.  Contains all of the required fields to create an Applicant resource.
+    required:
+      - individualProfile
+      - language
+      - brand
+    properties:
+      externalId:
+        type: string
+        description: The partners externalId id for the Applicant.
+        pattern: "[\\S]*$"
+        maxLength: 255
+        minLength: 1
+        x-validation-min-max-length-message: '{OB0116}'
+        x-validation-pattern-message: '{OB0119}'
+      individualProfile:
+        description: Information about the applicant.
+        $ref: '#/definitions/ProfileResource'
+        x-validation-required-message: '{OB0018}'
+      mktPlaceApplicant:
+        description: Marketplace specific information about the applicant.
+        $ref: '#/definitions/MarketPlaceApplicantResource'
+      socialNetworks:
+        type: array
+        description: A list of social networks the applicant belongs to.
+        items:
+          $ref: '#/definitions/SocialNetworkResource'
+      language:
+        type: string
+        description: language used to communicate
+      brand:
+        type: string
+        description: brand id of market place
+      consents:
+        type: array
+        items:
+          $ref: '#/definitions/ApplicantConsentRequest'
+      primaryInstrument:
+        description:  The primary instrument of the applicant. By default, all the applicant level offerings will be linked to this instrument.
+        type: string
+      reportingTag:
+        type: string
+        description: The reportingTag for the applicant.
+        maxLength: 100
+        minLength: 2
+      products:
+        type: array
+        description: Products requested by marketplace.
+        items:
+          $ref: '#/definitions/Product'
+      proCategory:
+        description: professional category of the applicant.
+        $ref: '#/definitions/ProCategoryResource'
+      billingInstrument:
+        type: string
+        description: The Billing Instrument.
+
+
+  IndividualApplicantUpdateRequest:
+    type: object
+    description: The Applicant Resource request.  Contains all of the required fields to create an Applicant resource.
+    required:
+      - individualProfile
+    properties:
+      externalId:
+        type: string
+        maxLength: 255
+        minLength: 1
+        pattern: "[\\S]*$"
+        x-validation-min-max-length-message: '{OB0116}'
+        x-validation-pattern-message: '{OB0119}'
+        description: The partners externalId id for the Applicant.
+      individualProfile:
+        description: Information about the applicant.
+        $ref: '#/definitions/ProfileResource'
+        x-validation-required-message: '{OB0018}'
+      mktPlaceApplicant:
+        description: Marketplace specific information about the applicant.
+        $ref: '#/definitions/MarketPlaceApplicantResource'
+      socialNetworks:
+        type: array
+        description: A list of social networks the applicant belongs to.
+        items:
+          $ref: '#/definitions/SocialNetworkResource'
+      language:
+        type: string
+        description: language used to communicate
+      brand:
+        type: string
+        description: brand id of market place
+      status:
+        description: The current status of the resource.
+        $ref: '#/definitions/EntityProductStatusResource'
+      operationalStatus:
+        description: The Operational Statuses for the applicant
+        $ref: '#/definitions/ApplicantOperationalStatus'
+      consents:
+        type: array
+        items:
+          $ref: '#/definitions/ApplicantConsentRequest'
+      products:
+        type: array
+        description: Products requested by marketplace.
+        items:
+          $ref: '#/definitions/Product'
+      noPostBooking:
+        type: boolean
+        description: value can be changed by only internal user.
+      proCategory:
+        description: professional category of the applicant.
+        $ref: '#/definitions/ProCategoryResource'
+      primaryInstrument:
+        description:  The primary instrument of the applicant. By default, all the applicant level offerings will be linked to this instrument.
+        type: string
+      billingInstrument:
+        type: string
+        description: The Billing Instrument.
+
+  # asset request common
+  AssetRequestCommon:
+    type: object
+    description: Assets are entities such as properties.
+    required:
+      - property
+      - type
+    properties:
+      owner:
+        type: object
+        description: Asset owner name details
+        $ref: '#/definitions/IndividualOwnerResource'
+      type:
+        type: string
+        description: The type of asset [PROPERTY]
+        enum:
+          - PROPERTY
+        x-validation-required-message: '{OB0018}'
+      externalId:
+        type: string
+        description: The partners externalId id for the Asset.
+        maxLength: 255
+        minLength: 1
+        pattern: ".*[^\\s].*"
+        x-validation-min-max-length-message: '{OB0116}'
+        x-validation-pattern-message: '{OB0119}'
+      primaryInstrument:
+        type: string
+        description: The primary instrument id for the Asset. By default, all the asset level offerings will be linked to this instrument.
+      property:
+        description: The information about the property.
+        $ref: '#/definitions/PropertyResource'
+        x-validation-required-message: '{OB0018}'
+      managedBy:
+        type: array
+        description: The merchant id
+        items:
+          type: string
+      billingInstrument:
+        type: string
+        description: The Billing Instrument.
+
+  # asset request
+  AssetRequest:
+    description: The Internal Asset request.
+    type: object
+    allOf:
+      - $ref: '#/definitions/AssetRequestCommon'
+      - properties:
+          products:
+            type: array
+            description: Products requested by marketplace.
+            items:
+              $ref: '#/definitions/Product'
+
+  # asset internal request
+  AssetUpdateRequest:
+    type: object
+    description: The Internal Asset request.
+    allOf:
+      - $ref: '#/definitions/AssetRequestCommon'
+      - properties:
+          status:
+            description: The current status of the resource.
+            $ref: '#/definitions/EntityProductStatusResource'
+          operationalStatus:
+            description: The Operational Statuses for the asset
+            $ref: '#/definitions/AssetOperationalStatus'
+          products:
+            type: array
+            description: Products requested by marketplace.
+            items:
+              $ref: '#/definitions/Product'
+
+  # asset resource
+  AssetResource:
+    type: object
+    description: Asset resource contains information about the asset.
+    allOf:
+      - $ref: '#/definitions/AssetRequest'
+      - properties:
+          id:
+            type: string
+            description: The resource identifier for the Asset.
+            x-validation-required-message: '{OB0018}'
+            readOnly: true
+          status:
+            description: The current status of the resource.
+            $ref: '#/definitions/EntityProductStatusResource'
+            x-validation-required-message: '{OB0018}'
+            readOnly: true
+          operationalStatus:
+            description: The Operational Statuses for the asset
+            $ref: '#/definitions/AssetOperationalStatus'
+            readOnly: true
+          primaryInstrument:
+            description: The primary Instrument for an asset. This will be used for all the aseet level offerings unless specified.
+            type: string
+          managedBy:
+            type: array
+            description: The entity which manages the asset.This may be a Merchant/Marketplace
+            items:
+              type: string
+
+  # asset resource set
+  AssetsResource:
+    allOf:
+      - $ref: '#/definitions/EntitiesResource'
+      - type: object
+      - description: Set of all asset resources
+      - properties:
+          results:
+            type: array
+            uniqueItems: true
+            items:
+              $ref: '#/definitions/AssetResource'
+      - required:
+          - results
+
+  # bank account
+  BankAccountResource:
+    type: object
+    description: The Bank account information.
+    required:
+      - type
+      - currency
+      - bankAccountData
+    properties:
+      type:
+        type: string
+        description: The type of bank account [CHECKING, SAVINGS]
+        enum:
+          - CHECKING
+          - SAVINGS
+        x-validation-required-message: '{OB0018}'
+      nameOnAccount:
+        type: string
+        description: The name on the account.
+        minLength: 3
+        maxLength: 99
+        pattern: "^[\\p{L}0-9\\s'.()&-]+$"
+        x-validation-min-max-length-message: '{OB0112}'
+        x-validation-required-message: '{OB0018}'
+      currency:
+        type: string
+        description: Need to be 3 digit currency code(ISO 3). USD, CAD, EUR, GBP, DOP, BSD, CRC, ANG, JMD, MXN, CHF.
+        x-validation-required-message: '{OB0018}'
+        x-validation-annotation-iso-currency: true
+        x-validation-annotation-iso-currency-message: '{OB0022}'
+      bankAccountData:
+        description: Detailed information about the bank account.
+        $ref: '#/definitions/BankAccountDataResource'
+        x-validation-required-message: '{OB0018}'
+      bankName:
+        type: string
+        description: The bank name.
+        minLength: 2
+        maxLength: 36
+        pattern: "^[a-zA-Z0-9 ]*$"
+        x-validation-size-message: '{OB0113}'
+      country:
+        type: string
+        description: The bank country.
+        minLength: 3
+        maxLength: 3
+        x-validation-size-message: '{OB0125}'
+
+  # bank account data
+  BankAccountDataResource:
+    type: object
+    description: Detailed information about the bank account.
+    properties:
+      bankAccountDataToken:
+        type: string
+        description: The key to the vault that contains the sensitive bank data.
+        minLength: 1
+        readOnly: true
+      routingCode:
+        type: string
+        description: routing code for USA, bank/branch identification for rest of the world
+      accountNumber:
+        type: string
+        description: Bank account number. If this is iban, routing code (bank/branch identification code) can be empty
+      displayText:
+        type: string
+        description: The textual description of the account.
+      fingerprint:
+        type: string
+        description: The bank account number fingerprint.
+
+  # Card data
+  CardDataResource:
+    type: object
+    description: Payment card details.
+    required:
+      - expirationDate
+      - cardHolderName
+    properties:
+      cardType:
+        type: string
+        description: Type of the card ( DEBIT, CREDIT, PREPAID)
+        enum:
+          - DEBIT
+          - CREDIT
+          - PREPAID
+      brand:
+        type: string
+        description: Issuing authority
+        enum:
+          - VISA
+          - MASTERCARD
+          - AMEX
+          - DISCOVER
+          - MAESTRO
+      cardTokenSource:
+        type: string
+        enum:
+          - APPLEPAY
+          - ANDROID
+          - SAMSUNG
+      expirationDate:
+        $ref: '#/definitions/ExpirationDateResource'
+      billingAddress:
+        $ref: '#/definitions/AddressResource'
+      cardHolderName:
+        type: string
+        description: Name on the card
+        minLength: 3
+        maxLength: 99
+        pattern: "^[\\p{L}0-9\\s'.()&-]+$"
+        x-validation-min-max-length-message: '{OB0112}'
+        x-validation-required-message: '{OB0018}'
+      cardTokenData:
+        type: string
+        description: The token to get the card details from vault.
+      fingerprint:
+        type: string
+        description: The credit card number fingerprint.
+      cardNumber:
+        type: string
+        minLength: 12
+        maxLength: 19
+        description: The card number.
+        x-validation-required-message: '{OB1303}'
+      cvv:
+        type: string
+        minLength: 3
+        maxLength: 4
+        description: CVV number.
+        x-validation-required-message: '{OB1302}'
+      currency:
+        type: string
+        description: Need to be 3 digit currency code(ISO 3). USD, CAD, EUR, GBP, DOP, BSD, CRC, ANG, JMD, MXN, CHF.
+        x-validation-annotation-iso-currency: true
+        x-validation-annotation-iso-currency-message: '{OB0022}'
+      country:
+        type: string
+        readOnly: true
+      cardClass:
+        type: string
+        readOnly: true
+
+  # verify instrument request
+  VerifyCardRequest:
+    type: object
+    description: The Card Instrument to verify.
+    required:
+      - paymentCard
+    properties:
+      paymentCard:
+        $ref: '#/definitions/CardDataResource'
+      checkCVV:
+        type: boolean
+      checkAVS:
+        type: boolean
+      checkFullAVS:
+        type: boolean
+      createCardToken:
+        type: boolean
+        default: false
+
+  # verify instrument request
+  VerifyCardResponse:
+    type: object
+    properties:
+      id:
+        type: string
+        description: Id of the Instrument Verification Data
+      status:
+        type: string
+        enum:
+          - OK
+          - ERROR
+          - TIMEOUT
+      result:
+        type: string
+        enum:
+          - APPROVED
+          - DECLINED
+          - VERIFIED
+      merchantTransactionId:
+        type: string
+        title: Identifies the transaction across all YS systems (aka YapID)
+      processorName:
+        type: string
+        title: The processor which performed Account Verification.
+      authResult:
+        type: object
+        title: Auth Result.
+        $ref: '#/definitions/VerifyCardResult'
+      cvvResult:
+        type: object
+        title: Indicates processor's CVV check result.
+        $ref: '#/definitions/VerifyCardResult'
+      avsResult:
+        type: object
+        title: Indicates processor's address/zip code validation result
+        $ref: '#/definitions/VerifyCardResult'
+      avsResultMapped:
+        type: string
+        enum:
+          - NOT_PRESENT
+          - MATCH
+          - STREET_NOT_MATCH
+          - POSTAL_CODE_NOT_MATCH
+          - NO_MATCH
+      cvvResultMapped:
+        type: string
+        enum:
+          - NOT_PRESENT
+          - MATCH
+          - NO_MATCH
+      authResultMapped:
+        type: object
+        title: Indicates Auth Result
+        $ref: '#/definitions/VerifyCardResult'
+      authCode:
+        type: string
+      cardType:
+        type: string
+      cardNetwork:
+        type: string
+      currency:
+        type: string
+      country:
+        type: string
+        readOnly: true
+      cardClass:
+        type: string
+        readOnly: true
+      cardLastFour:
+        type: string
+      instrumentId:
+        type: string
+
+  VerifyCardResult:
+    type: object
+    properties:
+      result:
+        type: string
+      code:
+        type: string
+      description:
+        type: string
+
+  # mandate related info
+  # consent base
+  Consent:
+    type: object
+    x-jackson-json-sub-type-info: true
+    discriminator: type
+    required:
+      - type
+      - accepted
+      - timeOfConsent
+      - version
+      - ipAddress
+    properties:
+      type:
+        type: string
+        description: Type of the consent
+        enum:
+          - DIRECT_DEBIT
+      accepted:
+        type: boolean
+        description: Indicates the acceptance of the T&Cs.
+      timeOfConsent:
+        type: string
+        description: Time of the consent
+        format: date-time
+      version:
+        type: integer
+        description: Version of the consent
+        format: int32
+        default: 1
+      ipAddress:
+        type: string
+        description: IP Address of machine from which consent was given
+        minLength: 1
+        maxLength: 15
+        x-validation-min-max-length-message: '{OB0104}'
+        x-validation-required-message: '{OB0018}'
+        x-validation-annotation-ip-address: true
+        x-validation-annotation-ip-address-message: '{OB0036}'
+
+  # directdebitconsent request object
+
+  DirectDebitConsentResource:
+    type: object
+    x-jackson-json-type-name: DIRECT_DEBIT
+    allOf:
+      - $ref: '#/definitions/Consent'
+      - required:
+          - creditorId
+      - properties:
+          externalId:
+            type: string
+            description: The reference number that client has for the mandate
+          creditorId:
+            type: string
+            description: The creditor Id
+            enum:
+              - MARKETPLACE
+              - YAPSTONE
+
+  # business applicant
+  BusinessApplicantResource:
+    type: object
+    description: The Business Applicant resource.
+    required:
+      - primaryContact
+      - businessProfile
+    allOf:
+      - $ref: '#/definitions/ApplicantResource'
+      - properties:
+          primaryContact:
+            description: The primary contact for the business.
+            $ref: '#/definitions/ProfileResource'
+            x-validation-required-message: '{OB0018}'
+          businessProfile:
+            description: The information about the business.
+            $ref: '#/definitions/BusinessProfileResource'
+            x-validation-required-message: '{OB0018}'
+          principalOwner:
+            description: principal owner
+            $ref: '#/definitions/BeneficialOwnerResource'
+          additionalOwners:
+            type: array
+            description: A list of additional beneficial owners
+            items:
+              $ref: '#/definitions/BeneficialOwnerResource'
+          metadata:
+            $ref: '#/definitions/ObjectNode'
+
+
+  BusinessApplicantsResource:
+    allOf:
+      - $ref: '#/definitions/EntitiesResource'
+      - type: object
+      - description: Set of all business applicant resources
+      - properties:
+          results:
+            type: array
+            uniqueItems: true
+            items:
+              $ref: '#/definitions/BusinessApplicantResource'
+        required:
+          - results
+
+  # business applicant details for Admin
+  BusinessApplicantAdminResource:
+    type: object
+    description: The Business Applicant resource.
+    allOf:
+      - $ref: '#/definitions/BusinessApplicantResource'
+      - properties:
+          autoGraduated:
+            type: boolean
+            description: value for graduation policy
+          payoutControl:
+            $ref: '#/definitions/PayoutControlResource'
+
+  # business applicant request
+  BusinessApplicantRequest:
+    type: object
+    description: The Business Applicant Resource request.  Contains all of the required fields to create an Business Applicant resource.
+    required:
+      - primaryContact
+      - businessProfile
+      - language
+      - brand
+      - consents
+    properties:
+      primaryContact:
+        description: The primary contact for the business.
+        $ref: '#/definitions/PrimaryContactResource'
+      businessProfile:
+        description: The information about the business.
+        $ref: '#/definitions/BusinessProfileResource'
+        x-validation-required-message: '{OB0018}'
+      externalId:
+        type: string
+        description: The partners externalId id for the Business Applicant.
+        maxLength: 255
+        minLength: 1
+        pattern: ".*[^\\s].*"
+        x-validation-min-max-length-message: '{OB0116}'
+        x-validation-pattern-message: '{OB0119}'
+      mktPlaceApplicant:
+        description: Marketplace specific information about the applicant.
+        $ref: '#/definitions/MarketPlaceApplicantResource'
+      socialNetworks:
+        type: array
+        description: A list of social networks the applicant belongs to.
+        items:
+          $ref: '#/definitions/SocialNetworkResource'
+      language:
+        type: string
+        description: language used to communicate
+      brand:
+        type: string
+        description: brand id of market place
+      consents:
+        type: array
+        items:
+          $ref: '#/definitions/ApplicantConsentRequest'
+      reportingTag:
+        type: string
+        description: The reportingTag for the applicant.
+        maxLength: 100
+        minLength: 2
+      principalOwner:
+        description: principal owner
+        $ref: '#/definitions/BeneficialOwnerRequest'
+      additionalOwners:
+        type: array
+        description: A list of additional beneficial owners
+        items:
+          $ref: '#/definitions/BeneficialOwnerRequest'
+      products:
+        type: array
+        description: Products requested by marketplace.
+        items:
+          $ref: '#/definitions/Product'
+      primaryInstrument:
+        description: The primary instrument of the applicant. By default, all the applicant level offerings will be linked to this instrument.
+        type: string
+      metadata:
+        $ref: '#/definitions/ObjectNode'
+      proCategory:
+        description: professional category of the applicant.
+        $ref: '#/definitions/ProCategoryResource'
+      billingInstrument:
+        type: string
+        description: The Billing Instrument.
+
+  BusinessApplicantUpdateRequest:
+    type: object
+    description: The Business Applicant Resource request.  Contains all of the required fields to create an Business Applicant resource.
+    required:
+      - primaryContact
+      - businessProfile
+      - language
+      - brand
+      - consents
+    properties:
+      primaryContact:
+        description: The primary contact for the business.
+        $ref: '#/definitions/PrimaryContactResource'
+      businessProfile:
+        description: The information about the business.
+        $ref: '#/definitions/BusinessProfileResource'
+        x-validation-required-message: '{OB0018}'
+      externalId:
+        type: string
+        description: The partners externalId id for the Business Applicant.
+        pattern: ".*[^\\s].*"
+        maxLength: 255
+        minLength: 1
+        x-validation-min-max-length-message: '{OB0116}'
+        x-validation-pattern-message: '{OB0119}'
+      mktPlaceApplicant:
+        description: Marketplace specific information about the applicant.
+        $ref: '#/definitions/MarketPlaceApplicantResource'
+      socialNetworks:
+        type: array
+        description: A list of social networks the applicant belongs to.
+        items:
+          $ref: '#/definitions/SocialNetworkResource'
+      status:
+        description: The current status of the resource.
+        $ref: '#/definitions/EntityProductStatusResource'
+        type: string
+      operationalStatus:
+        description: The Operational Statuses for the applicant
+        $ref: '#/definitions/ApplicantOperationalStatus'
+        x-validation-required-message: '{OB0018}'
+        readOnly: true
+      consents:
+        type: array
+        items:
+          $ref: '#/definitions/ApplicantConsentRequest'
+      principalOwner:
+        description: principal owner resource
+        $ref: '#/definitions/BeneficialOwnerResource'
+      additionalOwnersUpdate:
+        type: array
+        description: List of edits to beneficial owners of the property.
+        maxItems: 50
+        x-validation-max-items-message: '{OB0111}'
+        items:
+          $ref: "#/definitions/BeneficialOwnersPatch"
+      products:
+        type: array
+        description: Products requested by marketplace.
+        items:
+          $ref: '#/definitions/Product'
+      noPostBooking:
+        type: boolean
+        description: value can be changed by only internal user.
+      language:
+        type: string
+        description: language used to communicate
+      brand:
+        type: string
+        description: brand id of market place
+      primaryInstrument:
+        type: string
+        description:  The primary instrument of the applicant. By default, all the applicant level offerings will be linked to this instrument.
+      metadata:
+        $ref: '#/definitions/ObjectNode'
+      proCategory:
+        description: professional category of the applicant.
+        $ref: '#/definitions/ProCategoryResource'
+      billingInstrument:
+        type: string
+        description: The Billing Instrument.
+
+  # business profile
+  BusinessProfileResource:
+    type: object
+    description: Business profile information. Contains information such as doing business as, taxId fo the business, etc.
+    required:
+      - name
+      - type
+      - email
+      - address
+      - businessIdentification
+    properties:
+      name:
+        type: string
+        description: The name of the business.
+        minLength: 2
+        maxLength: 512
+        x-validation-min-max-length-message: '{OB0107}'
+        x-validation-required-message: '{OB0018}'
+      type:
+        type: string
+        description: The type of business unit (sole_prop, corp, llc)
+        enum:
+          - SOLE_PROPRIETOR
+          - PARTNERSHIP
+          - LLC
+          - S_CORP
+          - CORPORATION
+      dba:
+        type: array
+        description: Doing business as name list.
+        items:
+          type: string
+      email:
+        type: string
+        format: email
+        description: The email address.
+        maxLength: 512
+        minLength: 1
+        x-validation-annotation-email: true
+        x-validation-min-max-length-message: '{OB0114}'
+        x-validation-annotation-email-message: '{OB0023}'
+        x-validation-required-message: '{OB0018}'
+      address:
+        $ref: '#/definitions/AddressResource'
+        x-validation-required-message: '{OB0018}'
+      phone:
+        $ref: '#/definitions/PhoneResource'
+      businessIdentification:
+        description: The tax ein/tin identification for the business.
+        $ref: '#/definitions/BusinessIdentificationResource'
+      registration:
+        description: Business registration information contains info about the companies formation (when and where).
+        $ref: '#/definitions/RegistrationResource'
+      websiteURL:
+        type: string
+        description: The website hostname.
+        maxLength: 24
+        minLength: 4
+        pattern: ".*[^\\s].*"
+        x-validation-min-max-length-message: '{OB0115}'
+        x-validation-pattern-message: '{OB0119}'
+
+  # consent
+  ConsentRequest:
+    type: object
+    description: Represents the consent necessary for onboard an entity.
+    required:
+      - version
+      - accepted
+      - type
+      - ipAddress
+    properties:
+      version:
+        type: integer
+        format: int32
+        description: The version of the consent if there is one.
+        x-validation-required-message: '{OB0018}'
+      accepted:
+        type: boolean
+        description: Indicates the acceptance of the T&Cs.
+        x-validation-required-message: '{OB0018}'
+      ipAddress:
+        type: string
+        description: The ipAddress origin of the incoming call.
+        minLength: 1
+        maxLength: 64
+        x-validation-min-max-length-message: '{OB0109}'
+        x-validation-required-message: '{OB0018}'
+        x-validation-annotation-ip-address: true
+        x-validation-annotation-ip-address-message: '{OB0036}'
+      type:
+        $ref: '#/definitions/ConsentType'
+        x-validation-required-message: '{OB0018}'
+
+  # consent
+  ConsentResource:
+    type: object
+    description: Represents the consent resource.
+    required:
+      - type
+      - version
+      - accepted
+      - ipAddress
+    properties:
+      timeOfConsent:
+        type: string
+        format: date-time
+        description: The timestamp in ISO 8601 format when the user consentted.
+        readOnly: true
+      type:
+        $ref: '#/definitions/ConsentType'
+        x-validation-required-message: '{OB0018}'
+      version:
+        type: integer
+        format: int32
+        description: The version of the consent if there is one.
+        x-validation-required-message: '{OB0018}'
+      accepted:
+        type: boolean
+        description: Indicates the acceptance of the T&Cs.
+        x-validation-required-message: '{OB0018}'
+      ipAddress:
+        type: string
+        description: The ipAddress origin of the incoming call.
+        x-validation-annotation-ip-address: true
+        x-validation-annotation-ip-address-message: '{OB0036}'
+        x-validation-required-message: '{OB0018}'
+
+  ConsentType:
+    type: string
+    description: The type of the consent.
+    enum:
+      - TERMS
+      - PAYOUTS_TERMS
+
+  ApplicantConsentRequest:
+    type: object
+    required:
+      - version
+      - accepted
+      - type
+      - ipAddress
+    properties:
+      type:
+        $ref: '#/definitions/ApplicantConsentType'
+        x-validation-required-message: '{OB0018}'
+      version:
+        type: integer
+        format: int32
+        description: The version of the consent if there is one.
+        x-validation-required-message: '{OB0018}'
+      accepted:
+        type: boolean
+        description: Indicates the acceptance of the T&Cs.
+        x-validation-required-message: '{OB0018}'
+      ipAddress:
+        type: string
+        description: The ipAddress origin of the incoming call.
+        minLength: 1
+        maxLength: 64
+        x-validation-min-max-length-message: '{OB0109}'
+        x-validation-required-message: '{OB0018}'
+        x-validation-annotation-ip-address: true
+        x-validation-annotation-ip-address-message: '{OB0036}'
+
+  ApplicantConsentResource:
+    type: object
+    required:
+      - type
+      - version
+      - accepted
+      - ipAddress
+    properties:
+      timeOfConsent:
+        type: string
+        format: date-time
+        description: The timestamp in ISO 8601 format when the user consentted.
+        readOnly: true
+      type:
+        $ref: '#/definitions/ApplicantConsentType'
+      version:
+        type: integer
+        format: int32
+        description: The version of the consent if there is one.
+      accepted:
+        type: boolean
+        description: Indicates the acceptance of the T&Cs.
+      ipAddress:
+        type: string
+        description: The ipAddress origin of the incoming call.
+        x-validation-annotation-ip-address: true
+        x-validation-annotation-ip-address-message: '{OB0036}'
+
+  ApplicantConsentType:
+    type: string
+    enum:
+      - CREDIT_CHECK
+      - CONSENT_TO_RECEIVE_SMS
+      - PROVIDED_ALL_BENEFICIAL_OWNERS
+      - ATTESTING_BENEFICIAL_OWNER_INFO
+      - AGE
+
+  AbstractEntity:
+    type : object
+    properties:
+      externalId:
+        type: string
+        description: The partners externalId id for entity.
+        pattern: ".*[^\\s].*"
+        maxLength: 255
+        minLength: 1
+        x-validation-min-max-length-message: '{OB0116}'
+        x-validation-pattern-message: '{OB0119}'
+
+  # contract create request
+  ContractCreateRequest:
+    type: object
+    description: Create Contract Request
+    required:
+      - applicantId
+      - products
+    allOf:
+      - $ref: '#/definitions/AbstractEntity'
+      - properties:
+          applicantId:
+            type: string
+            description: The unique id of the Applicant Resource.
+            x-validation-required-message: '{OB0018}'
+          products:
+            description: Product catalog.
+            x-validation-required-message: '{OB0018}'
+            $ref: '#/definitions/ContractCreateRequestProducts'
+
+  # contract create request
+  ContractCreateRequestProducts:
+    type: object
+    description: Create Contract Request Products
+    properties:
+      marketplaces:
+        type: array
+        description: list of marketplace resources
+        items:
+          $ref: '#/definitions/MarketplaceProductAdd'
+      payouts:
+        type: array
+        description: list of payout resoucres
+        items:
+          $ref: '#/definitions/PayoutProductAdd'
+
+  # contract update request
+  ContractUpdateRequest:
+    type: object
+    description: Contract update request
+    required:
+      - applicantId
+    allOf:
+      - $ref: '#/definitions/AbstractEntity'
+      - properties:
+          applicantId:
+            type: string
+            description: The unique id of the Applicant Resource.
+            x-validation-required-message: '{OB0018}'
+
+  MarketplaceProductAdd:
+    type: object
+    description: Create marketplace product inside a contract.
+    allOf:
+      - $ref: '#/definitions/ProductWrite'
+      - $ref: '#/definitions/MarketplaceProductBasic'
+      - properties:
+          payoutInstruments:
+            type: array
+            items:
+              type: string
+
+  PayoutProductAdd:
+    type : object
+    description: Create payout product inside a contract.
+    allOf:
+      - $ref: '#/definitions/ProductWrite'
+      - properties:
+          payoutInstrumentId:
+            type: string
+            description: An unique id of Payout Instrument Resource
+
+  MarketplaceProductUpdate:
+    type: object
+    description: Update marketplace product in a contract.
+    allOf:
+      - $ref: '#/definitions/ProductWrite'
+      - $ref: '#/definitions/MarketplaceProductExtra'
+      - properties:
+          payoutInstruments:
+            type: array
+            items:
+              $ref: '#/definitions/MarketplaceProductPayoutInstrumentUpdate'
+
+  MarketplaceProductPayoutInstrumentUpdate:
+    type: object
+    description: Update payout instrument in marketplace product.
+    required:
+      - op
+    allOf:
+      - $ref: '#/definitions/MarketplaceProductPayoutInstrumentResource'
+      - properties:
+          op:
+            $ref: '#/definitions/PatchOperation'
+            x-validation-required-message: '{OB0018}'
+
+  # contract resource
+  ContractResource:
+    type: object
+    description: Contract Resource.
+    required:
+      - applicantId
+      - products
+    allOf:
+      - $ref: '#/definitions/AbstractEntity'
+      - properties:
+          id:
+            type: string
+            description: The resource identifier for the Contract.
+            readOnly: true
+          applicantId:
+            type: string
+            description: The unique id of the Applicant Resource.
+            x-validation-required-message: '{OB0018}'
+          products:
+            type: object
+            description: Product catalog.
+            x-validation-required-message: '{OB0018}'
+            $ref: '#/definitions/ContractResourceProducts'
+
+  ContractResourceProducts:
+    type: object
+    description: Contract Resource Products.
+    properties:
+      marketplaces:
+        type: array
+        description: a list of marketplace resources
+        items:
+          $ref: '#/definitions/MarketplaceProductSubResource'
+      payouts:
+        type: array
+        description: a list of payout resources
+        items:
+          $ref: '#/definitions/PayoutProductSubResource'
+
+  Resource:
+    type: object
+    description: Things common to all top-level resources
+    properties:
+      id:
+        description: The unique id of the resource
+        type: string
+
+  #market place product contract resource
+  MarketplaceProductSubResource:
+    type: object
+    description: Marketplace product definition in contract resource.
+    allOf:
+      - $ref: '#/definitions/ProductRead'
+      - $ref: '#/definitions/MarketplaceProductExtra'
+      - properties:
+          payoutInstruments:
+            type: array
+            description: An array of payout instruments.
+            items:
+              $ref: '#/definitions/MarketplaceProductPayoutInstrumentResource'
+
+  #top-level market place product resource
+  MarketplaceProductResource:
+    type: object
+    description: Marketplace product definition in contract resource.
+    allOf:
+      - $ref: '#/definitions/MarketplaceProductSubResource'
+      - $ref: '#/definitions/Resource'
+
+  ProductWrite:
+    type: object
+    properties:
+      consents:
+        type: array
+        description: An array of consents.
+        minItems: 1
+        maxItems: 100
+        x-validation-min-max-items-message: '{OB0105}'
+        items:
+          $ref: '#/definitions/ConsentRequest'
+
+  ProductRead:
+    type: object
+    properties:
+      consents:
+        type: array
+        description: An array of consents.
+        minItems: 1
+        maxItems: 100
+        x-validation-min-max-items-message: '{OB0105}'
+        items:
+          $ref: '#/definitions/ConsentResource'
+
+  #market place product basic attributes
+  MarketplaceProductBasic:
+    type: object
+    properties:
+      assetId:
+        description: The unique id of the Asset Resource.
+        type: string
+      payoutMode:
+        type: string
+        $ref: '#/definitions/PayoutMode'
+      settlementCurrency:
+        type: string
+        description: The ISO currency code enum for settlements.
+        x-validation-annotation-iso-currency: true
+        x-validation-annotation-iso-currency-message: '{OB0022}'
+      subscriptionType:
+        type: string
+        description: Subscription Type
+      primaryInstrument:
+        type: string
+        description: Primary Instrument for a given Marketplace product.
+
+  MarketplaceProductExtra:
+    type: object
+    allOf:
+      - $ref: '#/definitions/MarketplaceProductBasic'
+      - properties:
+          status:
+            description: The current status of the resource.
+            $ref: '#/definitions/StatusReasonResource'
+          chargesStatus:
+            description: The current charges status.
+            $ref: '#/definitions/ActionStatusResource'
+          refundStatus:
+            description: The current refund status.
+            $ref: '#/definitions/ActionStatusResource'
+          tokenForProcessing:
+            type: string
+            description: The token to use when making payments.
+            readOnly: true
+          paymentPlatform:
+            $ref: '#/definitions/PaymentPlatform'
+
+  ApplicantOperationalStatus:
+    type: object
+    allOf:
+      - properties:
+          chargesStatus:
+            description: The current charges status. This is applicable only for the Marketplace product.
+            $ref: '#/definitions/ActionStatusResource'
+          refundStatus:
+            description: The current Refund status. This is applicable only for the Marketplace product.
+            $ref: '#/definitions/ActionStatusResource'
+          creditStatus:
+            description: The current credit status. This is applicable only for the Payout product.
+            $ref: '#/definitions/ActionStatusResource'
+
+  InstrumentOperationalStatus:
+    type: object
+    allOf:
+      - properties:
+          payoutStatus:
+            description: The current payout status. This is applicable only for the Marketplace product.
+            $ref: '#/definitions/ActionStatusResource'
+          # refundStatus:
+          #   description: The current Refund status.
+          #   $ref: '#/definitions/ActionStatusResource'
+          # creditStatus:
+          #   description: The current credit status.
+          #   $ref: '#/definitions/ActionStatusResource'
+          debitStatus:
+            description: The current debit status. This is applicable only for the Payout product.
+            $ref: '#/definitions/ActionStatusResource'
+
+  AssetOperationalStatus:
+    type: object
+    allOf:
+      - properties:
+          chargesStatus:
+            description: The current charges status. This is applicable only for the Marketplace product.
+            $ref: '#/definitions/ActionStatusResource'
+          refundStatus:
+            description: The current Refund status. This is applicable only for the Marketplace product.
+            $ref: '#/definitions/ActionStatusResource'
+
+  MarketplaceProductPayoutInstrumentResource:
+    type: object
+    description: Payout instrument in marketplace product.
+    required:
+      - id
+      - payoutStatus
+    properties:
+      id:
+        type: string
+        description: payout instrument id
+        x-validation-required-message: '{OB0018}'
+      payoutStatus:
+        description: The current payout status.
+        $ref: '#/definitions/ActionStatusResource'
+        x-validation-required-message: '{OB0018}'
+
+  #payout product contract resource
+  PayoutProductSubResource:
+    type: object
+    description: Payout Instrument in payout product.
+    allOf:
+      - $ref: '#/definitions/ProductRead'
+      - properties:
+          status:
+            description: The current status of the resource.
+            $ref: '#/definitions/StatusReasonResource'
+          payoutInstrumentId:
+            type: string
+            description: payout instrumnet id
+          creditStatus:
+            $ref: '#/definitions/ActionStatusResource'
+          debitStatus:
+            $ref: '#/definitions/ActionStatusResource'
+
+  #top-level payout product resource
+  PayoutProductResource:
+    type: object
+    description: Payout Instrument in payout product.
+    allOf:
+      - $ref: '#/definitions/PayoutProductSubResource'
+      - $ref: '#/definitions/Resource'
+
+  # customer history
+  CustomerHistoryResource:
+    type: object
+    description: The marketplace's customer information.
+    properties:
+      propertyOwner:
+        description: History information about the customer as an asset owner.
+        $ref: '#/definitions/PropertyOwnerResource'
+      traveler:
+        description: History information about the customer as a traveler.
+        $ref: '#/definitions/TravelerResource'
+
+  # payout common resource
+  PayoutInstrumentResourceCommonEntities:
+    type: object
+    description: Payout Instrument.
+    required:
+      - type
+    properties:
+      externalId:
+        type: string
+        description: The partners externalId id for the Payout Instrument.
+        pattern: ".*[^\\s].*"
+        maxLength: 255
+        minLength: 1
+        x-validation-min-max-length-message: '{OB0116}'
+        x-validation-pattern-message: '{OB0119}'
+      bankAccount:
+        description: The bank account information.
+        $ref: '#/definitions/BankAccountResource'
+      paymentCard:
+        description: The details of the payment card.
+        $ref: '#/definitions/CardDataResource'
+      type:
+        type: string
+        description: The type of finanancial instrument [BANK_ACCOUNT]
+        enum:
+          - BANK_ACCOUNT
+          - CARD
+          - CHECK
+        x-validation-required-message: '{OB0018}'
+      managedBy:
+        description: The entity manages the Instrument. It can be merchant or marketplace.
+        type: array
+        items:
+          type: string
+
+  # payout instrument request
+  PayoutInstrumentRequest:
+    type: object
+    description: The Payout Instrument such as Bank Account is used when sending money to an Asset Owner.
+    required:
+      - owner
+    allOf:
+      - $ref: '#/definitions/PayoutInstrumentResourceCommonEntities'
+      - properties:
+          owner:
+            type: object
+            description: payout owner name details
+            $ref: '#/definitions/OwnerResource'
+          consents:
+            type: array
+            description: list of consent requests
+            items:
+              $ref: '#/definitions/Consent'
+          products:
+            type: array
+            description: Products requested by marketplace.
+            items:
+              $ref: '#/definitions/Product'
+          managedBy:
+            type: array
+            items:
+              type: string
+            description:  The entity which manages the Instrument. This can be a merchant/marketplace.
+
+  # payout instrument update request
+  PayoutInstrumentUpdateRequest:
+    type: object
+    description: The Payout Instrument update request.
+    allOf:
+      - $ref: '#/definitions/PayoutInstrumentResourceCommonEntities'
+      - properties:
+          status:
+            description: The current status of the resource.
+            $ref: '#/definitions/EntityProductStatusResource'
+          operationalStatus:
+            description: Operational Status of the Payout instrument
+            $ref: '#/definitions/InstrumentOperationalStatus'
+            readOnly: true
+          owner:
+            type: object
+            description: Updated Owner.
+            $ref: '#/definitions/OwnerRequest'
+          consents:
+            type: array
+            description: list of consent requests
+            items:
+              $ref: '#/definitions/Consent'
+          products:
+            type: array
+            description: Products requested by marketplace.
+            items:
+              $ref: '#/definitions/Product'
+          managedBy:
+            type: array
+            items:
+              type: string
+            description:  The entity which manage the Instrument. This can be a merchant/marketplace.
+
+  # payout instrument resource
+  PayoutInstrumentResource:
+    type: object
+    description: Payout Instrument resource contains information about the payout account.
+    required:
+      - owner
+    allOf:
+      - $ref: '#/definitions/PayoutInstrumentResourceCommonEntities'
+      - properties:
+          id:
+            type: string
+            description: The resource identifier for the Payout Instrument.
+            x-validation-required-message: '{OB0018}'
+            readOnly: true
+          status:
+            description: The current status of the resource.
+            $ref: '#/definitions/EntityProductStatusResource'
+            x-validation-required-message: '{OB0018}'
+            readOnly: true
+          operationalStatus:
+            description: Operational Status of the Payout instrument
+            $ref: '#/definitions/InstrumentOperationalStatus'
+            readOnly: true
+          owner:
+            type: object
+            description: payout owner name details
+            $ref: '#/definitions/OwnerResource'
+          consents:
+            type: array
+            description: list of consent responses
+            items:
+              $ref: '#/definitions/Consent'
+          products:
+            type: array
+            description: Products requested by marketplace.
+            items:
+              $ref: '#/definitions/Product'
+          capabilities:
+            type: array
+            description: Set of capabilities the instrument can perform.
+            items:
+              $ref: '#/definitions/CapabilityResource'
+          managedBy:
+            type: array
+            items:
+              type: string
+            description:  The entity which manage the Instrument. This can be a merchant/marketplace.
+
+  # payout instrument resource
+  PayoutInstrumentsResource:
+    allOf:
+      - $ref: '#/definitions/EntitiesResource'
+      - type: object
+      - description: Set of all payout instrument resources
+      - properties:
+          results:
+            type: array
+            uniqueItems: true
+            items:
+              $ref: '#/definitions/PayoutInstrumentResource'
+      - required:
+          - results
+
+
+  # government identification
+  GovIdentificationResource:
+    type: object
+    description: The goverment identification information.For US - Need Last4 SSN.
+    required:
+      - type
+      - number
+    properties:
+      type:
+        $ref: '#/definitions/GovernmentIdType'
+        x-validation-required-message: '{OB0018}'
+      displayText:
+        type: string
+        description: The display info for the identification, only last 2 digits of the SSN is shown in the response.
+      govIdDataToken:
+        type: string
+        description: The key to vault that contains the data associated with the government id. This key will be generated when the identification is created at YapStone.
+        readOnly: true
+      number:
+        type: string
+        description: The number associated with the identification.
+        pattern: ".*[^\\s].*"
+        x-validation-pattern-message: '{OB0119}'
+        x-validation-required-message: '{OB0018}'
+      expiration:
+        type: string
+        format: date
+        pattern: /^([0-9]{4})-([0-9]{2})-([0-9]{2})$/
+        description: The expiration date of the identication.This field is required when goverment identification type is passport.
+        x-validation-pattern-message: '{OB0120}'
+      country:
+        type: string
+        description: The 3-letter ISO country code of the identification issuer.This field is required when goverment identification type is passport.
+        maxLength: 3
+        minLength: 3
+        x-validation-annotation-iso3-country: true
+        x-validation-annotation-iso3-country-message: '{OB0102}'
+        x-validation-min-max-length-message: '{OB0118}'
+        x-validation-required-message: '{OB0018}'
+      state:
+        type: string
+        description: The state or province of the identification issuer.Two digit should be provided for Canada.
+        maxLength: 255
+        minLength: 2
+        x-validation-min-max-length-message: '{OB0108}'
+
+  GovernmentIdType:
+    type: string
+    description: The type of identification (passport, drivers license, etc).US needs only LAST_FOUR_SSN as type, Remaining types are for Non US.
+    enum:
+      - DRIVERS_LICENSE
+      - PASSPORT
+      - GOVERNMENT_ID
+      - PASSPORT_CARD
+      - LAST_FOUR_SSN
+      - TAX_ID
+      - SIN
+      - NIF
+      - CODICE_FISCALE
+
+  # government identification
+  GovIdentificationUpdateResource:
+    type: object
+    description: The goverment identification information.
+    properties:
+      type:
+        $ref: '#/definitions/GovernmentIdType'
+      displayText:
+        type: string
+        description: The display info for the identification.
+      govIdDataToken:
+        type: string
+        description: The key to vault that contains the data associated with the government id. This key will be generated when the identification is created at YapStone.
+        readOnly: true
+      number:
+        type: string
+        description: The number associated with the identification.
+        pattern: ".*[^\\s].*"
+        x-validation-pattern-message: '{OB0119}'
+      expiration:
+        type: string
+        format: date
+        pattern: /^([0-9]{4})-([0-9]{2})-([0-9]{2})$/
+        description: The expiration date of the identication.This field is required when goverment identification type is passport.
+        x-validation-pattern-message: '{OB0120}'
+      country:
+        type: string
+        description: The 3-letter ISO country code of the identification issuer.This field is required when goverment identification type is passport.
+        maxLength: 3
+        minLength: 3
+        x-validation-annotation-iso3-country: true
+        x-validation-annotation-iso3-country-message: '{OB0102}'
+        x-validation-min-max-length-message: '{OB0118}'
+        x-validation-required-message: '{OB0018}'
+      state:
+        type: string
+        description: The state or province of the identification issuer.
+        maxLength: 255
+        minLength: 2
+        x-validation-min-max-length-message: '{OB0108}'
+
+
+  # businessIdentification
+  BusinessIdentificationResource:
+    type: object
+    description: The business identification information.
+    required:
+      - type
+      - number
+    properties:
+      type:
+        $ref: '#/definitions/BusinessIdType'
+        x-validation-required-message: '{OB0018}'
+      displayText:
+        type: string
+        description: The display info for the identification.
+      businessIdDataToken:
+        type: string
+        description: The key to vault that contains the data associated with the EIN, VAT or CRN id. This key will be generated when the identification is created at YapStone.
+        readOnly: true
+      number:
+        type: string
+        description: The number associated with the identification.
+        pattern: ".*[^\\s].*"
+        x-validation-pattern-message: '{OB0119}'
+        x-validation-required-message: '{OB0018}'
+      issuer:
+        $ref: '#/definitions/IssuerScope'
+
+  BusinessIdType:
+    type: string
+    description: The type of identification [VAT, EIN, COMPANY_REGISTRATION_NUMBER, TAX_ID].
+    enum:
+      - VAT
+      - EIN
+      - COMPANY_REGISTRATION_NUMBER
+      - TAX_ID
+
+
+  # businessUpdateIdentification
+  BusinessUpdateIdentificationResource:
+    type: object
+    description: The business identification information.
+    properties:
+      type:
+        $ref: '#/definitions/BusinessIdType'
+      displayText:
+        type: string
+        description: The display info for the identification.
+      businessIdDataToken:
+        type: string
+        description: The key to vault that contains the data associated with the EIN, VAT or CRN id. This key will be generated when the identification is created at YapStone.
+        readOnly: true
+      number:
+        type: string
+        description: The number associated with the identification.
+        pattern: ".*[^\\s].*"
+        x-validation-pattern-message: '{OB0119}'
+      issuer:
+        $ref: '#/definitions/IssuerScope'
+
+  #issuer scope enum
+  IssuerScope:
+    type: string
+    description: The level at witch the identification was issued (national, state, county, city, other)
+    default: NATIONAL
+    enum:
+      - CITY
+      - COUNTY
+      - NATIONAL
+      - STATE
+      - OTHER
+
+  # market place applicant
+  MarketPlaceApplicantResource:
+    type: object
+    description: Market Place applicant information. Includes the customers history and the subscription type.
+    properties:
+      customerHistory:
+        description: The history of the customer.
+        $ref: '#/definitions/CustomerHistoryResource'
+
+
+  # market place property
+  MarketPlacePropertyResource:
+    type: object
+    description: Market place information about the property, includes reservation settings, check in/out time, etc.
+    properties:
+      score:
+        description: The marketplace score property.
+        type: number
+        format: double
+      reservationSetting:
+        description: The reservation settings for the property.
+        $ref: '#/definitions/ReservationSettingResource'
+      checkIn:
+        type: string
+        description: The checkin time.
+      checkOut:
+        type: string
+        description: The checkout time.
+      cancellationPolicy:
+        type: string
+        description: The cancellation policy for the property.
+        minLength: 2
+        x-validation-min-length-message: '{OB0121}'
+      propertyTracker:
+        description: The property stats and count details.
+        $ref: '#/definitions/PropertyTrackerResource'
+
+  # money
+  MoneyResource:
+    type: object
+    description: A money object defines the currency type and amount.
+    required:
+      - currencyCode
+      - value
+    properties:
+      currencyCode:
+        type: string
+        description: The ISO currency code for the moneyResource.
+        x-validation-required-message: '{OB0018}'
+        x-validation-annotation-iso-currency: true
+        x-validation-annotation-iso-currency-message: '{OB0022}'
+      value:
+        type: integer
+        format: int64
+        description: The amount of the in cents.
+        x-validation-required-message: '{OB0018}'
+
+  # name
+  NameResource:
+    type: object
+    description: The name of the person. It will consist of first, middle, last, additionalLast, honorificPrefix, and honorificSuffix.
+    required:
+      - first
+      - last
+    properties:
+      honorificPrefix:
+        type: string
+        description: The persons title.
+        enum:
+          - MR
+          - MRS
+          - MS
+          - MISS
+          - DR
+      first:
+        type: string
+        description: The persons first name.
+        x-validation-min-max-length-message: '{OB0100}'
+        maxLength: 100
+        minLength: 2
+        pattern: ".*[\\p{L}]{2,}"
+        x-validation-pattern-message: '{OB0119}'
+        x-validation-required-message: '{OB0018}'
+      middle:
+        type: string
+        description: The persons middle name or initial.
+        minLength: 1
+        maxLength: 25
+        x-validation-min-max-length-message: '{OB0117}'
+      last:
+        type: string
+        description: The persons last name.
+        maxLength: 100
+        minLength: 2
+        pattern: ".*[\\p{L}]{2,}"
+        x-validation-pattern-message: '{OB0119}'
+        x-validation-min-max-length-message: '{OB0100}'
+        x-validation-required-message: '{OB0018}'
+      additionalLast:
+        type: string
+        description: The 2nd last name of the person.
+        maxLength: 100
+        minLength: 2
+        pattern: ".*[^\\s].*"
+        x-validation-pattern-message: '{OB0119}'
+        x-validation-min-max-length-message: '{OB0100}'
+      honorificSuffix:
+        type: string
+        description: The persons title.
+        maxLength: 25
+
+  # delete request
+  DeactivateRequest:
+    type: object
+    description: The deactivate request contains information about why the deactivation is requested and also if the deactivation should be cascaded.
+    required:
+      - reason
+    properties:
+      reason:
+        type: string
+        description: reason for de-activation
+        x-validation-required-message: '{OB0018}'
+      note:
+        type: string
+        maxLength: 1000
+        description: Reason Notes for why the deactivation is requested
+        x-validation-max-length-message: '{OB0122}'
+
+  # delete response
+  DeactivateResponse:
+    type: object
+    description: The deactivate response contains if the deactivation was successful and entity IDs for associated entities (in case of cascade delete).
+    properties:
+      message:
+        type: string
+      cascadedContracts:
+        type: array
+        description: "List of contracts successfully de-activated due to cascade, otherwise empty"
+        items:
+          type: string
+      failedContracts:
+        type: array
+        description: "List of contracts failed to de-activate while cascade, otherwise empty"
+        items:
+          type: string
+
+  # phone
+  PhoneResource:
+    type: object
+    description: The phone number.
+    required:
+      - number
+    properties:
+      number:
+        type: string
+        description: The phone number.
+        x-validation-required-message: '{OB0018}'
+      extension:
+        type: string
+        description: The phone extension.
+        maxLength: 10
+        x-validation-max-length-message: '{OB0123}'
+
+  # price setting
+  PriceSettingResource:
+    type: object
+    description: Information about the properties price settings including min/max rate, and different fees.
+    properties:
+      minRate:
+        description: The minimum rate the property can be reserved for.
+        $ref: '#/definitions/MoneyResource'
+      maxRate:
+        description: The maximum rate the property can be reserved for.
+        $ref: '#/definitions/MoneyResource'
+      cleaningFee:
+        description: The cleaning fee.
+        $ref: '#/definitions/MoneyResource'
+      sameDayChargeAllowed:
+        type: boolean
+        description: Is there a same day charge for the property.
+      autoPricing:
+        type: boolean
+        description: Is auto pricing setup for the property.
+      rentingFrequency:
+        type: string
+        description: The renting frequencey for the property.
+        enum:
+          - LESS_THAN_ONE_MONTH
+          - ONE_TO_THREE_MONTHS
+          - THREE_TO_SIX_MONTHS
+          - SIX_OR_MORE_MONTHS
+      paymentTerms:
+        type: string
+        description: The terms of payment for the property for a traveler [single, multiple].
+        enum:
+          - SINGLE_CHARGE
+          - MULTIPLE_CHARGES
+
+  # primaryContact
+  PrimaryContactResource:
+    type: object
+    description: User primary contact information. Contains data about the person such as name, address, phone, email, etc.
+    required:
+      - name
+      - email
+    properties:
+      name:
+        description: The name of the person.
+        $ref: '#/definitions/NameResource'
+        x-validation-required-message: '{OB0018}'
+      address:
+        $ref: '#/definitions/AddressResource'
+      phone:
+        $ref: '#/definitions/PhoneResource'
+      email:
+        type: string
+        format: email
+        description: The email address.
+        maxLength: 512
+        minLength: 1
+        x-validation-annotation-email: true
+        x-validation-annotation-email-message: '{OB0023}'
+        x-validation-min-max-length-message: '{OB0114}'
+        x-validation-required-message: '{OB0018}'
+      govIdentification:
+        description: The goverment identification information. For US - Need Last4 SSN.
+        $ref: '#/definitions/GovIdentificationResource'
+      gender:
+        $ref: '#/definitions/Gender'
+      dateOfBirth:
+        type: string
+        format: date
+        pattern: /^([0-9]{4})-([0-9]{2})-([0-9]{2})$/
+        description: The date of birth for the person.Format should be (yyyy-mm-dd)
+        x-validation-pattern-message: '{OB0120}'
+      countryOfBirth:
+        type: string
+        description: The country of birth for the person.
+        maxLength: 3
+        minLength: 3
+        x-validation-annotation-iso3-country: true
+        x-validation-annotation-iso3-country-message: '{OB0102}'
+        x-validation-min-max-length-message: '{OB0118}'
+        x-validation-pattern-message: '{OB0119}'
+      nationality:
+        type: string
+        description: The nationality of the person.
+        maxLength: 3
+        minLength: 3
+        pattern: ".*[^\\s].*"
+        x-validation-annotation-iso3-country: true
+        x-validation-annotation-iso3-country-message: '{OB0102}'
+        x-validation-min-max-length-message: '{OB0118}'
+        x-validation-pattern-message: '{OB0119}'
+      websiteURL:
+        type: string
+        description: The website hostname.
+        maxLength: 24
+        minLength: 4
+        pattern: ".*[^\\s].*"
+        x-validation-min-max-length-message: '{OB0115}'
+        x-validation-pattern-message: '{OB0119}'
+
+  # Beneficial owner request
+  BeneficialOwnerRequest:
+    type: object
+    description: Beneficial Owner Request
+    required:
+      - name
+      - address
+      - email
+      - dateOfBirth
+    properties:
+      externalId:
+        type: string
+        description: The Mktplaces unique identifier for the Beneficial Owner.
+      name:
+        description: The name of the person.
+        $ref: '#/definitions/NameResource'
+        x-validation-required-message: '{OB0018}'
+      address:
+        $ref: '#/definitions/AddressResource'
+        x-validation-required-message: '{OB0018}'
+      email:
+        type: string
+        format: email
+        description: The email address.
+        maxLength: 512
+        minLength: 1
+        x-validation-annotation-email: true
+        x-validation-annotation-email-message: '{OB0023}'
+        x-validation-min-max-length-message: '{OB0114}'
+        x-validation-required-message: '{OB0018}'
+      govIdentification:
+        $ref: '#/definitions/GovIdentificationResource'
+      dateOfBirth:
+        type: string
+        format: date
+        pattern: /^([0-9]{4})-([0-9]{2})-([0-9]{2})$/
+        description: The date of birth for the person.
+        x-validation-pattern-message: '{OB0120}'
+        x-validation-required-message: '{OB0018}'
+
+  # Beneficial owner response
+  BeneficialOwnerResource:
+    type: object
+    description: Beneficial owner resource object.
+    required:
+      - name
+      - address
+      - email
+      - dateOfBirth
+    properties:
+      id:
+        type: string
+        description: The resource identifier for the Beneficial Owner
+      #        readOnly: true
+      status:
+        description: The current status of the resource.
+        $ref: '#/definitions/EntityProductStatusResource'
+        readOnly: true
+      externalId:
+        type: string
+        description: The Mktplaces unique identifier for the Beneficial Owner.
+      name:
+        description: The name of the person.
+        $ref: '#/definitions/NameResource'
+        x-validation-required-message: '{OB0018}'
+      address:
+        $ref: '#/definitions/AddressResource'
+        x-validation-required-message: '{OB0018}'
+      email:
+        type: string
+        format: email
+        description: The email address.
+        maxLength: 512
+        minLength: 1
+        x-validation-annotation-email: true
+        x-validation-annotation-email-message: '{OB0023}'
+        x-validation-min-max-length-message: '{OB0114}'
+        x-validation-required-message: '{OB0018}'
+      govIdentification:
+        $ref: '#/definitions/GovIdentificationResource'
+      dateOfBirth:
+        type: string
+        format: date
+        pattern: /^([0-9]{4})-([0-9]{2})-([0-9]{2})$/
+        description: The date of birth for the person.
+        x-validation-pattern-message: '{OB0120}'
+        x-validation-required-message: '{OB0018}'
+
+  # profile
+  ProfileResource:
+    type: object
+    description: User profile information. Contains data about the person such as name, address, phone, email, etc.
+    required:
+      - name
+      - address
+      - email
+      - dateOfBirth
+      - govIdentification
+    properties:
+      name:
+        description: The name of the person.
+        $ref: '#/definitions/NameResource'
+        x-validation-required-message: '{OB0018}'
+      address:
+        $ref: '#/definitions/AddressResource'
+        x-validation-required-message: '{OB0018}'
+      phone:
+        $ref: '#/definitions/PhoneResource'
+        x-validation-required-message: '{OB0018}'
+      email:
+        type: string
+        format: email
+        description: The email address.
+        maxLength: 512
+        minLength: 1
+        x-validation-annotation-email: true
+        x-validation-annotation-email-message: '{OB0023}'
+        x-validation-min-max-length-message: '{OB0114}'
+        x-validation-required-message: '{OB0018}'
+      govIdentification:
+        description: The goverment identification information. For US - Need Last4 SSN.
+        $ref: '#/definitions/GovIdentificationResource'
+      gender:
+        $ref: '#/definitions/Gender'
+      dateOfBirth:
+        type: string
+        format: date
+        pattern: /^([0-9]{4})-([0-9]{2})-([0-9]{2})$/
+        description: The date of birth for the person.Format should be (yyyy-mm-dd)
+        x-validation-pattern-message: '{OB0120}'
+      countryOfBirth:
+        type: string
+        description: The country of birth for the person.
+        maxLength: 3
+        minLength: 3
+        x-validation-annotation-iso3-country: true
+        x-validation-annotation-iso3-country-message: '{OB0102}'
+        x-validation-min-max-length-message: '{OB0118}'
+        x-validation-pattern-message: '{OB0119}'
+      nationality:
+        type: string
+        description: The nationality of the person.
+        maxLength: 3
+        minLength: 3
+        pattern: ".*[^\\s].*"
+        x-validation-annotation-iso3-country: true
+        x-validation-annotation-iso3-country-message: '{OB0102}'
+        x-validation-min-max-length-message: '{OB0118}'
+        x-validation-pattern-message: '{OB0119}'
+      websiteURL:
+        type: string
+        description: The website hostname.
+        maxLength: 24
+        minLength: 4
+        pattern: ".*[^\\s].*"
+        x-validation-min-max-length-message: '{OB0115}'
+        x-validation-pattern-message: '{OB0119}'
+
+  Gender:
+    type: string
+    description: The gender of the person. (M, F, O)
+    enum:
+      - M
+      - F
+      - O
+
+  # property resource
+  PropertyResource:
+    type: object
+    description: contains data about the property.
+    required:
+      - name
+      - displayName
+      - address
+    properties:
+      name:
+        type: string
+        description: The name of the asset.
+        minLength: 3
+        maxLength: 255
+        x-validation-min-max-length-message: '{OB0101}'
+        x-validation-required-message: '{OB0018}'
+      displayName:
+        type: string
+        minLength: 3
+        maxLength: 255
+        description: The display name of the asset.
+        x-validation-min-max-length-message: '{OB0101}'
+        x-validation-required-message: '{OB0018}'
+      address:
+        description: The address of the property
+        $ref: '#/definitions/AddressResource'
+        x-validation-required-message: '{OB0018}'
+      propertyInfo:
+        description: The information about the property including bedroom, bathroom count, etc.
+        $ref: '#/definitions/PropertyInfoResource'
+      propertyHistory:
+        description: The historical information on the property.
+        $ref: '#/definitions/PropertyHistoryResource'
+      mktPlaceInfo:
+        description: Market place information about the property.
+        $ref: '#/definitions/MarketPlacePropertyResource'
+
+  # property history resource
+  PropertyHistoryResource:
+    type: object
+    description: Historical information on the property.
+    properties:
+      activeSince:
+        type: string
+        format: date
+        description: The date the property was active
+      chargeCount:
+        type: integer
+        description: The number of charges.
+        format: int32
+      chargebackCount:
+        type: integer
+        description: The number of chargebacks.
+        format: int32
+      chargeVolume:
+        description: The volume of charges made on the property.
+        $ref: '#/definitions/MoneyResource'
+      chargebackVolume:
+        description: The chargeback volume made on the property.
+        $ref: '#/definitions/MoneyResource'
+      propertyTracker:
+        description: The property stats and count details.
+        $ref: '#/definitions/PropertyTrackerResource'
+
+  # property tracker resource
+  PropertyTrackerResource:
+    type: object
+    description: Property stats and counts.
+    properties:
+      inquiryCount:
+        type: integer
+        description: The number of inquries.
+        format: int32
+      ratingCount:
+        type: integer
+        description: The number of ratings.
+        format: int32
+      complaintCount:
+        type: integer
+        description: The number of complaints made on the property.
+        format: int32
+      rating:
+        type: number
+        format: double
+        description: The rating of the property.
+
+  # property info resource
+  PropertyInfoResource:
+    type: object
+    description: Information about the property
+    properties:
+      capacity:
+        type: integer
+        format: int32
+        description: The capacity of the property.
+      bedroomCount:
+        type: integer
+        format: int32
+        description: The number of bedrooms.
+      bathroomCount:
+        type: number
+        format: double
+      amenities:
+        type: array
+        description: List of amenitites the property has.
+        minItems: 1
+        maxItems: 512
+        x-validation-min-max-items-message: '{OB0114}'
+        items:
+          type: string
+
+  # property owner
+  PropertyOwnerResource:
+    type: object
+    description: The information about the customer as an asset owner.
+    properties:
+      ownerSince:
+        type: string
+        format: date
+        pattern: /^([0-9]{4})-([0-9]{2})-([0-9]{2})$/
+        description: How long has the customer owned an asset in the marketplace.
+        x-validation-pattern-message: '{OB0120}'
+      inquiryCount:
+        type: integer
+        description: The number of inquries.
+        format: int32
+        minimum: 0
+        x-validation-minimum-message: '{OB0020}'
+      chargeCount:
+        type: integer
+        description: The number of charges.
+        format: int32
+        minimum: 0
+        x-validation-minimum-message: '{OB0020}'
+      ratingCount:
+        type: integer
+        description: The number of ratings.
+        format: int32
+        minimum: 0
+        x-validation-minimum-message: '{OB0020}'
+      rating:
+        type: number
+        format: double
+        description: The rating of the asset for the owner.
+        minimum: 0
+        x-validation-minimum-message: '{OB0020}'
+      processingVolume:
+        description: How much does the owner generate through the asset.
+        $ref: '#/definitions/MoneyResource'
+      estimatedVolume:
+        description: How much is estimated that the owner will generate through the asset.
+        $ref: '#/definitions/MoneyResource'
+      assetCount:
+        type: integer
+        description: The number of assets ownered.
+        minimum: 0
+        x-validation-minimum-message: '{OB0020}'
+
+  RegistrationResource:
+    type: object
+    description: Business registration information contains data about the businesses formation.
+    required:
+      - formationCountry
+    properties:
+      formationDate:
+        type: string
+        format: date
+        description: Date of the company was created.
+      formationCountry:
+        type: string
+        description: The country where the business was created.
+        maxLength: 3
+        pattern: ".*[^\\s].*"
+        x-validation-annotation-iso3-country: true
+        x-validation-annotation-iso3-country-message: '{OB0102}'
+        x-validation-pattern-message: '{OB0119}'
+        x-validation-required-message: '{OB0018}'
+      formationState:
+        type: string
+        description: The US state where the business was created or province
+
+  # reservation setting resource
+  ReservationSettingResource:
+    type: object
+    description: The properties reservation settings.
+    properties:
+      staySetting:
+        description: Information about the min/max days the property can be reserved.
+        $ref: '#/definitions/StaySettingResource'
+      priceSetting:
+        description: Information about the price settings for the property.
+        $ref: '#/definitions/PriceSettingResource'
+
+  # social network
+  SocialNetworkResource:
+    type: object
+    description: Information about the Applicants Social Network.
+    properties:
+      network:
+        type: string
+        description: The type of social network [FACEBOOK, TWITTER, GOOGLE_PLUS, LINKEDIN, PINTEREST, INSTAGRAM, SNAPCHAT]
+        enum:
+          - FACEBOOK
+          - TWITTER
+          - GOOGLE_PLUS
+          - LINKEDIN
+          - PINTEREST
+          - INSTAGRAM
+          - SNAPCHAT
+        x-validation-required-message: '{OB0018}'
+      networkId:
+        type: string
+        description: The account networkId that is used for the social network to identify the user.
+        maxLength: 255
+        minLength: 1
+        pattern: ".*[^\\s].*"
+        x-validation-min-max-length-message: '{OB0116}'
+        x-validation-pattern-message: '{OB0119}'
+        x-validation-required-message: '{OB0018}'
+
+  #
+  EntityProductStatusResource:
+    type: object
+    description: The status of the entity.
+    properties:
+      marketplace:
+        description: The status of the entity with respect to the marketplace product.
+        $ref: '#/definitions/StatusResource'
+      payout:
+        description: The status of the entity with respect to the payout product.
+        $ref: '#/definitions/StatusResource'
+
+  # Individual product entry statuses for an entity
+  StatusResource:
+    type: object
+    description: The status of the entity relative to a product.
+    required:
+      - verificationStatus
+    properties:
+      verificationStatus:
+        type: string
+        description: The status of the entity.
+        enum:
+          - VERIFICATION_NOT_STARTED
+          - DECLINED
+          - UNVERIFIED
+          - VERIFIED
+          - VERIFICATION_IN_PROGRESS
+          - DEACTIVATED
+          - VALIDATED
+        x-validation-required-message: '{OB0018}'
+      requiredActions:
+        type: array
+        items:
+          $ref: '#/definitions/ActionResource'
+      reasons:
+        type: array
+        items:
+          type: string
+
+  # status
+  ActionStatusResource:
+    type: object
+    description: The status of the entity.
+    required:
+      - status
+    properties:
+      status:
+        type: string
+        description: The status of the entity.
+        enum:
+          - ENABLED
+          - DISABLED
+          - SUSPENDED
+        x-validation-required-message: '{OB0018}'
+      requiredActions:
+        type: array
+        items:
+          $ref: '#/definitions/ActionResource'
+      suspendedReasons:
+        type: array
+        items:
+          $ref: '#/definitions/SuspensionReasonResource'
+        description: Indicates the reason for suspension
+
+  #suspension reason resource
+  SuspensionReasonResource:
+    type: object
+    description: suspension reasons and their current values
+    properties:
+      suspensionReason:
+        type: string
+        description: reason for suspension if selected
+
+  # status reason
+  StatusReasonResource:
+    type: object
+    description: The status and reason for the status of the entity.
+    required:
+      - status
+    properties:
+      status:
+        type: string
+        description: The status of the entity.
+        enum:
+          - DECLINED
+          - APPROVED
+          - CONDITIONALLY_APPROVED
+          - DISABLED
+          - VERIFICATION_IN_PROGRESS
+        x-validation-required-message: '{OB0018}'
+      disabledReason:
+        type: string
+        description: Reasoncode for status change.
+      disabledReasonNotes:
+        type: string
+      declinedReasons:
+        type: array
+        items:
+          type: string
+
+  # status request
+  StatusRequest:
+    type: object
+    description: The status of the entity.
+    properties:
+      verificationStatus:
+        type: string
+        description: The status of the entity.
+        enum:
+          - UNVERIFIED
+          - VERIFIED
+          - VERIFICATION_IN_PROGRESS
+          - DECLINED
+          - DEACTIVATED
+
+  # stay setting
+  StaySettingResource:
+    type: object
+    description: The stay settings includes min/max number of days that the property can be reserved.
+    properties:
+      minDays:
+        type: integer
+        format: int32
+        description: The minimum number of days the property can be reserved for.
+      maxDays:
+        type: integer
+        format: int32
+        description: The maximum number of days the property can be reserved for.
+
+
+
+  # traveler
+  TravelerResource:
+    type: object
+    description: The customer history as a traveler.
+    required:
+      - startedOn
+    properties:
+      startedOn:
+        type: string
+        format: date
+        pattern: /^([0-9]{4})-([0-9]{2})-([0-9]{2})$/
+        description: The date the customer started as a traveler.
+        x-validation-pattern-message: '{OB0120}'
+        x-validation-required-message: '{OB0018}'
+      inquiryCount:
+        type: integer
+        description: The number of inquries.
+        format: int32
+        minimum: 0
+        x-validation-minimum-message: '{OB0020}'
+      chargeCount:
+        type: integer
+        description: The number of charges.
+        format: int32
+        minimum: 0
+        x-validation-minimum-message: '{OB0020}'
+      ratingCount:
+        type: integer
+        description: The number of ratings.
+        format: int32
+        minimum: 0
+        x-validation-minimum-message: '{OB0020}'
+
+  # owner
+  IndividualOwnerResource:
+    type: object
+    description: The name of the owner of the asset. It will consist of first and last name.
+    required:
+      - first
+      - last
+    properties:
+      first:
+        type: string
+        description: The persons first name.
+        maxLength: 100
+        minLength: 1
+        pattern: ".*[^\\s].*"
+        x-validation-min-max-length-message: '{OB0100}'
+        x-validation-pattern-message: '{OB0119}'
+        x-validation-required-message: '{OB0018}'
+      last:
+        type: string
+        description: The persons last name.
+        maxLength: 100
+        minLength: 1
+        pattern: ".*[^\\s].*"
+        x-validation-min-max-length-message: '{OB0100}'
+        x-validation-pattern-message: '{OB0119}'
+        x-validation-required-message: '{OB0018}'
+
+  BusinessOwnerResource:
+    type: object
+    description: The business that is the owner of the asset
+    required:
+      - name
+    properties:
+      name:
+        type: string
+        description: The name of the business.
+        minLength: 3
+        maxLength: 512
+        x-validation-min-max-length-message: '{OB0107}'
+        x-validation-required-message: '{OB0018}'
+
+  OwnerResource:
+    type: object
+    description: The owner of the asset
+    required:
+      - first
+      - last
+    properties:
+      id:
+        type: string
+        description: id of the applicant
+      first:
+        type: string
+        description: The persons first name.
+        maxLength: 100
+        minLength: 1
+        pattern: ".*[^\\s].*"
+        x-validation-min-max-length-message: '{OB0100}'
+        x-validation-pattern-message: '{OB0119}'
+        x-validation-required-message: '{OB0018}'
+      last:
+        type: string
+        description: The persons last name.
+        maxLength: 100
+        minLength: 1
+        pattern: ".*[^\\s].*"
+        x-validation-min-max-length-message: '{OB0100}'
+        x-validation-pattern-message: '{OB0119}'
+        x-validation-required-message: '{OB0018}'
+      address:
+        description: The address of the owner
+        $ref: '#/definitions/AddressResource'
+        x-validation-required-message: '{OB0018}'
+
+  OwnerRequest:
+    type: object
+    description: The owner of the asset
+    required:
+      - first
+      - last
+    properties:
+      first:
+        type: string
+        description: The persons first name.
+        maxLength: 100
+        minLength: 1
+        pattern: ".*[^\\s].*"
+        x-validation-min-max-length-message: '{OB0100}'
+        x-validation-pattern-message: '{OB0119}'
+        x-validation-required-message: '{OB0018}'
+      last:
+        type: string
+        description: The persons last name.
+        maxLength: 100
+        minLength: 1
+        pattern: ".*[^\\s].*"
+        x-validation-min-max-length-message: '{OB0100}'
+        x-validation-pattern-message: '{OB0119}'
+        x-validation-required-message: '{OB0018}'
+      address:
+        description: The address of the owner
+        $ref: '#/definitions/AddressResource'
+        x-validation-required-message: '{OB0018}'
+
+  PatchOperation:
+    type: string
+    description: The operation to be performed
+    enum:
+      - "add"
+      - "delete"
+      - "update"
+
+
+  #Contract search api resources
+  ContractResources:
+    type: object
+    properties:
+      results:
+        type: array
+        items:
+          $ref: "#/definitions/ContractResource"
+
+  # Beneficial owner update
+  BeneficialOwnersPatch:
+    description: Owners update element
+    required:
+      - "op"
+    properties:
+      op:
+        $ref: '#/definitions/PatchOperation'
+        x-validation-required-message: '{OB0018}'
+      beneficialOwnerId:
+        type: string
+        description: The identifier for the entity.
+      beneficialOwnerEntity:
+        description: Owner entity
+        $ref: '#/definitions/BeneficialOwnerRequest'
+
+  #product
+  Product:
+    description: a supported onboarding product that we offer to our customers.
+    type: string
+    enum:
+      - MARKETPLACE
+      - PAYOUT
+
+  # Entity history resources
+  EntityHistoryResource:
+    type: object
+    description: Entity history resource.
+    properties:
+      results:
+        type: array
+        description: A list of entity update events.
+        items:
+          $ref: '#/definitions/EntityUpdateEvent'
+
+  # Entity history
+  EntityUpdateEvent:
+    type: object
+    description: Entity update event.
+    properties:
+      entityId:
+        type: string
+        description: Unique Id of entity.
+      updatedAttributes:
+        type: array
+        description: List of updated attributes.
+        items:
+          $ref: '#/definitions/EntityUpdatedAttribute'
+      userName:
+        type: string
+        description: Name of user.
+      lastUpdated:
+        type: string
+        format: date-time
+        description: The timestamp in ISO 8601 format when the entity last updated.
+
+  # Updated attribute
+  EntityUpdatedAttribute:
+    type: object
+    description: An updated attribute.
+    properties:
+      name:
+        type: string
+        description: Name of attribute.
+      newValue:
+        type: object
+        description: New value of attribute.
+      oldValue:
+        type: object
+        description: Old value of attribute.
+
+  Meta:
+    type: object
+    allOf:
+      - $ref: '#/definitions/Pagination'
+
+  Pagination:
+    type: object
+    properties:
+      totalCount:
+        type: integer
+        format: int64
+      page:
+        type: integer
+        format: int32
+      size:
+        type: integer
+        format: int32
+    required:
+      - page
+      - size
+
+  # Only used to remove error msg when using $ref: '#/definitions/Errors'. Actual Errors is mapped to correct class in
+  # rest-api pom, in swagger-codegen-maven-plugin import-mappings config
+  Errors:
+    type: object
+
+  CapabilityResource:
+    type: object
+    x-jackson-json-sub-type-info: true
+    x-jackson-json-sub-type-as-exiting-property: true
+    discriminator: type
+    required:
+      - type
+    properties:
+      type:
+        type: string
+        enum:
+          - DIRECT_DEBIT
+      additionalProperties:
+        $ref: '#/definitions/ObjectNode'
+
+  DirectDebitSchemeType:
+    type: string
+    description: The mandate scheme based on the country
+    enum:
+      - SEPA
+      - BACS
+      - OTHER
+
+  DirectDebitFrequencyType:
+    type: string
+    description: It describes the frequency with which debits can be made
+    enum:
+      - ONE_TIME_PAYMENT
+      - RECURRING_PAYMENT
+
+  DirectDebtCapabilityResource:
+    type: object
+    x-jackson-json-type-name: DIRECT_DEBIT
+    allOf:
+      - $ref: '#/definitions/CapabilityResource'
+      - properties:
+          id:
+            type : string
+            description: The id of the mandate maintained internally by yapstone
+          scheme:
+            $ref: '#/definitions/DirectDebitSchemeType'
+          status:
+            type: string
+            description: The status of the capability
+            enum:
+              - ENABLED
+              - DISABLED
+              - SUSPENDED
+          creditorId:
+            type: string
+            description: The creditor Id
+            enum:
+              - MARKETPLACE
+              - YAPSTONE
+
+  ObjectNode:
+    type: object
+
+  # Individual Applicant Internal Fields
+  IndividualApplicantAdminFieldsResource:
+    type: object
+    description: Internal attributes to be updated by Admin for Individual Applicant
+    properties:
+      autoGraduated:
+        type: boolean
+        description: value for graduation policy
+      payoutControl:
+        $ref: '#/definitions/PayoutControlResource'
+
+  # Business Applicant Internal Fields
+  BusinessApplicantAdminFieldsResource:
+    type: object
+    description: Internal attributes to be updated by Admin for Business Applicant
+    properties:
+      autoGraduated:
+        type: boolean
+        description: value for graduation policy
+      payoutControl:
+        $ref: '#/definitions/PayoutControlResource'
+
+  # Merchant Category Code Fields
+  ProCategoryResource:
+    type: object
+    required:
+      - code
+    properties:
+      code:
+        type: integer
+        format: int32
+        description: merchant category code of applicant.
+      description:
+        type: string
+        description: merchant category code description of applicant.
+
+  CustomerResource:
+    type: object
+    allOf:
+      - properties:
+          id:
+            type: string
+            description: The resource identifier for the customer.
+          name:
+            description: The name of the person.
+            $ref: '#/definitions/CustomerNameResource'
+          phone:
+            $ref: '#/definitions/CustomerPhoneResource'
+            description: The phone number.
+          email:
+            type: string
+            format: email
+            description: The email address.
+          address:
+            $ref: '#/definitions/CustomerAddressResource'
+          govIdentification:
+            $ref: '#/definitions/CustomerGovernmentIdentificationResource'
+          dateOfBirth:
+            type: string
+            format: date
+          metadata:
+            $ref: '#/definitions/ObjectNode'
+          consents:
+            type: array
+            items:
+              $ref: '#/definitions/CustomerConsentResource'
+          externalId:
+            type: string
+            description: The Mktplaces unique identifier for the Customer.
+          status:
+            $ref: '#/definitions/CustomerEntityProductcustomerStatusResource'
+          businessName:
+            type: string
+            description: The name of the business.
+          businessType:
+            type: string
+            description: The type of business unit (sole_prop, corp, llc)
+            enum:
+              - SOLE_PROPRIETOR
+              - PARTNERSHIP
+              - LLC
+              - S_CORP
+              - CORPORATION
+
+  CustomerNameResource:
+    type: object
+    description: The name of the person. It will consist of first, middle, last, additionalLast, honorificPrefix, and honorificSuffix.
+    properties:
+      honorificPrefix:
+        type: string
+        description: The persons title.
+        enum:
+          - MR
+          - MRS
+          - MS
+          - MISS
+          - DR
+      first:
+        type: string
+        description: The persons first name.
+      middle:
+        type: string
+      last:
+        type: string
+        description: The persons last name.
+      additionalLast:
+        type: string
+        description: The 2nd last name of the person.
+      honorificSuffix:
+        type: string
+        description: The persons title.
+
+  CustomerGovernmentIdentificationResource:
+    type: object
+    description: The goverment identification information.
+    properties:
+      type:
+        $ref: '#/definitions/CustomerGovernmentIdType'
+      displayText:
+        type: string
+        description: The display info for the identification.
+      govIdDataToken:
+        type: string
+        description: The key to vault that contains the data associated with the government id. This key will be generated when the identification is created at YapStone.
+      number:
+        type: string
+        description: The number associated with the identification.
+      expiration:
+        type: string
+        format: date
+      country:
+        type: string
+        description: The 3-letter ISO country code of the identification issuer.
+      state:
+        type: string
+        description: The state or province of the identification issuer.
+
+  CustomerGovernmentIdType:
+    type: string
+    description: The type of identification.
+    enum:
+      - LAST_FOUR_SSN
+
+  CustomerPhoneResource:
+    type: object
+    description: The phone number.
+    properties:
+      number:
+        type: string
+        description: The phone number.
+      extension:
+        type: string
+        description: The phone extension.
+
+  CustomerAddressResource:
+    type: object
+    description: The address of the customer.
+    properties:
+      street1:
+        type: string
+        description: The street address line 1.
+      street2:
+        type: string
+        description: The street address line 2.
+      street3:
+        type: string
+        description: The street address line 3.
+      street4:
+        type: string
+        description: The street address line 4.
+      city:
+        type: string
+        description: The name of the city.
+      state:
+        type: string
+        description: The state or province where the address resides.
+      postalCode:
+        type: string
+        description: The postal code of the address.
+      countryCode:
+        type: string
+        description: The 3-letter countryCode of the address.
+
+  CustomerAdminResource:
+    allOf:
+      - $ref: '#/definitions/CustomerResource'
+      - type: object
+      - description: Customer Data with Additional details
+      - properties:
+          partyId:
+            type: string
+            description: The party id for the customer.
+
+  CustomerConsentResource:
+    type: object
+    properties:
+      timeOfConsent:
+        type: string
+        format: date-time
+        description: The timestamp in ISO 8601 format when the user consented.
+      type:
+        $ref: '#/definitions/CustomerConsentType'
+      version:
+        type: integer
+        format: int32
+        description: The version of the consent if there is one.
+      accepted:
+        type: boolean
+        description: Indicates the acceptance of the T&Cs.
+
+  CustomerConsentType:
+    type: string
+    enum:
+      - AGE
+
+  CustomerEntityProductcustomerStatusResource:
+    type: object
+    description: The status of the entity.
+    properties:
+      payout:
+        description: The status of the entity with respect to the payout product.
+        $ref: '#/definitions/CustomerStatusResource'
+
+  CustomerStatusResource:
+    type: object
+    description: The status of the Customer.
+    properties:
+      verificationStatus:
+        type: string
+        description: The verification status of the Customer.
+        enum:
+          - VERIFICATION_NOT_STARTED
+          - DECLINED
+          - UNVERIFIED
+          - VERIFIED
+          - VERIFICATION_IN_PROGRESS
+          - DEACTIVATED
+          - VALIDATED
+      requiredActions:
+        type: array
+        items:
+          $ref: '#/definitions/CustomerActionResource'
+      reasons:
+        type: array
+        items:
+          type: string
+
+  # action
+  CustomerActionResource:
+    type: object
+    description: The action that must be taken on the entity.
+    properties:
+      actionCode:
+        type: string
+        description: The name of the type of action that must be taken.
+      description:
+        type: string
+        description: A detailed description of the action that must be performed.
+      entityId:
+        type: string
+        description: id for the enitity that requires the action.
+      entityType:
+        type: string
+        description: the type of entity for the required action.
+
+  CreateCustomerRequest:
+    type: object
+    $ref: '#/definitions/CustomerResource'
+
+  UpdateCustomerRequest:
+    type: object
+    $ref: '#/definitions/CustomerResource'
+
+  # delete response
+  CustomerDeactivateResponse:
+    type: object
+    description: The deactivate response contains if the deactivation was successful and entity IDs for associated entities (in case of cascade delete).
+    properties:
+      message:
+        type: string
+      cascadedContracts:
+        type: array
+        description: "List of contracts successfully de-activated due to cascade, otherwise empty"
+        items:
+          type: string
+      failedContracts:
+        type: array
+        description: "List of contracts failed to de-activate while cascade, otherwise empty"
+        items:
+          type: string
+
+  CustomerErrors:
+    type: object
+    properties:
+      customerErrors:
+        type: array
+        items:
+          type: object
+          properties:
+            errorCode:
+              type: string
+            message:
+              type: string
+
+  CustomerMarketplaceResource:
+    type: object
+    properties:
+      customer:
+        description: The customer resource.
+        $ref: '#/definitions/Customer'
+      marketplace:
+        $ref: '#/definitions/MarketplaceResource'
+        description: The marketplace resource.
+
+  Customer:
+    type: object
+    properties:
+      id:
+        type: string
+        description: The customer Id.
+      name:
+        type: string
+        $ref: '#/definitions/CustomerNameResource'
+        description: The customer name.
+
+  MarketplaceResource:
+    type: object
+    properties:
+      id:
+        type: string
+        description: The marketplace Id.
+      name:
+        type: string
+        description: The marketplace name.
+      phone:
+        $ref: '#/definitions/CustomerPhoneResource'
+        description: The Marketplace phone number.
+      email:
+        type: string
+        format: email
+        description: The Marketplace email address.
+      address:
+        description: The Marketplace Address.
+        $ref: '#/definitions/CustomerAddressResource'
+
+  OfferingResponse:
+    allOf:
+      - $ref: '#/definitions/RestResponse'
+      - type: object
+      - properties:
+          items:
+            type: array
+            items:
+              $ref: '#/definitions/OfferingResource'
+  RestResponse:
+    type: object
+    discriminator: "restResponse" # required for inheritance to work
+    properties:
+      _meta:
+        $ref: '#/definitions/MetaPage'
+
+  OfferingResource:
+    type: object
+    properties:
+      offeringId:
+        type: string
+        description: Id of the given offering.
+      offeringName:
+        type: string
+        description: Name of the offering.
+        #maxLength: 8
+        #pattern: ^\S+$
+      aliasFor:
+        type: string
+        description: Aliase for a given offering.
+      instrumentId:
+        type: string
+        description: Id of the given instrument to which the offering is associated with.
+      groupId:
+        type: string
+        description: Group to which the offering belongs to
+      escrowFlag:
+        type: boolean
+        description:  Flag which decides whether this offering can be paid advanced or checkin.
+      isDefault:
+        type: boolean
+        description: Indicates if this is the default Offering set up for the assetListing
+      softDescriptor:
+        type: string
+        description: The text to be send to the processor for displaying on the statement.
+      associatedEntity:
+        type: string
+        description: Entity where the offerings will be attached to.
+      entityRef:
+        $ref: '#/definitions/EntityRef'
+      metaData:
+        $ref: '#/definitions/ObjectNode'
+
+  EntityRef:
+    description: Entity reference
+    required:
+      - entityId
+      - entityType
+    properties:
+      entityId:
+        type: string
+      entityType:
+        type: string
+        enum:
+          - MARKETPLACE
+          - MERCHANT
+          - ASSET_LISTING
+          - CUSTOMER
+
+  OfferingRequest:
+    type: object
+    properties:
+      items:  {
+        $ref: '#/definitions/OfferingResource'
+      }
+
+  PayoutMode:
+    type: string
+    description: The type of Payout Mode
+    enum:
+      - POST_CHECK_IN
+      - POST_BOOKING
+      - NONE
+      - STANDARD
+      - ADVANCED
+
+  PaymentPlatform:
+    type: string
+    description: The platform to initiate payments on.
+    enum:
+      - DOMESTIC
+      - INTERNATIONAL
+
+
+
+  PayoutControlResource:
+    description: Payout Control for the Applicant
+    properties:
+      payoutMode:
+        type: string
+        enum:
+          - STANDARD
+          - ADVANCED
+      delay:
+        type: integer
+
+  Preference:
+    type: object
+    required:
+      - name
+      - entityRef
+    properties:
+      id:
+        type: string
+      name:
+        type: string
+        x-validation-required-message: '{OB0018}'
+        x-validation-pattern-message: '{OB0119}'
+      value:
+        type: string
+      scope:
+        type: string
+        readOnly: true
+      description:
+        type: string
+      additionalProperties:
+        $ref: '#/definitions/ObjectNode'
+      entityRef:
+        $ref: '#/definitions/EntityRef'
+        x-validation-required-message: '{OB0018}'
+      updateHistory:
+        type: array
+        items:
+          $ref: '#/definitions/History'
+
+  History:
+    type: object
+    properties:
+      oldPayoutMode:
+        type: string
+      newPayoutMode:
+        type: string
+      oldDelay:
+        type: string
+      newDelay:
+        type: string
+      updatedBy:
+        type: string
+      updatedDate:
+        type: string
+        format: date-time

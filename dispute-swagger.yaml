@@ -1,0 +1,1201 @@
+swagger: '2.0'
+info:
+  title: YapStone Dispute Composite Service
+  description: |
+    This service provides a Dispute engine that enables a Marketplace to manage Disputes and Dispute related objects like Evidences on processed Payments.
+  version: v1
+  contact:
+    email: cbkdev@yapstone.com
+
+produces:
+  - application/json
+consumes:
+  - application/json
+securityDefinitions:
+  Bearer:
+    type: apiKey
+    name: Authorization
+    in: header
+    description: |
+      Bearer authorization
+
+basePath: /dispute-composite/api/v1
+
+paths:
+  /disputes:
+    post:
+      tags: ['disputes']
+      summary: Create a dispute [Test Only]
+      description: A test harness API to create a dispute
+      operationId: createDispute
+      security:
+        - Bearer: []
+      parameters:
+        - name: request
+          in: body
+          description: New dispute entity to be created
+          required: true
+          schema:
+            $ref: '#/definitions/CompositeDispute'
+      responses:
+        '201':
+          description: Success
+          schema:
+            $ref: '#/definitions/CompositeDispute'
+        '400':
+          description: Bad request
+          schema:
+            $ref: '#/definitions/Errors'
+        '401':
+          description: Unauthorized
+          schema:
+            $ref: '#/definitions/Errors'
+        '404':
+          description: Not found
+          schema:
+            $ref: '#/definitions/Errors'
+        '500':
+          description: Internal server error
+          schema:
+            $ref: '#/definitions/Errors'
+
+  /disputes/{id}:
+    get:
+      tags: ['disputes']
+      summary: Fetch a single dispute
+      description: Returns the dispute detail and status history for the given `disputeId`
+      operationId: getDispute
+      security:
+        - Bearer: []
+      parameters:
+        - in: path
+          name: id
+          description: Primary key for a single dispute record (assigned by YapStone)
+          required: true
+          type: string
+          maxLength: 64
+      responses:
+        '200':
+          description: Success
+          schema:
+            $ref: '#/definitions/CompositeDispute'
+        '400':
+          description: Bad request
+          schema:
+            $ref: '#/definitions/Errors'
+        '401':
+          description: Unauthorized
+          schema:
+            $ref: '#/definitions/Errors'
+        '404':
+          description: Not found
+          schema:
+            $ref: '#/definitions/Errors'
+        '500':
+          description: Internal server error
+          schema:
+            $ref: '#/definitions/Errors'
+
+  /disputes/{id}/action:
+    patch:
+      tags: ['disputes']
+      summary: Action to perform on the dispute - two values are supported - ACCEPT or CONTEST
+      description: Action to perform on the dispute - two values are supported - ACCEPT or CONTEST
+      operationId: actionByDisputeId
+      security:
+        - Bearer: []
+      parameters:
+        - in: path
+          name: id
+          description: Primary key for a single dispute record (assigned by YapStone)
+          required: true
+          type: string
+          maxLength: 64
+        - name: request
+          in: body
+          description: Action to be patched
+          required: true
+          schema:
+            $ref: '#/definitions/ActionPatchRequest'
+      responses:
+        '204':
+          description: No content
+        '400':
+          description: Bad request
+          schema:
+            $ref: '#/definitions/Errors'
+        '401':
+          description: Unauthorized
+          schema:
+            $ref: '#/definitions/Errors'
+        '403':
+          description: Forbidden
+          schema:
+            $ref: '#/definitions/Errors'
+        '404':
+          description: Not found
+          schema:
+            $ref: '#/definitions/Errors'
+        '422':
+          description: Unprocessable Entity
+          schema:
+            $ref: '#/definitions/Errors'
+        '500':
+          description: Internal server error
+          schema:
+            $ref: '#/definitions/Errors'
+
+  /disputes/{id}/finalDisposition:
+    patch:
+      tags: ['disputes']
+      summary: Final disposition to be set on the dispute - two values are supported - WON or LOST
+      description: Final disposition to be set on the dispute - two values are supported - WON or LOST
+      operationId: finalDispositionByDisputeId
+      security:
+        - Bearer: []
+      parameters:
+        - in: path
+          name: id
+          description: Primary key for a single dispute record (assigned by YapStone)
+          required: true
+          type: string
+          maxLength: 64
+        - name: request
+          in: body
+          description: Final disposition to be patched
+          required: true
+          schema:
+            $ref: '#/definitions/FinalDispositionPatchRequest'
+      responses:
+        '204':
+          description: No content
+        '400':
+          description: Bad request
+          schema:
+            $ref: '#/definitions/Errors'
+        '401':
+          description: Unauthorized
+          schema:
+            $ref: '#/definitions/Errors'
+        '403':
+          description: Forbidden
+          schema:
+            $ref: '#/definitions/Errors'
+        '404':
+          description: Not found
+          schema:
+            $ref: '#/definitions/Errors'
+        '422':
+          description: Unprocessable Entity
+          schema:
+            $ref: '#/definitions/Errors'
+        '500':
+          description: Internal server error
+          schema:
+            $ref: '#/definitions/Errors'
+
+  /disputes/{id}/status:
+    patch:
+      tags: ['disputes']
+      summary: Status to be updated in the dispute
+      description: Status to be updated in the dispute
+      operationId: updateStatus
+      security:
+        - Bearer: []
+      parameters:
+        - in: path
+          name: id
+          description: Primary key for a single dispute record (assigned by YapStone)
+          required: true
+          type: string
+          maxLength: 64
+        - name: request
+          in: body
+          description: Status to be patched
+          required: true
+          schema:
+            $ref: '#/definitions/StatusPatchRequest'
+      responses:
+        '204':
+          description: No content
+        '400':
+          description: Bad request
+          schema:
+            $ref: '#/definitions/Errors'
+        '401':
+          description: Unauthorized
+          schema:
+            $ref: '#/definitions/Errors'
+        '403':
+          description: Forbidden
+          schema:
+            $ref: '#/definitions/Errors'
+        '404':
+          description: Not found
+          schema:
+            $ref: '#/definitions/Errors'
+        '422':
+          description: Unprocessable Entity
+          schema:
+            $ref: '#/definitions/Errors'
+        '500':
+          description: Internal server error
+          schema:
+            $ref: '#/definitions/Errors'
+
+  /disputes/{id}/portalWizardState:
+    patch:
+      tags: ['disputes']
+      summary: Portal wizard state to be updated in the dispute
+      description: Portal wizard state to be updated in the dispute
+      operationId: updatePortalWizardState
+      security:
+        - Bearer: []
+      parameters:
+        - in: path
+          name: id
+          description: Primary key for a single dispute record (assigned by YapStone)
+          required: true
+          type: string
+          maxLength: 64
+        - name: request
+          in: body
+          description: Portal Wizard State to be patched
+          required: true
+          schema:
+            $ref: '#/definitions/PortalWizardStatePatchRequest'
+      responses:
+        '204':
+          description: No content
+        '400':
+          description: Bad request
+          schema:
+            $ref: '#/definitions/Errors'
+        '401':
+          description: Unauthorized
+          schema:
+            $ref: '#/definitions/Errors'
+        '403':
+          description: Forbidden
+          schema:
+            $ref: '#/definitions/Errors'
+        '404':
+          description: Not found
+          schema:
+            $ref: '#/definitions/Errors'
+        '422':
+          description: Unprocessable Entity
+          schema:
+            $ref: '#/definitions/Errors'
+        '500':
+          description: Internal server error
+          schema:
+            $ref: '#/definitions/Errors'
+
+  /disputes/{id}/disputeWorkflow:
+    patch:
+      tags: ['disputes']
+      summary: Workflow status to be updated in Dispute
+      description: Workflow status to be updated in Dispute
+      operationId: updateWorkflowStatus
+      security:
+        - Bearer: []
+      parameters:
+        - in: path
+          name: id
+          description: Primary key for a single dispute record (assigned by YapStone)
+          required: true
+          type: string
+          maxLength: 64
+        - name: request
+          in: body
+          description: Workflow status to be patched
+          required: true
+          schema:
+            $ref: '#/definitions/WorkflowStatusPatchRequest'
+      responses:
+        '204':
+          description: No content
+        '400':
+          description: Bad request
+          schema:
+            $ref: '#/definitions/Errors'
+        '401':
+          description: Unauthorized
+          schema:
+            $ref: '#/definitions/Errors'
+        '403':
+          description: Forbidden
+          schema:
+            $ref: '#/definitions/Errors'
+        '404':
+          description: Not found
+          schema:
+            $ref: '#/definitions/Errors'
+        '422':
+          description: Unprocessable Entity
+          schema:
+            $ref: '#/definitions/Errors'
+        '500':
+          description: Internal server error
+          schema:
+            $ref: '#/definitions/Errors'
+
+  /disputes/{id}/followUpDates:
+    patch:
+      tags: ['disputes']
+      summary: FollowUpDate and AgentFollowUpDate to be updated
+      description: FollowUpDate and AgentFollowUpDate to be updated in the dispute
+      operationId: updateFollowUpDates
+      security:
+        - Bearer: []
+      parameters:
+        - in: path
+          name: id
+          description: Primary key for a single dispute record (assigned by YapStone)
+          required: true
+          type: string
+          maxLength: 64
+        - name: request
+          in: body
+          description: FollowUpDate and AgentFollowUpDate to be patched
+          required: true
+          schema:
+            $ref: '#/definitions/FollowUpDatesPatchRequest'
+      responses:
+        '204':
+          description: No content
+        '400':
+          description: Bad request
+          schema:
+            $ref: '#/definitions/Errors'
+        '401':
+          description: Unauthorized
+          schema:
+            $ref: '#/definitions/Errors'
+        '403':
+          description: Forbidden
+          schema:
+            $ref: '#/definitions/Errors'
+        '404':
+          description: Not found
+          schema:
+            $ref: '#/definitions/Errors'
+        '422':
+          description: Unprocessable Entity
+          schema:
+            $ref: '#/definitions/Errors'
+        '500':
+          description: Internal server error
+          schema:
+            $ref: '#/definitions/Errors'
+
+  /disputes/{id}/releaseOrderHoldRequested:
+    patch:
+      tags: ['disputes']
+      summary: Release hold on all Pds associated with the chargeback order
+      description: Release hold on all PDs tied to all chargeback orders that are in dispute hold
+      operationId: releaseOrderHoldRequested
+      security:
+        - Bearer: []
+      parameters:
+        - in: path
+          name: id
+          description: Primary key for a single dispute record (assigned by YapStone)
+          required: true
+          type: string
+          maxLength: 64
+      responses:
+        '204':
+          description: No content
+        '400':
+          description: Bad request
+          schema:
+            $ref: '#/definitions/Errors'
+        '401':
+          description: Unauthorized
+          schema:
+            $ref: '#/definitions/Errors'
+        '403':
+          description: Forbidden
+          schema:
+            $ref: '#/definitions/Errors'
+        '404':
+          description: Not found
+          schema:
+            $ref: '#/definitions/Errors'
+        '422':
+          description: Unprocessable Entity
+          schema:
+            $ref: '#/definitions/Errors'
+        '500':
+          description: Internal server error
+          schema:
+            $ref: '#/definitions/Errors'
+
+  /disputes/{id}/events:
+    get:
+      tags: ['disputes']
+      summary: Fetch the dispute events associated with a dispute
+      description: Returns the dispute events associated with a dispute
+      operationId: getDisputeEvents
+      security:
+        - Bearer: []
+      parameters:
+        - in: path
+          name: id
+          description: Primary key for a single dispute record (assigned by YapStone)
+          required: true
+          type: string
+          maxLength: 64
+        - $ref: '#/parameters/offset'
+        - $ref: '#/parameters/limit'
+      responses:
+        '200':
+          description: Success
+          schema:
+            $ref: '#/definitions/CompositeDisputeEventPagedResponse'
+        '400':
+          description: Bad request
+          schema:
+            $ref: '#/definitions/Errors'
+        '401':
+          description: Unauthorized
+          schema:
+            $ref: '#/definitions/Errors'
+        '404':
+          description: Not found
+          schema:
+            $ref: '#/definitions/Errors'
+        default:
+          description: Unexpected Error
+          schema:
+            $ref: '#/definitions/Errors'
+
+  /evidences/{id}/files:
+    post:
+      tags: ['evidences']
+      summary: Update a dispute evidences
+      operationId: createFile
+      consumes:
+        - multipart/form-data
+      security:
+        - Bearer: []
+      parameters:
+        - in: path
+          name: id
+          description: Primary key for a single evidence record (assigned by YapStone)
+          required: true
+          type: string
+          maxLength: 64
+        - name: evidenceCategory
+          in: formData
+          required: true
+          type: string
+          enum: &EVIDENCE_CATEGORY
+            - CANCELLATION
+            - CHARGE
+            - REFUND
+            - SHIPPING
+            - SIGNATURE
+            - USAGE
+        - name: evidenceType
+          in: formData
+          required: true
+          type: string
+          enum: &EVIDENCE_TYPE
+            - ACCESS_LOG
+            - COMMUNICATION
+            - DISCLOSURE
+            - DOCUMENTATION
+            - EXPLANATION_LETTER
+            - RECEIPT
+        - name: file
+          in: formData
+          description: file to upload
+          required: true
+          type: file
+        - name: note
+          in: formData
+          description: Text note for file evidence
+          type: string
+        - name: wizardStep
+          in: formData
+          description: Wizard step in portal for which this evidence is being uploaded
+          type: string
+        - name: documentType
+          in: formData
+          description: The type of document being uploaded as evidence
+          type: string
+        - name: finalEvidence
+          in: formData
+          description: Indicates whether the submitted evidence is final or not
+          type: boolean
+          default: true
+      responses:
+        '201':
+          description: Created
+          schema:
+            $ref: '#/definitions/CompositeFileEvidence'
+        '400':
+          description: Bad request
+          schema:
+            $ref: '#/definitions/Errors'
+        '401':
+          description: Unauthorized
+          schema:
+            $ref: '#/definitions/Errors'
+        '404':
+          description: Not found
+          schema:
+            $ref: '#/definitions/Errors'
+        '409':
+          description: Conflict
+          schema:
+            $ref: '#/definitions/Errors'
+        default:
+          description: Unexpected Error
+          schema:
+            $ref: '#/definitions/Errors'
+
+  /evidences/{id}/text:
+    post:
+      tags: ['evidences']
+      summary: Update a dispute evidences
+      operationId: createText
+      security:
+        - Bearer: []
+      parameters:
+        - in: path
+          name: id
+          description: Primary key for a single evidence record (assigned by YapStone)
+          required: true
+          type: string
+          maxLength: 64
+        - name: request
+          in: body
+          description: Text evidence to be created
+          required: true
+          schema:
+            $ref: '#/definitions/CompositeTextEvidence'
+      responses:
+        '201':
+          description: Created
+          schema:
+            $ref: '#/definitions/CompositeTextEvidence'
+        '400':
+          description: Bad request
+          schema:
+            $ref: '#/definitions/Errors'
+        '401':
+          description: Unauthorized
+          schema:
+            $ref: '#/definitions/Errors'
+        '404':
+          description: Not found
+          schema:
+            $ref: '#/definitions/Errors'
+        '409':
+          description: Conflict
+          schema:
+            $ref: '#/definitions/Errors'
+        '422':
+          description: Unprocessable Entity
+          schema:
+            $ref: '#/definitions/Errors'
+        default:
+          description: Unexpected Error
+          schema:
+            $ref: '#/definitions/Errors'
+
+
+  /evidences/{id}:
+    get:
+      tags: ['evidences']
+      summary: Get the evidence by it's id
+      description: |
+        Get the evidence by it's id
+      operationId: getEvidence
+      security:
+        - Bearer: []
+      parameters:
+        - in: path
+          name: id
+          description: Id of the evidene
+          required: true
+          type: string
+          maxLength: 64
+      responses:
+        '200':
+          description: Success
+          schema:
+            $ref: '#/definitions/CompositeEvidenceResponse'
+        '400':
+          description: Bad request
+          schema:
+            $ref: '#/definitions/Errors'
+        '401':
+          description: Unauthorized
+          schema:
+            $ref: '#/definitions/Errors'
+        '404':
+          description: Not found
+          schema:
+            $ref: '#/definitions/Errors'
+        default:
+          description: Unexpected Error
+          schema:
+            $ref: '#/definitions/Errors'
+            
+  /files/{id}/content:
+    get:
+      tags: ['evidences']
+      summary: Get file content by file evidence id
+      description: Returns a file evidence's content
+      operationId: getFileContentById
+      produces:
+        - application/*
+      parameters:
+        - name: id
+          in: path
+          description: File evidence id
+          required: true
+          type: string
+      responses:
+        200:
+          description: Success
+          schema:
+            $ref: '#/definitions/FileContentResponse'
+        404:
+          description: Not Found
+          schema:
+            $ref: '#/definitions/Errors'
+        default:
+          description: Unexpected Error
+          schema:
+            $ref: '#/definitions/Errors'
+      security:
+        - Bearer: []
+
+  /files/{id}:
+    delete:
+      tags: ['evidences']
+      summary: Get the evidence by it's id
+      description: |
+        Get the evidence by it's id
+      operationId: deleteFile
+      security:
+        - Bearer: []
+      parameters:
+        - in: path
+          name: id
+          description: Id of the file
+          required: true
+          type: string
+          maxLength: 64
+      responses:
+        '204':
+          description: Success
+        '400':
+          description: Bad request
+          schema:
+            $ref: '#/definitions/Errors'
+        '401':
+          description: Unauthorized
+          schema:
+            $ref: '#/definitions/Errors'
+        '404':
+          description: Not found
+          schema:
+            $ref: '#/definitions/Errors'
+        default:
+          description: Unexpected Error
+          schema:
+            $ref: '#/definitions/Errors'
+
+  /text/{id}:
+    delete:
+      tags: ['evidences']
+      summary: Get the evidence by it's id
+      description: |
+        Get the evidence by it's id
+      operationId: deleteText
+      security:
+        - Bearer: []
+      parameters:
+        - in: path
+          name: id
+          description: Id of the evidence
+          required: true
+          type: string
+          maxLength: 64
+      responses:
+        '204':
+          description: Success
+        '400':
+          description: Bad request
+          schema:
+            $ref: '#/definitions/Errors'
+        '401':
+          description: Unauthorized
+          schema:
+            $ref: '#/definitions/Errors'
+        '404':
+          description: Not found
+          schema:
+            $ref: '#/definitions/Errors'
+        default:
+          description: Unexpected Error
+          schema:
+            $ref: '#/definitions/Errors'
+
+parameters:
+  limit:
+    name: "limit"
+    in: "query"
+    description: "Maximum number of items to return"
+    type: "integer"
+    default: "10"
+  offset:
+    name: "offset"
+    in: "query"
+    description: "Offset to start returning items at"
+    type: "integer"
+    default: "0"
+
+definitions:
+  CompositeReason:
+    type: object
+    description: Represents dispute reason
+    required:
+      - processorCode
+      - normalizedCode
+    properties:
+      processorCode:
+        description: Payment processor reason code
+        type: string
+        x-validation-required-message: "{DI038}"
+      normalizedCode:
+        description: Network / normalized reason code
+        type: string
+        x-validation-required-message: "{DI039}"
+      category:
+        description: Category of the reason code
+        type: string
+        default: NOT_SPECIFIED
+        enum:
+          - CREDIT_NOT_PROCESSED
+          - DUPLICATE_OR_MULTIPLE_TXN
+          - FRAUDULENT
+          - INCORRECT_TXN_AMOUNT
+          - NOT_AS_DESCRIBED_OR_DEFECTIVE
+          - NOT_RECEIVED
+          - POTENTIAL_CHARGEBACK_NOTICE
+          - UNKNOWN_OR_REVIEW_REQUIRED
+          - UNRECOGNIZED
+          - NOT_SPECIFIED
+      description:
+        description: Reason code description / reason code definition
+        type: string
+
+  CompositeEvidence:
+    type: object
+    x-abstract-class: true
+    discriminator: evidence
+    properties:
+      id:
+        type: string
+        readOnly: true
+        description: Id of the created evidence
+        x-validation-read-only-message: "{DI012}"
+      type:
+        description: Type of the evidence
+        default: TEXT
+        enum:
+          - FILE
+          - TEXT
+
+  CompositeEvidenceResponse:
+    type: object
+    properties:
+      id:
+        type: string
+      documents:
+        type: array
+        items:
+          $ref: '#/definitions/CompositeEvidence'
+
+  CompositeFileEvidence:
+    allOf:
+      - $ref: '#/definitions/CompositeEvidence'
+      - type: object
+        description: Represents evidence of file type that's used to dispute an evidence
+        required:
+          - fileName
+          - evidenceCategory
+          - evidenceType
+        properties:
+          fileName:
+            type: string
+          evidenceCategory:
+            description: Cateogry of the file that's being uploaded as an evidence
+            type: string
+            enum: *EVIDENCE_CATEGORY
+          evidenceType:
+            description: Represents type of EvidenceFile object
+            type: string
+            enum: *EVIDENCE_TYPE
+          documentType:
+            description: (Optional) Describes the type of the file evidence e.g. Government Id
+            type: string
+          note:
+            type: string
+            description: Text note for file evidence
+          wizardStep:
+            type: string
+            description: Wizard step in portal for which this evidence is being uploaded
+          finalEvidence:
+            type: boolean
+            description: Indicates whether the submitted evidence is final or not
+  CompositeTextEvidence:
+    allOf:
+      - $ref: '#/definitions/CompositeEvidence'
+      - type: object
+        description: Represents an evidence of type text
+        required:
+          - content
+        properties:
+          content:
+            type: string
+            description: Text content
+          wizardStep:
+            type: string
+            description: Wizard step in portal for which this evidence is being uploaded
+          finalEvidence:
+            type: boolean
+            description: Indicates whether the submitted evidence is final or not
+        example:
+          content: "File content with multiple lines"
+
+  Amount:
+    type: object
+    description: Amount
+    required:
+      - currency
+      - exponent
+      - value
+    properties:
+      currency:
+        type: string
+        x-validation-required-message: "{DI033}"
+      exponent:
+        type: integer
+        format: int32
+        x-validation-required-message: "{DI034}"
+      value:
+        type: integer
+        format: int64
+        x-validation-required-message: "{DI035}"
+
+  PaymentCard:
+    type: object
+    required:
+      - type
+      - brand
+    properties:
+      type:
+        type: string
+        x-validation-required-message: "{DI036}"
+      brand:
+        type: string
+        x-validation-required-message: "{DI037}"
+
+  OriginalTransaction:
+    type: object
+    description: Original transaction that was disputed
+    required:
+      - paymentId
+    properties:
+      id:
+        type: string
+      paymentId:
+        type: string
+        x-validation-required-message: "{DI040.2}"
+      clientUniqueTransactionId:
+        type: string
+      amount:
+        $ref: '#/definitions/Amount'
+      paymentCard:
+        $ref: '#/definitions/PaymentCard'
+      createdOn:
+        type: string
+        format: date-time
+        
+  CompositeDisputeEventPagedResponse:
+    allOf:
+      - $ref: '#/definitions/RestResponse'
+      - type: object
+        properties:
+          events:
+            type: array
+            items:
+              $ref: '#/definitions/CompositeDisputeEvent'
+
+  CompositeDispute:
+    type: object
+    description: Represents single dispute object
+    required:
+      - disputeWorkflow
+    properties:
+      id:
+        type: string
+      arn:
+        description: Acquirer reference number references the transaction in acquiring processor
+        type: string
+      caseNumbers:
+        description: Case numbers reported by the processor
+        type: array
+        items:
+          type: string
+      evidenceId:
+        type: string
+      action:
+        type: string
+        enum: &DISPUTE_ACTION
+          - ACCEPT
+          - CONTEST
+      status:
+        type: string
+        enum:
+          - NEW
+          - EVIDENCE_REQUESTED
+          - EVIDENCE_RECEIVED
+          - ADDITIONAL_EVIDENCE_REQUESTED
+          - DECISION_PENDING
+          - EXPIRED
+          - CLOSED
+      statusUpdatedOn:
+        type: string
+        format: date-time
+      disputeAmount:
+        $ref: '#/definitions/Amount'
+      disputeWorkflow:
+        type: string
+        description: Status of the dispute at the card scheme
+        x-validation-required-message: "{DI040.1}"
+        enum: &DISPUTE_WORKFLOW
+          - ARBITRATION
+          - CHARGEBACK
+          - CHARGEBACK_CANCEL
+          - CHARGEBACK_CREDIT
+          - COMPLIANCE
+          - FIRST_CHARGEBACK
+          - INQUIRY
+          - PRE_ARBITRATION
+          - PRE_COMPLIANCE
+          - REPRESENTMENT
+          - REPRESENTMENT_REJECT
+          - RETRIEVAL_REQUEST
+          - SECOND_CHARGEBACK
+          - UNKNOWN
+      finalDisposition:
+        type: string
+        enum: &DISPUTE_FINAL_DISPOSITION
+          - WON
+          - LOST
+      dispositionReason:
+        description: Final disposition reason
+        type: string
+      evidenceRequestedNotes:
+        description: Details of additional evidence required
+        type: string
+      originalTransaction:
+        $ref: '#/definitions/OriginalTransaction'
+      reason:
+        $ref: '#/definitions/CompositeReason'
+      responseDueDate:
+        type: string
+        format: date-time
+      processorNotes:
+        type: array
+        items:
+          type: string
+      createdOn:
+        type: string
+        format: date-time
+
+  ActionPatchRequest:
+    type: object
+    properties:
+      action:
+        type: string
+        description: The action to be patched
+        enum: *DISPUTE_ACTION
+
+  FinalDispositionPatchRequest:
+    type: object
+    properties:
+      finalDisposition:
+        description: Dispute final disposition
+        $ref: '#/definitions/FinalDisposition'
+      triggeredBy:
+        type: string
+        description: Enum to decide where this update is triggered from
+        enum:
+          - CRM
+          - EVENT
+
+  FinalDisposition:
+    type: object
+    properties:
+      disposition:
+        type: string
+        description: The final disposition to be patched
+        enum: *DISPUTE_FINAL_DISPOSITION
+      dispositionReason:
+        description: Final disposition reason
+        type: string
+
+  StatusPatchRequest:
+      type: object
+      properties:
+        status:
+          type: string
+          description: The status to be patched
+          enum:
+            - ADDITIONAL_EVIDENCE_REQUESTED
+            - CLOSED
+            - EVIDENCE_RECEIVED
+            - EVIDENCE_REQUESTED
+            - EVIDENCE_SUBMITTED
+        evidenceRequestedNotes:
+          type: string
+          description: Details of additional evidences requested
+
+  PortalWizardStatePatchRequest:
+    type: object
+    required:
+      - portalWizardState
+    properties:
+      portalWizardState:
+        type: string
+        description: Portal Wizard State to be patched
+
+  FollowUpDatesPatchRequest:
+    type: object
+    properties:
+      followUpDate:
+        type: string
+        format: date-time
+        description: FollowUpDate to be patched
+      agentFollowUpDate:
+        type: string
+        format: date-time
+        description: Agent FollowUpDate to be patched
+      merchantDueDate:
+        type: string
+        format: date-time
+        description: Merchant Due Date to be patched
+
+  WorkflowStatusPatchRequest:
+    type: object
+    properties:
+      disputeWorkflow:
+        type: string
+        description: Dispute workflow to be patched
+        enum: *DISPUTE_WORKFLOW
+
+  CompositeDisputeEvent:
+    type: object
+    description: Represents singe dispute event
+    required:
+      - type
+      - createdOn
+    properties:
+      type:
+        description: Dispute event type
+        type: string
+        enum:
+          - ADDITIONAL_EVIDENCE_REQUESTED
+          - EVIDENCE_REQUESTED
+          - EVIDENCE_RECEIVED
+          - EVIDENCE_SUBMITTED
+          - DISPUTE_ACCEPTED
+      disputeWorkflow:
+        description: Dispute event status
+        type: string
+        enum: *DISPUTE_WORKFLOW
+      createdOn:
+        type: string
+        format: date-time
+      evidence:
+        description: Dispute event evidence
+        $ref: '#/definitions/CompositeEvidenceResponse'
+
+  Page:
+    description: Pagination support
+    properties:
+      limit:
+        type: integer
+        format: int32
+        description: Number of items to retrieve
+      offset:
+        type: integer
+        format: int32
+        description: Position in pagination
+      count:
+        type: integer
+        format: int32
+        description: Number of items available
+
+  Meta:
+    description: Response metadata
+    properties:
+      page:
+        $ref: '#/definitions/Page'
+
+  RestEntity:
+    allOf:
+      - type: object
+        discriminator: "restEntityType" # required for inheritance to work
+        properties:
+          id:
+            type: string
+            maxLength: 64
+          meta:
+            $ref: '#/definitions/EntityMeta'
+
+  EntityMeta:
+    description: Meta data that belongs to a single entity being returned
+    properties:
+      createdOn:
+        type: string
+        format: date-time
+      modifiedOn:
+        type: string
+        format: date-time
+
+  StatusChange:
+    type: object
+    properties:
+      status:
+        type: string
+      reason:
+        type: string
+      changeDate:
+        type: string
+        format: date-time
+
+  RestResponse:
+    type: object
+    discriminator: "restResponse" # required for inheritance to work
+    properties:
+      _meta:
+        $ref: '#/definitions/Meta'
+
+  Errors:
+    type: object
+
+  FileContentResponse:
+    description: File content response
+
