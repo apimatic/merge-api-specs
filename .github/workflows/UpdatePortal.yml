@@ -1,0 +1,32 @@
+name: Update Portal
+
+on:
+  push:
+    branches: 
+      - master 
+    paths: 
+      - 'spec/**'   
+
+jobs:
+  update-portal:
+    runs-on: ubuntu-latest
+    
+    env: 
+      API_ENTITY_ID: 612367d4940eaecf55051d77  
+    steps:
+    
+    - name : checkout-repo
+      uses: actions/checkout@v1
+      id: checkout-repo 
+
+    - name: Install zip action
+      uses: montudor/action-zip@v0.1.1    
+
+    - name: Zip input files
+      run: zip -qq -r portal-input.zip .
+
+    - name: inplace-import
+      run: curl -X PUT --url 'https://www.apimatic.io/api/api-entities/${{ env.API_ENTITY_ID }}' -H 'Authorization:${{ secrets.CREDENTIALS }}' -F 'file=@portal-input.zip'
+      
+    - name: publish-portal
+      run: curl -X PUT --url "https://www.apimatic.io/api/api-entities/portals/publish" -H "accept:application/json" -H "Authorization:${{ secrets.CREDENTIALS }}" -H "content-type:application/json" --data-raw "{\"apiEntityIds\":[\"${{ env.API_ENTITY_ID }}\"]}"
