@@ -25,7 +25,7 @@ jobs:
       run: sudo apt-get install zip unzip
       
     - name: zip files
-      run: zip portal-input.zip *
+      run: zip -r portal-input.zip *
       working-directory: Specs
 
     - name: list
