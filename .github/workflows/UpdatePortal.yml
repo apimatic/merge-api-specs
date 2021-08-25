@@ -27,9 +27,11 @@ jobs:
       
     - name: list 
       run: ls
+      working-directory: Specs
 
     - name: inplace-import
       run: curl -X PUT --url 'https://www.apimatic.io/api/api-entities/${{ env.API_ENTITY_ID }}' -H 'Authorization:${{ secrets.CREDENTIALS }}' -F 'file=@portal-input.zip'
+      working-directory: Specs
       
     - name: publish-portal
       run: curl -X PUT --url "https://www.apimatic.io/api/api-entities/portals/publish" -H "accept:application/json" -H "Authorization:${{ secrets.CREDENTIALS }}" -H "content-type:application/json" --data-raw "{\"apiEntityIds\":[\"${{ env.API_ENTITY_ID }}\"]}"
