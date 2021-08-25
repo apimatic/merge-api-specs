@@ -1,6 +1,10 @@
 {
     "MergeConfiguration": {
         "MergeApis": true,
-        "MergedApiName": "Merged API"
+        "MergedApiName": "Merged",
+        "MergeSettings": {
+          "ConflictStrategy": "Merge", 
+          "AppendParentNameInNamingConflict" : true
+      }
       }
 }
