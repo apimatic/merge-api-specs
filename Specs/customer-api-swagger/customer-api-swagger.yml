@@ -3,7 +3,7 @@
   "info": {
     "version": "V1",
     "title": "Yapstone Customer APIs",
-    "description": "APIs for onboarding and managing  customers.",
+    "description": "APIs for onboarding and managing customers.",
     "contact": {},
     "x-codegen-settings": {
       "Nullify404": false,
