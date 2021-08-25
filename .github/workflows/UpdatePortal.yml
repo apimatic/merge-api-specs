@@ -25,8 +25,11 @@ jobs:
       run: zip -qq -r portal-input.zip .
       working-directory: Specs
       
-    - name: list 
-      run: ls
+    - name: install zip 
+      run: sudo ap-get install zip unzip
+      
+    - name: list
+      run: zip -sf portal-input.zip
       working-directory: Specs
 
     - name: inplace-import
