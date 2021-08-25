@@ -22,8 +22,9 @@ jobs:
       uses: montudor/action-zip@v0.1.1    
 
     - name: Zip input files
-      run: zip -qq -r portal-input.zip Specs
-
+      run: zip -qq -r portal-input.zip .
+      working-directory: Specs
+      
     - name: list 
       run: ls
 
