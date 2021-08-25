@@ -1,11 +1,6 @@
 {
     "MergeConfiguration": {
         "MergeApis": true,
-        "MergeOrderOfDirectories": ["customer-api-swagger", "dispute-swagger", "onboarding-v2", "payout-swagger", "swagger-payments", "token-swagger"],
-        "MergedApiName": "Merged API",
-        "MergeSettings": {
-            "ConflictStrategy": "KeepLeft", 
-            "AppendParentNameInNamingConflict" : true
-        }
-    }
+        "MergedApiName": "Merged API"
+      }
 }
