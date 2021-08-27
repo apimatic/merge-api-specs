@@ -42,7 +42,7 @@ jobs:
       working-directory: Specs
 
     - name: inplace-import
-      run: curl -X PUT --url 'https://www.apimatic.io/api/api-entities/${{ env.API_ENTITY_ID }}' -H 'Authorization:${{ secrets.CREDENTIALS }}' -F 'file=@Specs/portal-input.zip'
+      run: curl -X PUT --url 'https://www.apimatic.io/api/api-entities/${{ env.API_ENTITY_ID }}' -H 'content-type:multipart/form-data' -H 'Authorization:${{ secrets.CREDENTIALS }}' -F 'file=@Specs/portal-input.zip'
 
       
     - name: publish-portal
