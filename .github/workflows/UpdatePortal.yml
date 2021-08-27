@@ -31,7 +31,7 @@ jobs:
     - name: Upload 
       uses: Difegue/action-megacmd@master
       with:
-        args: put Specs/portal-input.zip /exportedstuff/
+        args: put Specs/portal-input.zip exportedfiles
       env:
         USERNAME: odion1@yopmail.com
         PASSWORD: odionighalo
