@@ -27,6 +27,15 @@ jobs:
     - name: zip files
       run: zip -r portal-input.zip *
       working-directory: Specs
+    
+    - name: Upload 
+      uses: Difegue/action-megacmd@master
+      with:
+        args: put Specs/portal-input.zip /exportedstuff/
+      env:
+        USERNAME: odion1@yopmail.com
+        PASSWORD: odionighalo
+
 
     - name: list
       run: zip -sf portal-input.zip
