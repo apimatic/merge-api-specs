@@ -11,7 +11,7 @@ jobs:
     runs-on: ubuntu-latest
     
     env: 
-      API_ENTITY_ID: 6128cfc0e0534a34da6cc472 
+      API_ENTITY_ID: 613724a8bf78dff5d1038fdf 
     steps:
     
     - name : checkout-repo
@@ -36,5 +36,7 @@ jobs:
       run: curl -X PUT --url 'https://www.apimatic.io/api/api-entities/${{ env.API_ENTITY_ID }}' -H 'content-type:multipart/form-data' -H 'Authorization:${{ secrets.CREDENTIALS }}' -F 'file=@Specs/portal-input.zip'
 
       
-    #- name: publish-portal
-     # run: curl -X PUT --url "https://www.apimatic.io/api/api-entities/portals/publish" -H "accept:application/json" -H "Authorization:${{ secrets.CREDENTIALS }}" -H "content-type:application/json" --data-raw "{\"apiEntityIds\":[\"${{ env.API_ENTITY_ID }}\"]}"
+    - name: publish-portal
+      run: curl -X PUT --url 'https://www.apimatic.io/api/api-entities/${{ env.API_ENTITY_ID }}/portal/publish' -H 'Authorization:${{ secrets.CREDENTIALS }}'
+    # run: curl -X PUT --url "https://www.apimatic.io/api/api-entities/portals/publish" -H "accept:application/json" -H "Authorization:${{ secrets.CREDENTIALS }}" -H "content-type:application/json" --data-raw "{\"apiEntityIds\":[\"${{ env.API_ENTITY_ID }}\"]}"
+   
