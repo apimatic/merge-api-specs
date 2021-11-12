@@ -33,8 +33,8 @@ jobs:
       working-directory: Specs
 
     - name: inplace-import
-      run: curl -X PUT --url 'https://www.apimatic.io/api/api-entities/${{ env.API_ENTITY_ID }}' -H 'content-type:multipart/form-data' -H 'Authorization:${{ secrets.CREDENTIALS }}' -F 'file=@Specs/portal-input.zip'
+      run: curl -X PUT --url 'https://www.apimatic.io/api/api-entities/${{ env.API_ENTITY_ID }}' -H 'content-type:multipart/form-data' -H 'Authorization:X-Auth-Key ${{ secrets.API_KEY }}' -F 'file=@Specs/portal-input.zip'
 
       
     - name: publish-portal
-      run: curl --location --request PUT 'https://www.apimatic.io/api/api-entities/${{ env.API_ENTITY_ID }}/portal/publish' -H 'Content-Length:0' -H 'Authorization:${{ secrets.CREDENTIALS }}'  
+      run: curl --location --request PUT 'https://www.apimatic.io/api/api-entities/${{ env.API_ENTITY_ID }}/portal/publish' -H 'Content-Length:0' -H 'Authorization:X-Auth-Key ${{ secrets.API_KEY }}'  
