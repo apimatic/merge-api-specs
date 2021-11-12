@@ -1,0 +1,3074 @@
+swagger: '2.0'
+info:
+  version: '1.3.0'
+  title: Boost API Example Documentation
+  description: >-
+    Boost API example documentation.
+
+
+    # Authentication
+
+
+    <!-- ReDoc-Inject: <security-definitions> -->
+  contact: {}
+  x-codegen-settings:
+    Nullify404: false
+    GenerateAsyncCode: true
+    UseMethodPrefix: false
+    UseModelPostfix: false
+    UseControllerPrefix: true
+    UseEnumPostfix: true
+    CollectParameters: false
+    UseConstructorsForConfig: false
+    UseCommonSDKLibrary: false
+    iOSUseAppInfoPlist: false
+    AndroidUseAppManifest: false
+    BodySerialization: 0
+    EnableAdditionalModelProperties: false
+    PreserveParameterOrder: true
+    AppendContentHeaders: true
+    iOSGenerateCoreData: false
+    GenerateInterfaces: false
+    NodeHttpClient: NODE_REQUEST
+    ValidateRequiredParameters: false
+    JavaUsePropertiesConfig: false
+    Timeout: 0
+    StoreTimezoneInformation: false
+    EnablePHPComposerVersionString: false
+    EnableLogging: false
+    ArraySerialization: Indexed
+    ModelSerializationScheme: Json
+    UseExceptionPrefix: true
+    RunscopeEnabled: false
+    AndroidHttpClient: ANDROID_OK
+    ObjCHttpClient: UNIREST
+    CSharpHttpClient: UNIREST
+    PHPHttpClient: UNIREST
+    JavaHttpClient: JAVA_OK
+    ParameterArrayFormat: ParamArrayWithIndex
+    SecurityProtocols:
+    - Ssl3
+    - Tls
+    GenerateTravisConfig: false
+    GenerateCircleConfig: false
+    GenerateAppveyorConfig: false
+    GenerateJenkinsConfig: false
+    EnableHttpCache: false
+    Retries: 0
+    RetryInterval: 1
+    GenerateAdvancedDocs: true
+    UnderscoreNumbers: true
+    UseSingletonPattern: true
+    DisableLinting: false
+    ApplyCustomizations: []
+    SortResources: false
+    AllowSkippingSSLCertVerification: false
+    DoNotSplitWords: []
+    EnableGlobalUserAgent: true
+    ReturnCompleteHttpResponse: false
+    GenerateModels: true
+    GenerateExceptions: true
+    IgnoreIfNullJson: false
+    DisableDocs: false
+    LiftParameterDescriptionFromCustomType: false
+    ThrowForHttpErrorStatusCodes: true
+    ResponseMapping:
+      Type: Simple
+    ForceKeywordArgsInRuby: false
+    SymbolizeHashKeysInRuby: false
+    UsageExampleEndpoint:
+      Description: ''
+      EndpointGroupName: ''
+      EndpointName: ''
+    IsLatestVersion: false
+    EnableImmutableModels: false
+    GenerateEnums: true
+    BackoffFactor: 2
+    StatusCodesToRetry:
+    - 408
+    - 413
+    - 429
+    - 500
+    - 502
+    - 503
+    - 504
+    - 521
+    - 522
+    - 524
+    RequestMethodsToRetry:
+    - GET
+    - PUT
+    UserConfigurableRetries: true
+    UseEndpointMethodName: false
+    EncodeTemplateParameters: true
+    GenerateExamplesForOptionalFields: false
+    MultitargetDotnetVersions: false
+    BackoffMax: 0
+    RetryOnTimeout: true
+    EnableCookies: false
+    EnableJsonPassThroughForAny: false
+  x-server-configuration:
+    default-environment: production
+    default-server: default
+    environments:
+    - name: production
+      description: Production environment
+      servers:
+      - name: default
+        url: https://api.insurtech.dev
+    - name: environment2
+      description: Staging environment
+      servers:
+      - name: default
+        url: https://staging.api.insurtech.dev
+    parameters: []
+  x-image-uri: ''
+host: api.insurtech.dev
+basePath: /
+securityDefinitions:
+  auth:
+    type: oauth2
+    flow: application
+    tokenUrl: https://api.insurtech.dev/auth/oauth2/token
+    scopes: {}
+schemes:
+- https
+consumes:
+- application/json
+produces:
+- application/json
+paths:
+  /auth/oauth2/token:
+    post:
+      description: >
+        Generates an access token which must be used on all subsequent API calls.
+      summary: getOAuthToken
+      tags:
+      - authentication
+      operationId: getOAuthToken
+      deprecated: false
+      produces:
+      - application/json
+      - application/vnd.api+json
+      consumes:
+      - application/x-www-form-urlencoded
+      parameters:
+      - name: Content-Type
+        in: header
+        required: true
+        enum:
+        - application/x-www-form-urlencoded
+        x-enum-elements:
+        - name: Enum_applicationxwwwformurlencoded
+          description: ''
+        type: string
+        description: Entity header to indicate that the media type of the resource is www-form-urlencoded.
+      - name: client_id
+        in: formData
+        required: true
+        type: string
+        description: Your Client ID
+      - name: client_secret
+        in: formData
+        required: true
+        type: string
+        description: Your Client Secret
+      - name: grant_type
+        in: formData
+        required: true
+        enum:
+        - client_credentials
+        x-enum-elements:
+        - name: client_credentials
+          description: ''
+        type: string
+      responses:
+        '200':
+          description: Token
+          schema:
+            $ref: '#/definitions/AuthOauth2TokenResponse'
+          headers: {}
+        '400':
+          description: Request is invalid
+          schema:
+            $ref: '#/definitions/AuthOauth2Token400Error1'
+          headers: {}
+        '500':
+          description: Internal Server Error
+          headers: {}
+      security: []
+      x-unitTests: []
+      x-operation-settings:
+        CollectParameters: false
+        AllowDynamicQueryParameters: false
+        AllowDynamicFormParameters: false
+        IsMultiContentStreaming: false
+  /quotes:
+    post:
+      description: Issues a new quote.
+      summary: postQuote
+      tags:
+      - quoting
+      operationId: postQuote
+      deprecated: false
+      produces:
+      - application/vnd.api+json
+      consumes:
+      - application/vnd.api+json
+      parameters:
+      - name: Boost-User
+        in: header
+        required: true
+        type: string
+        format: uuid
+        x-example: 0aa54c55-7890-abcd-1234-789012345678
+        description: Boost provided agent UUID that identifies the user.
+      - name: Content-Type
+        in: header
+        required: true
+        enum:
+        - application/vnd.api+json
+        x-enum-elements:
+        - name: Enum_applicationvndapijson
+          description: ''
+        type: string
+        description: Entity header to indicate that the media type of the resource is JSON:API.
+      - name: body
+        in: body
+        required: true
+        description: ''
+        schema:
+          $ref: '#/definitions/QuotesRequest'
+      responses:
+        '201':
+          description: Quote was successfully created. Response contains our representation of the quote.
+          schema:
+            $ref: '#/definitions/QuotesResponse'
+          headers: {}
+        '400':
+          description: Request is invalid.
+          schema:
+            $ref: '#/definitions/Quotes400Error1'
+          headers: {}
+        '401':
+          description: Unauthorized. The bearer authentication failed.
+          schema:
+            $ref: '#/definitions/Quotes401Error1'
+          headers: {}
+        '500':
+          description: Internal Server Error.
+          schema:
+            $ref: '#/definitions/Quotes500Error1'
+          headers: {}
+      x-unitTests: []
+      x-operation-settings:
+        CollectParameters: false
+        AllowDynamicQueryParameters: false
+        AllowDynamicFormParameters: false
+        IsMultiContentStreaming: false
+  /policies:
+    post:
+      description: >
+        Issues a new policy with the given the input data. Policy goes in force on the specified effective_date.
+      summary: postPolicy
+      tags:
+      - policy
+      operationId: postPolicy
+      deprecated: false
+      produces:
+      - application/vnd.api+json
+      - application/json
+      consumes:
+      - application/vnd.api+json
+      parameters:
+      - name: Boost-User
+        in: header
+        required: true
+        type: string
+        format: uuid
+        x-example: 53f85c54-f471-444d-80a7-9feb1951ff46
+        description: UUID that identifies the user.
+      - name: Content-Type
+        in: header
+        required: true
+        enum:
+        - application/vnd.api+json
+        x-enum-elements:
+        - name: Enum_applicationvndapijson
+          description: ''
+        type: string
+        description: Entity header to indicate that the media type of the resource is JSON:API.
+      - name: body
+        in: body
+        required: true
+        description: ''
+        schema:
+          $ref: '#/definitions/PoliciesRequest'
+      responses:
+        '201':
+          description: Policy was successfully created.
+          schema:
+            $ref: '#/definitions/PoliciesResponse'
+          headers: {}
+        '400':
+          description: Request is invalid.
+          schema:
+            $ref: '#/definitions/Policies400Error1'
+          headers: {}
+        '401':
+          description: Unauthorized. The bearer authentication failed.
+          schema:
+            $ref: '#/definitions/Policies401Error1'
+          headers: {}
+        '403':
+          description: Forbidden. The operation is not allowed.
+          schema:
+            $ref: '#/definitions/Policies403Error1'
+          headers: {}
+        '500':
+          description: Internal Server Error.
+          schema:
+            $ref: '#/definitions/Policies500Error1'
+          headers: {}
+      x-unitTests: []
+      x-operation-settings:
+        CollectParameters: false
+        AllowDynamicQueryParameters: false
+        AllowDynamicFormParameters: false
+        IsMultiContentStreaming: false
+    get:
+      description: >
+        List previously created policies
+      summary: listPolicies
+      tags:
+      - policy
+      operationId: listPolicies
+      deprecated: false
+      produces:
+      - application/vnd.api+json
+      parameters:
+      - name: Boost-User
+        in: header
+        required: true
+        type: string
+        format: uuid
+        x-example: 53f85c54-f471-444d-80a7-9feb1951ff46
+        description: UUID that identifies the user.
+      - name: Accept
+        in: header
+        required: false
+        enum:
+        - application/vnd.api+json
+        x-enum-elements:
+        - name: Enum_applicationvndapijson
+          description: ''
+        type: string
+        description: Header to indicate that desired response type is JSON:API.
+      responses:
+        '200':
+          description: Policy list was successfully retrieved.
+          schema:
+            $ref: '#/definitions/PoliciesResponse1'
+          headers: {}
+      x-unitTests:
+      - request:
+          method: GET
+          uri: /policies
+          headers:
+            Boost-User: 53f85c54-f471-444d-80a7-9feb1951ff46
+        expectedResponse:
+          x-allowExtraHeaders: true
+          x-bodyMatchMode: NONE
+          x-arrayOrderedMatching: false
+          x-arrayCheckCount: false
+          x-matchResponseSchema: true
+          statusCode: '200'
+          headers:
+            Content-Type: application/vnd.api+json
+        x-testShouldPass: true
+        x-testEnabled: true
+        x-testName: Test listPolicies
+        x-testDescription: >
+          List previously created policies
+      x-operation-settings:
+        CollectParameters: false
+        AllowDynamicQueryParameters: false
+        AllowDynamicFormParameters: false
+        IsMultiContentStreaming: false
+  /insured-risks:
+    post:
+      description: Creates a new insured risk to then utilize when creating a policy.
+      summary: postInsuredRisk
+      tags:
+      - insured-risk
+      operationId: postInsuredRisk
+      deprecated: false
+      produces:
+      - application/vnd.api+json
+      - application/json
+      consumes:
+      - application/vnd.api+json
+      parameters:
+      - name: Boost-User
+        in: header
+        required: true
+        type: string
+        format: uuid
+        x-example: c336620b-4444-4a42-a2f1-643084046a01
+        description: UUID that identifies the user.
+      - name: Content-Type
+        in: header
+        required: true
+        enum:
+        - application/vnd.api+json
+        x-enum-elements:
+        - name: Enum_applicationvndapijson
+          description: ''
+        type: string
+        description: Entity header to indicate that the media type of the resource is JSON:API.
+      - name: body
+        in: body
+        required: true
+        x-example:
+          data:
+            type: insured_risk
+            attributes:
+              factors:
+                foo: bar
+                baz: true
+            relationships:
+              product:
+                data:
+                  type: product
+                  id: 7c09a876-b53f-4939-b98d-a3630c936593
+        description: ''
+        schema:
+          $ref: '#/definitions/InsuredRisksRequest'
+      responses:
+        '201':
+          description: Insured risk was successfully created.
+          schema:
+            $ref: '#/definitions/InsuredRisksResponse'
+          headers: {}
+        '400':
+          description: Request is invalid.
+          schema:
+            $ref: '#/definitions/InsuredRisks400Error1'
+          headers: {}
+        '401':
+          description: Unauthorized. The bearer authentication failed.
+          schema:
+            $ref: '#/definitions/InsuredRisks401Error1'
+          headers: {}
+        '403':
+          description: Forbidden. The operation is not allowed.
+          schema:
+            $ref: '#/definitions/InsuredRisks403Error1'
+          headers: {}
+        '415':
+          description: Unsupported Media Type. Only JSONAPI is supported.
+          schema:
+            $ref: '#/definitions/InsuredRisks415Error1'
+          headers: {}
+        '500':
+          description: Internal Server Error.
+          schema:
+            $ref: '#/definitions/InsuredRisks500Error1'
+          headers: {}
+      x-unitTests: []
+      x-operation-settings:
+        CollectParameters: false
+        AllowDynamicQueryParameters: false
+        AllowDynamicFormParameters: false
+        IsMultiContentStreaming: false
+definitions:
+  Content-Type:
+    title: Content-Type
+    example: application/x-www-form-urlencoded
+    x-enum-elements:
+    - name: Enum_applicationxwwwformurlencoded
+      description: ''
+    type: string
+    enum:
+    - application/x-www-form-urlencoded
+  grant_type:
+    title: grant_type
+    example: client_credentials
+    x-enum-elements:
+    - name: client_credentials
+      description: ''
+    type: string
+    enum:
+    - client_credentials
+  AuthOauth2TokenResponse:
+    title: AuthOauth2TokenResponse
+    type: object
+    properties:
+      token_type:
+        $ref: '#/definitions/TokenType'
+      access_token:
+        description: The token to be used in future API calls.
+        example: JDKSjkdnasknxkasjd
+        type: string
+      expires_in:
+        $ref: '#/definitions/ExpiresIn'
+  TokenType:
+    title: TokenType
+    description: Type of token.
+    example: bearer
+    x-enum-elements:
+    - name: bearer
+      description: ''
+    type: string
+    enum:
+    - bearer
+  ExpiresIn:
+    title: ExpiresIn
+    description: How long this token is valid for.
+    example: 7200
+    x-enum-elements:
+    - name: Enum_7200
+      description: ''
+    type: integer
+    format: int32
+    enum:
+    - '7200'
+  Errors:
+    title: Errors
+    type: object
+    properties:
+      error:
+        description: Type of error.
+        example: invalid_client
+        type: string
+      error_description:
+        description: Detailed information about the error.
+        example: Invalid client authentication
+        type: string
+  AuthOauth2Token400Error1:
+    title: AuthOauth2Token400Error1
+    type: object
+    properties:
+      errors:
+        $ref: '#/definitions/Errors'
+  Content-Type1:
+    title: Content-Type1
+    example: application/vnd.api+json
+    x-enum-elements:
+    - name: Enum_applicationvndapijson
+      description: ''
+    type: string
+    enum:
+    - application/vnd.api+json
+  InsuredRisksRequest:
+    title: InsuredRisksRequest
+    type: object
+    properties:
+      data:
+        $ref: '#/definitions/Data'
+    required:
+    - data
+  Data:
+    title: Data
+    description: All values that describe this Insured Risk resource.
+    type: object
+    properties:
+      type:
+        description: The type of resource being represented.
+        example: insured_risk
+        type: string
+        default: insured_risk
+      id:
+        type: string
+        format: uuid
+      attributes:
+        $ref: '#/definitions/Attributes'
+      relationships:
+        $ref: '#/definitions/Relationships'
+    required:
+    - type
+    - attributes
+    - relationships
+  Attributes:
+    title: Attributes
+    description: Attributes that describe an Insured Risk.
+    type: object
+    properties:
+      created_date:
+        description: Date time when this resource was created in our system.
+        example: 2018-08-01T10:41:32.437818+0000
+        type: string
+        format: date-time
+      modified_date:
+        description: Date time when this resource was last modified in our system.
+        example: 2018-08-01T10:41:32.437833+0000
+        type: string
+        format: date-time
+      factors:
+        description: Specific ratable factors that apply to this Insured Risk. The content must fully adhere to a product-specific, pre-defined schema.
+        type: object
+    required:
+    - factors
+  Relationships:
+    title: Relationships
+    description: Related objects.
+    type: object
+    properties:
+      agent:
+        $ref: '#/definitions/Agent'
+      product:
+        $ref: '#/definitions/Product'
+    required:
+    - product
+  Agent:
+    title: Agent
+    description: UUID of the agent.
+    type: object
+    properties:
+      data:
+        $ref: '#/definitions/Data1'
+    required:
+    - data
+  Data1:
+    title: Data1
+    description: Provided data for this agent relationship.
+    type: object
+    properties:
+      type:
+        description: The type of resource being represented.
+        example: agent
+        type: string
+        default: agent
+      id:
+        description: UUID that identifies this resource.
+        example: 6a04ddef-b9fa-48b0-8c46-1a580868491e
+        type: string
+        format: uuid
+    required:
+    - type
+    - id
+  Product:
+    title: Product
+    description: >-
+      Boost supplied value representing the specific product type. The product's configuration
+
+      Determines allowable values, such as limits and deductibles.
+    type: object
+    properties:
+      data:
+        $ref: '#/definitions/Data2'
+    required:
+    - data
+  Data2:
+    title: Data2
+    description: Provided data for this product relationship.
+    type: object
+    properties:
+      type:
+        description: The type of resource being represented.
+        example: product
+        type: string
+        default: product
+      id:
+        description: UUID that identifies this resource.
+        example: 7fca5107-79c0-4b1d-88e7-0a3155a42aba
+        type: string
+        format: uuid
+    required:
+    - type
+    - id
+  InsuredRisksResponse:
+    title: InsuredRisksResponse
+    type: object
+    properties:
+      data:
+        $ref: '#/definitions/Data3'
+    required:
+    - data
+  Data3:
+    title: Data3
+    type: object
+    properties:
+      type:
+        description: The type of resource being represented.
+        example: insured_risk
+        type: string
+        default: insured_risk
+      id:
+        type: string
+        format: uuid
+      attributes:
+        $ref: '#/definitions/Attributes1'
+      relationships:
+        $ref: '#/definitions/Relationships1'
+    required:
+    - type
+    - id
+    - attributes
+    - relationships
+  Attributes1:
+    title: Attributes1
+    description: Attributes that describe an Insured Risk.
+    type: object
+    properties:
+      created_date:
+        description: Date time when this resource was created in our system.
+        example: 2018-08-01T10:41:32.437818+0000
+        type: string
+        format: date-time
+      modified_date:
+        description: Date time when this resource was last modified in our system.
+        example: 2018-08-01T10:41:32.437833+0000
+        type: string
+        format: date-time
+      factors:
+        description: Specific ratable factors that apply to this Insured Risk. The content must fully adhere to a product-specific, pre-defined schema.
+        type: object
+    required:
+    - created_date
+    - modified_date
+    - factors
+  Relationships1:
+    title: Relationships1
+    description: Related objects.
+    type: object
+    properties:
+      agent:
+        $ref: '#/definitions/Agent'
+      product:
+        $ref: '#/definitions/Product'
+    required:
+    - agent
+    - product
+  Errors1:
+    title: Errors1
+    type: object
+    properties:
+      title:
+        description: Type of error.
+        example: Error Title
+        type: string
+      detail:
+        description: Detailed information about the error.
+        example: Error Description
+        type: string
+  InsuredRisks400Error1:
+    title: InsuredRisks400Error1
+    type: object
+    properties:
+      errors:
+        type: array
+        items:
+          $ref: '#/definitions/Errors1'
+  InsuredRisks401Error1:
+    title: InsuredRisks401Error1
+    type: object
+    properties:
+      errors:
+        $ref: '#/definitions/Errors'
+  InsuredRisks403Error1:
+    title: InsuredRisks403Error1
+    type: object
+    properties:
+      errors:
+        type: array
+        items:
+          $ref: '#/definitions/Errors1'
+  InsuredRisks415Error1:
+    title: InsuredRisks415Error1
+    type: object
+    properties:
+      errors:
+        type: array
+        items:
+          $ref: '#/definitions/Errors1'
+  InsuredRisks500Error1:
+    title: InsuredRisks500Error1
+    type: object
+    properties:
+      errors:
+        type: array
+        items:
+          $ref: '#/definitions/Errors1'
+  PoliciesRequest:
+    title: PoliciesRequest
+    type: object
+    properties:
+      data:
+        $ref: '#/definitions/Data6'
+    required:
+    - data
+  Data6:
+    title: Data6
+    description: Data for creating a policy from a quote requiring a stripe token.
+    type: object
+    properties:
+      type:
+        description: The type of resource being represented.
+        example: policy
+        type: string
+        default: policy
+      attributes:
+        $ref: '#/definitions/Attributes2'
+      relationships:
+        $ref: '#/definitions/Relationships2'
+    required:
+    - type
+    - attributes
+    - relationships
+  Attributes2:
+    title: Attributes2
+    description: Attributes for this policy.
+    type: object
+    properties:
+      quote_number:
+        description: Quote number received from quote creation.
+        example: BLU-XX-T63XWYHFE
+        type: string
+        pattern: ^BLU-[0-9a-zA-Z]{2}-[0-9a-zA-Z]{9}$
+      installment_plan:
+        description: >-
+          Value from the set which controls invoicing and billing. This is dependent
+
+          on your product's configuration.
+        example: ANNUAL
+        type: string
+      stripe_token:
+        description: Stripe credit card token that will be used for charge authorization.
+        example: tok_mastercard
+        type: string
+      external_id:
+        description: Any value you wish to associate with this resource such as an ID from your system.
+        example: '1234567890'
+        type: string
+    required:
+    - quote_number
+    - installment_plan
+    - stripe_token
+  Relationships2:
+    title: Relationships2
+    description: Related items.
+    type: object
+    properties:
+      additional_interests:
+        $ref: '#/definitions/AdditionalInterests'
+      parent:
+        $ref: '#/definitions/Parent'
+  AdditionalInterests:
+    title: AdditionalInterests
+    description: List of additional interests for this policy.
+    type: object
+    properties:
+      data:
+        description: List of additional interests.
+        type: array
+        items:
+          $ref: '#/definitions/Data7'
+      meta:
+        $ref: '#/definitions/Meta'
+    required:
+    - data
+  Data7:
+    title: Data7
+    type: object
+    properties:
+      type:
+        description: The type of resource being represented.
+        example: customer
+        type: string
+        default: customer
+      id:
+        description: UUID that identifies this resource.
+        example: 55efaaf6-2bb2-4cdd-b5ec-5475af712c52
+        type: string
+        format: uuid
+    required:
+    - type
+    - id
+  Meta:
+    title: Meta
+    description: Additional meta information about this data.
+    type: object
+    properties:
+      count:
+        description: The number of related objects of this type.
+        example: 1
+        type: integer
+        format: int32
+  Parent:
+    title: Parent
+    description: ID of parent policy. Product must also be a parent product.
+    type: object
+    properties:
+      data:
+        $ref: '#/definitions/Data8'
+    required:
+    - data
+  Data8:
+    title: Data8
+    description: Provided data for this parent policy relationship.
+    type: object
+    properties:
+      type:
+        description: The type of resource being represented.
+        example: policy
+        type: string
+        default: policy
+      id:
+        description: UUID that identifies this resource.
+        example: 9c5fa6b9-4107-4709-8b44-e188b9a45d33
+        type: string
+        format: uuid
+    required:
+    - type
+    - id
+  PoliciesResponse:
+    title: PoliciesResponse
+    type: object
+    properties:
+      data:
+        $ref: '#/definitions/Data9'
+      included:
+        description: >-
+          Array of included objects which provide additional data about an object from the
+
+          above `data.relationships`.
+        type: array
+        items:
+          type: object
+    required:
+    - data
+    - included
+  Data9:
+    title: Data9
+    type: object
+    properties:
+      type:
+        description: The type of resource being represented.
+        example: policy
+        type: string
+        default: policy
+      id:
+        type: string
+        format: uuid
+      attributes:
+        $ref: '#/definitions/Attributes3'
+      relationships:
+        $ref: '#/definitions/Relationships3'
+    required:
+    - type
+    - id
+    - attributes
+    - relationships
+  Attributes3:
+    title: Attributes3
+    description: Attributes that describe a policy resource with optional writeable money fields.
+    type: object
+    properties:
+      created_date:
+        description: Date time when this resource was created in our system.
+        example: 2018-08-01T10:41:32.437818+0000
+        type: string
+        format: date-time
+      modified_date:
+        description: Date time when this resource was last modified in our system.
+        example: 2018-08-01T10:41:32.437833+0000
+        type: string
+        format: date-time
+      actual_end_date:
+        description: The end date for this policy if it has been ended.
+        example: 2019-06-01T00:00:00.000000+0000
+        type: string
+        format: date-time
+      status:
+        $ref: '#/definitions/Status'
+      earned_premium:
+        description: Our calculated earned premium thus far for this policy.
+        example: '100.00000'
+        type: string
+        pattern: ^[0-9]+(\.[0-9]{5})?$
+      earned_tax:
+        description: Our calculated earned tax thus far for this policy.
+        example: '0.01644'
+        type: string
+        pattern: ^[0-9]+(\.[0-9]{5})?$
+      earned_fees:
+        description: Our calculated earned fees thus far for this policy.
+        example: '0.10142'
+        type: string
+        pattern: ^[0-9]+(\.[0-9]{5})?$
+      cancel_reason:
+        description: A value from the set denoting the reason for policy cancellation.
+        example: fraud
+        type: string
+      cancel_description:
+        description: User provided description for why policy was cancelled.
+        example: Client committed fraud when applying for this policy.
+        type: string
+      policy_number:
+        description: A unique alphanumeric string used as a human-readable value for the Policy.
+        example: BLU-XX-2FM83109D
+        type: string
+        pattern: ^BLU-[0-9a-zA-Z]{2}-[0-9a-zA-Z]{9}$
+      effective_date:
+        description: The date and time this policy went into effect.
+        example: 2018-08-01T00:00:00.000000+0000
+        type: string
+        format: date-time
+      external_reference:
+        description: Any value you wish to associate with this policy such as an ID from your system.
+        example: 000000001
+        type: string
+      limit:
+        description: A value from the set denoting the user-selected limit of coverage. This is dependent on your product's configuration.
+        example: '1000000'
+        type: string
+        pattern: ^[0-9]+(\.[0-9]{1,2})?$
+      deductible:
+        description: A value from the set denoting the user-selected deductible of coverage. This is dependent on your product's configuration.
+        example: '1000'
+        type: string
+        pattern: ^[0-9]+(\.[0-9]{1,2})?$
+      policy_state:
+        $ref: '#/definitions/PolicyState'
+      metadata:
+        description: Additional data about the policy. The required metadata fields are specific to your product.
+        type: object
+      term_end_date:
+        description: The policy's natural term end date and time.
+        example: 2019-08-01T00:00:00.0000000+0000
+        type: string
+        format: date-time
+      installment_plan:
+        description: The installment plan schedule that determines invoicing and/or automatic payment dates.
+        example: ANNUAL
+        type: string
+      written_premium:
+        description: The written premium for this policy.
+        example: '1234.56'
+        type: string
+        pattern: ^[0-9]+(\.[0-9]{1,2})?$
+      issue_date:
+        description: The date and time that the policy was issued.
+        example: 2018-08-01T00:00:00.000000+0000
+        type: string
+        format: date-time
+      non_renewal_notice_date:
+        description: The most recently set date and time that a non-renewal notice was set to be sent.
+        example: 2018-08-01T00:00:00.000000+0000
+        type: string
+        format: date-time
+      cancellation_notice_date:
+        description: The most recently set date and time that a cancellation notice was set to be sent.
+        example: 2018-08-01T00:00:00.000000+0000
+        type: string
+        format: date-time
+      requested_cancellation_date:
+        description: The most recently set date and time that an allowed party requested a policy to be cancelled.
+        example: 2018-08-01T00:00:00.000000+0000
+        type: string
+        format: date-time
+      state_tax:
+        description: The term state tax
+        example: '12.34'
+        type: string
+        pattern: ^[0-9]+(\.[0-9]{1,2})?$
+      state_fees:
+        description: The aggregate term state fees.
+        example: '12.34'
+        type: string
+        pattern: ^[0-9]+(\.[0-9]{1,2})?$
+      service_fees:
+        description: The term aggregate service fees
+        example: '12.34'
+        type: string
+        pattern: ^[0-9]+(\.[0-9]{1,2})?$
+      term_premium:
+        description: This term premium . This value includes taxes only for admitted products
+        example: '1234.56'
+        type: string
+        pattern: ^[0-9]+(\.[0-9]{1,2})?$
+      billing_fees:
+        description: The term aggregate billing fees
+        example: '12.34'
+        type: string
+        pattern: ^[0-9]+(\.[0-9]{1,2})?$
+  Status:
+    title: Status
+    description: The status of the policy.
+    example: issued
+    x-enum-elements:
+    - name: issued
+      description: ''
+    - name: inforce
+      description: ''
+    - name: reinstated
+      description: ''
+    - name: renewed
+      description: ''
+    - name: cancelpending
+      description: ''
+    - name: cancelled
+      description: ''
+    - name: void
+      description: ''
+    type: string
+    enum:
+    - issued
+    - in-force
+    - reinstated
+    - renewed
+    - cancel-pending
+    - cancelled
+    - void
+  PolicyState:
+    title: PolicyState
+    description: The two letter state code (including Washington DC) for the state in which the issured entity resides.
+    example: AZ
+    x-enum-elements:
+    - name: AL
+      description: ''
+    - name: AK
+      description: ''
+    - name: AZ
+      description: ''
+    - name: AR
+      description: ''
+    - name: CA
+      description: ''
+    - name: CO
+      description: ''
+    - name: CT
+      description: ''
+    - name: DC
+      description: ''
+    - name: DE
+      description: ''
+    - name: FL
+      description: ''
+    - name: GA
+      description: ''
+    - name: HI
+      description: ''
+    - name: ID
+      description: ''
+    - name: IL
+      description: ''
+    - name: IN
+      description: ''
+    - name: IA
+      description: ''
+    - name: KS
+      description: ''
+    - name: KY
+      description: ''
+    - name: LA
+      description: ''
+    - name: ME
+      description: ''
+    - name: MD
+      description: ''
+    - name: MA
+      description: ''
+    - name: MI
+      description: ''
+    - name: MN
+      description: ''
+    - name: MS
+      description: ''
+    - name: MO
+      description: ''
+    - name: MT
+      description: ''
+    - name: NE
+      description: ''
+    - name: NV
+      description: ''
+    - name: NH
+      description: ''
+    - name: NJ
+      description: ''
+    - name: NM
+      description: ''
+    - name: NY
+      description: ''
+    - name: NC
+      description: ''
+    - name: ND
+      description: ''
+    - name: OH
+      description: ''
+    - name: OK
+      description: ''
+    - name: OR
+      description: ''
+    - name: PA
+      description: ''
+    - name: RI
+      description: ''
+    - name: SC
+      description: ''
+    - name: SD
+      description: ''
+    - name: TN
+      description: ''
+    - name: TX
+      description: ''
+    - name: UT
+      description: ''
+    - name: VT
+      description: ''
+    - name: VA
+      description: ''
+    - name: WA
+      description: ''
+    - name: WV
+      description: ''
+    - name: WI
+      description: ''
+    - name: WY
+      description: ''
+    type: string
+    enum:
+    - AL
+    - AK
+    - AZ
+    - AR
+    - CA
+    - CO
+    - CT
+    - DC
+    - DE
+    - FL
+    - GA
+    - HI
+    - ID
+    - IL
+    - IN
+    - IA
+    - KS
+    - KY
+    - LA
+    - ME
+    - MD
+    - MA
+    - MI
+    - MN
+    - MS
+    - MO
+    - MT
+    - NE
+    - NV
+    - NH
+    - NJ
+    - NM
+    - NY
+    - NC
+    - ND
+    - OH
+    - OK
+    - OR
+    - PA
+    - RI
+    - SC
+    - SD
+    - TN
+    - TX
+    - UT
+    - VT
+    - VA
+    - WA
+    - WV
+    - WI
+    - WY
+  Relationships3:
+    title: Relationships3
+    description: Items related to this policy.
+    type: object
+    properties:
+      coverages:
+        $ref: '#/definitions/Coverages'
+      insured_risk:
+        $ref: '#/definitions/InsuredRisk'
+      customer:
+        $ref: '#/definitions/Customer'
+      product:
+        $ref: '#/definitions/Product2'
+      parent:
+        $ref: '#/definitions/Parent'
+      additional_interests:
+        $ref: '#/definitions/AdditionalInterests'
+      additional_insured:
+        $ref: '#/definitions/AdditionalInsured'
+      agent:
+        $ref: '#/definitions/Agent'
+      installment_plan:
+        $ref: '#/definitions/InstallmentPlan'
+    required:
+    - coverages
+    - insured_risk
+    - customer
+    - product
+    - parent
+    - additional_interests
+    - additional_insured
+    - agent
+    - installment_plan
+  Coverages:
+    title: Coverages
+    description: List of coverages that apply to this policy.
+    type: object
+    properties:
+      data:
+        description: List of coverages.
+        type: array
+        items:
+          $ref: '#/definitions/Data7'
+      meta:
+        $ref: '#/definitions/Meta'
+    required:
+    - data
+  InsuredRisk:
+    title: InsuredRisk
+    description: The risk insured by the policy.
+    type: object
+    properties:
+      data:
+        $ref: '#/definitions/Data11'
+    required:
+    - data
+  Data11:
+    title: Data11
+    description: Provided data for this insured risk relationship.
+    type: object
+    properties:
+      type:
+        description: The type of resource being represented.
+        example: insured_risk
+        type: string
+        default: insured_risk
+      id:
+        description: UUID that identifies this resource.
+        example: 889c16f9-c236-4c29-9721-aa5bbaeb7107
+        type: string
+        format: uuid
+    required:
+    - type
+    - id
+  Customer:
+    title: Customer
+    description: Relationship containing the id that identifies the customer for this policy.
+    type: object
+    properties:
+      data:
+        $ref: '#/definitions/Data12'
+    required:
+    - data
+  Data12:
+    title: Data12
+    description: Provided data for this customer relationship.
+    type: object
+    properties:
+      type:
+        description: The type of resource being represented.
+        example: customer
+        type: string
+        default: customer
+      id:
+        description: UUID that identifies this resource.
+        example: fd5a4e30-a897-4383-a0a4-bd62970f6d23
+        type: string
+        format: uuid
+    required:
+    - type
+    - id
+  Product2:
+    title: Product2
+    description: >-
+      Boost supplied value representing the specific product type. The product's configuration
+
+      Determines allowable values, such as limit and deductible.
+    type: object
+    properties:
+      data:
+        $ref: '#/definitions/Data2'
+    required:
+    - data
+  AdditionalInsured:
+    title: AdditionalInsured
+    description: List of additional insured for this policy.
+    type: object
+    properties:
+      data:
+        description: List of additional insured.
+        type: array
+        items:
+          $ref: '#/definitions/Data7'
+      meta:
+        $ref: '#/definitions/Meta'
+    required:
+    - data
+  InstallmentPlan:
+    title: InstallmentPlan
+    description: The Boost UUID for the `installment_plan` based on the chosen installment plan.
+    type: object
+    properties:
+      data:
+        $ref: '#/definitions/Data18'
+    required:
+    - data
+  Data18:
+    title: Data18
+    description: Provided data for this installment plan relationship.
+    type: object
+    properties:
+      type:
+        description: The type of resource being represented.
+        example: installment_plan
+        type: string
+        default: installment_plan
+      id:
+        description: UUID that identifies this resource.
+        example: 2e3dc75c-3f7d-4721-80df-b5fac6617825
+        type: string
+        format: uuid
+    required:
+    - type
+    - id
+  Included:
+    title: Included
+    type: object
+    properties:
+      type:
+        description: The type of resource being represented.
+        example: coverage
+        type: string
+        default: coverage
+      id:
+        description: UUID that identifies this resource.
+        example: a5f0c4fc-737e-41e3-b88b-fb56020766a8
+        type: string
+        format: uuid
+      attributes:
+        $ref: '#/definitions/Attributes4'
+      relationships:
+        $ref: '#/definitions/Relationships4'
+    required:
+    - type
+    - id
+    - attributes
+    - relationships
+  Attributes4:
+    title: Attributes4
+    description: Attributes of this coverage.
+    type: object
+    properties:
+      created_date:
+        description: Date time when this resource was created in our system.
+        example: 2018-08-01T10:41:32.437818+0000
+        type: string
+        format: date-time
+      modified_date:
+        description: Date time when this resource was last modified in our system.
+        example: 2018-08-01T10:41:32.437833+0000
+        type: string
+        format: date-time
+      deductible:
+        description: >-
+          A value from the set denoting the user-selected deductible of coverage. This is dependent
+
+          on the product's configuration.
+        example: '1000'
+        type: string
+        pattern: ^[0-9]+(\.[0-9]{1,2})?$
+      limit:
+        description: >-
+          A value from the set denoting the user-selected limit of coverage. This is dependent
+
+          on the product's configuration.
+        example: '1000000'
+        type: string
+        pattern: ^[0-9]+(\.[0-9]{1,2})?$
+      premium:
+        description: Term premium for this coverage
+        example: '150.00'
+        type: string
+        pattern: ^[0-9]+(\.[0-9]{1,2})?$
+      additional_fees:
+        description: Additional fees relating to this coverage.
+        example: '1.23'
+        type: string
+        pattern: ^[0-9]+(\.[0-9]{1,2})?$
+      revision_date:
+        description: Date for when this coverage goes into effect on the policy.
+        example: 2019-01-30T12:32:15.122040+0000
+        type: string
+        format: date-time
+    required:
+    - created_date
+    - modified_date
+    - deductible
+    - limit
+    - premium
+    - additional_fees
+    - revision_date
+  Relationships4:
+    title: Relationships4
+    description: Items related to this coverage.
+    type: object
+    properties:
+      policy:
+        $ref: '#/definitions/Policy'
+      endorsement:
+        $ref: '#/definitions/Endorsement'
+      coverage:
+        $ref: '#/definitions/Coverage'
+    required:
+    - policy
+    - endorsement
+    - coverage
+  Policy:
+    title: Policy
+    description: UUID that identifies this policy.
+    type: object
+    properties:
+      data:
+        $ref: '#/definitions/Data19'
+    required:
+    - data
+  Data19:
+    title: Data19
+    description: Provided data for this policy relationship.
+    type: object
+    properties:
+      type:
+        description: The type of resource being represented.
+        example: policy
+        type: string
+        default: policy
+      id:
+        description: UUID that identifies this resource.
+        example: f445dde9-32d2-46cf-8cac-9fe4409fee0b
+        type: string
+        format: uuid
+    required:
+    - type
+    - id
+  Endorsement:
+    title: Endorsement
+    description: UUID that identifies this endorsement.
+    type: object
+    properties:
+      data:
+        $ref: '#/definitions/Data20'
+    required:
+    - data
+  Data20:
+    title: Data20
+    description: Provided data for this endorsement relationship.
+    type: object
+    properties:
+      type:
+        description: Name of this related object. Must be `endorsement`.
+        example: endorsement
+        type: string
+        default: endorsement
+      id:
+        description: UUID that identifies this resource.
+        example: b1deb55f-8108-400c-9443-e8bc61d1928d
+        type: string
+        format: uuid
+    required:
+    - type
+    - id
+  Coverage:
+    title: Coverage
+    description: UUID that identifies this product coverage.
+    type: object
+    properties:
+      data:
+        $ref: '#/definitions/Data21'
+    required:
+    - data
+  Data21:
+    title: Data21
+    description: Provided data for this product coverage relationship.
+    type: object
+    properties:
+      type:
+        description: The type of resource being represented.
+        example: product_coverage
+        type: string
+        default: product_coverage
+      id:
+        description: UUID that identifies this resource.
+        example: 902522f9-f38c-40c5-9b4c-bb401be5f0d9
+        type: string
+        format: uuid
+    required:
+    - type
+    - id
+  Included1:
+    title: Included1
+    type: object
+    properties:
+      type:
+        description: The type of resource being represented.
+        example: insured_risk
+        type: string
+        default: insured_risk
+      id:
+        description: UUID that identifies this resource.
+        example: 3c0313fb-d441-4d90-82ea-5b23931349be
+        type: string
+        format: uuid
+      attributes:
+        $ref: '#/definitions/Attributes5'
+      relationships:
+        $ref: '#/definitions/Relationships5'
+    required:
+    - type
+    - id
+    - attributes
+    - relationships
+  Attributes5:
+    title: Attributes5
+    description: Attributes of this insured risk.
+    type: object
+    properties:
+      created_date:
+        description: Date time when this resource was created in our system.
+        example: 2018-08-01T10:41:32.437818+0000
+        type: string
+        format: date-time
+      modified_date:
+        description: Date time when this resource was last modified in our system.
+        example: 2018-08-01T10:41:32.437833+0000
+        type: string
+        format: date-time
+      factors:
+        description: Specific ratable factors that apply to this Insured Risk. The content must fully adhere to a product-specific, pre-defined schema.
+        type: object
+    required:
+    - created_date
+    - modified_date
+    - factors
+  Relationships5:
+    title: Relationships5
+    description: Items related to this insured risk.
+    type: object
+    properties:
+      product:
+        $ref: '#/definitions/Product3'
+      agent:
+        $ref: '#/definitions/Agent3'
+    required:
+    - product
+    - agent
+  Product3:
+    title: Product3
+    description: UUID that identifies this product.
+    type: object
+    properties:
+      data:
+        $ref: '#/definitions/Data2'
+    required:
+    - data
+  Agent3:
+    title: Agent3
+    description: UUID that identifies this agent.
+    type: object
+    properties:
+      data:
+        $ref: '#/definitions/Data1'
+    required:
+    - data
+  Policies400Error1:
+    title: Policies400Error1
+    type: object
+    properties:
+      errors:
+        type: array
+        items:
+          $ref: '#/definitions/Errors1'
+  Policies401Error1:
+    title: Policies401Error1
+    type: object
+    properties:
+      errors:
+        $ref: '#/definitions/Errors'
+  Policies403Error1:
+    title: Policies403Error1
+    type: object
+    properties:
+      errors:
+        type: array
+        items:
+          $ref: '#/definitions/Errors1'
+  Policies500Error1:
+    title: Policies500Error1
+    type: object
+    properties:
+      errors:
+        type: array
+        items:
+          $ref: '#/definitions/Errors1'
+  Accept:
+    title: Accept
+    example: application/vnd.api+json
+    x-enum-elements:
+    - name: Enum_applicationvndapijson
+      description: ''
+    type: string
+    enum:
+    - application/vnd.api+json
+  PoliciesResponse1:
+    title: PoliciesResponse1
+    type: object
+    properties:
+      data:
+        description: Array of policy objects.
+        type: array
+        items:
+          $ref: '#/definitions/Data24'
+    required:
+    - data
+  Data24:
+    title: Data24
+    description: All values that describe this policy resource are listed in here.
+    type: object
+    properties:
+      type:
+        description: The type of resource being represented.
+        example: policy
+        type: string
+        default: policy
+      id:
+        type: string
+        format: uuid
+      attributes:
+        $ref: '#/definitions/Attributes6'
+      relationships:
+        $ref: '#/definitions/Relationships3'
+      included:
+        description: >-
+          Array of included objects which provide additional data about an object from the
+
+          above `data.relationships`.
+        type: array
+        items:
+          type: object
+    required:
+    - type
+    - id
+    - attributes
+    - relationships
+    - included
+  Attributes6:
+    title: Attributes6
+    description: Attributes that describe a policy resource with optional writeable money fields.
+    type: object
+    properties:
+      created_date:
+        description: Date time when this resource was created in our system.
+        example: 2018-08-01T10:41:32.437818+0000
+        type: string
+        format: date-time
+      modified_date:
+        description: Date time when this resource was last modified in our system.
+        example: 2018-08-01T10:41:32.437833+0000
+        type: string
+        format: date-time
+      document_id:
+        description: UUID that identifies the document for this policy.
+        example: 530c8393-ebb6-4625-a4be-fe9bc5a75d4a
+        type: string
+        format: uuid
+      actual_end_date:
+        description: The end date for this policy if it has been ended.
+        example: 2019-06-01T00:00:00.000000+0000
+        type: string
+        format: date-time
+      status:
+        $ref: '#/definitions/Status'
+      earned_premium:
+        description: Our calculated earned premium thus far for this policy.
+        example: '100.00000'
+        type: string
+        pattern: ^[0-9]+(\.[0-9]{5})?$
+      earned_tax:
+        description: Our calculated earned tax thus far for this policy.
+        example: '0.01644'
+        type: string
+        pattern: ^[0-9]+(\.[0-9]{5})?$
+      earned_fees:
+        description: Our calculated earned fees thus far for this policy.
+        example: '0.10142'
+        type: string
+        pattern: ^[0-9]+(\.[0-9]{5})?$
+      cancel_reason:
+        description: A value from the set denoting the reason for policy cancellation.
+        example: fraud
+        type: string
+      cancel_description:
+        description: User provided description for why policy was cancelled.
+        example: Client committed fraud when applying for this policy.
+        type: string
+      policy_number:
+        description: A unique alphanumeric string used as a human-readable value for the Policy.
+        example: BLU-XX-2FM83109D
+        type: string
+        pattern: ^BLU-[0-9a-zA-Z]{2}-[0-9a-zA-Z]{9}$
+      effective_date:
+        description: The date and time this policy went into effect.
+        example: 2018-08-01T00:00:00.000000+0000
+        type: string
+        format: date-time
+      external_reference:
+        description: Any value you wish to associate with this policy such as an ID from your system.
+        example: 000000001
+        type: string
+      limit:
+        description: A value from the set denoting the user-selected limit of coverage. This is dependent on your product's configuration.
+        example: '1000000'
+        type: string
+        pattern: ^[0-9]+(\.[0-9]{1,2})?$
+      deductible:
+        description: A value from the set denoting the user-selected deductible of coverage. This is dependent on your product's configuration.
+        example: '1000'
+        type: string
+        pattern: ^[0-9]+(\.[0-9]{1,2})?$
+      policy_state:
+        $ref: '#/definitions/PolicyState'
+      metadata:
+        description: Additional data about the policy. The required metadata fields are specific to your product.
+        type: object
+      term_end_date:
+        description: The policy's natural term end date and time.
+        example: 2019-08-01T00:00:00.0000000+0000
+        type: string
+        format: date-time
+      installment_plan:
+        description: The installment plan schedule that determines invoicing and/or automatic payment dates.
+        example: ANNUAL
+        type: string
+      written_premium:
+        description: The written premium for this policy.
+        example: '1234.56'
+        type: string
+        pattern: ^[0-9]+(\.[0-9]{1,2})?$
+      issue_date:
+        description: The date and time that the policy was issued.
+        example: 2018-08-01T00:00:00.000000+0000
+        type: string
+        format: date-time
+      non_renewal_notice_date:
+        description: The most recently set date and time that a non-renewal notice was set to be sent.
+        example: 2018-08-01T00:00:00.000000+0000
+        type: string
+        format: date-time
+      cancellation_notice_date:
+        description: The most recently set date and time that a cancellation notice was set to be sent.
+        example: 2018-08-01T00:00:00.000000+0000
+        type: string
+        format: date-time
+      requested_cancellation_date:
+        description: The most recently set date and time that an allowed party requested a policy to be cancelled.
+        example: 2018-08-01T00:00:00.000000+0000
+        type: string
+        format: date-time
+      state_tax:
+        description: The term state tax
+        example: '12.34'
+        type: string
+        pattern: ^[0-9]+(\.[0-9]{1,2})?$
+      state_fees:
+        description: The aggregate term state fees.
+        example: '12.34'
+        type: string
+        pattern: ^[0-9]+(\.[0-9]{1,2})?$
+      service_fees:
+        description: The term aggregate service fees
+        example: '12.34'
+        type: string
+        pattern: ^[0-9]+(\.[0-9]{1,2})?$
+      term_premium:
+        description: This term premium . This value includes taxes only for admitted products
+        example: '1234.56'
+        type: string
+        pattern: ^[0-9]+(\.[0-9]{1,2})?$
+      billing_fees:
+        description: The term aggregate billing fees
+        example: '12.34'
+        type: string
+        pattern: ^[0-9]+(\.[0-9]{1,2})?$
+  QuotesRequest:
+    title: QuotesRequest
+    description: Data for creating a quote.
+    type: object
+    properties:
+      data:
+        $ref: '#/definitions/Data39'
+      included:
+        description: Array of included objects.
+        type: array
+        items:
+          type: object
+    required:
+    - data
+    - included
+  Data39:
+    title: Data39
+    description: All values for the request are in this top-level object.
+    type: object
+    properties:
+      type:
+        description: The type of resource being represented.
+        example: quote
+        type: string
+        default: quote
+      attributes:
+        $ref: '#/definitions/Attributes9'
+      relationships:
+        $ref: '#/definitions/Relationships9'
+    required:
+    - type
+    - attributes
+    - relationships
+  Attributes9:
+    title: Attributes9
+    description: Attributes for this object.
+    type: object
+    properties:
+      limit:
+        description: >-
+          A value from the set denoting the user-selected limit of coverage. This is dependent
+
+          on the product's configuration.
+        example: '1000'
+        type: string
+        pattern: ^[0-9]+(\.[0-9]{1,2})?$
+      deductible:
+        description: >-
+          A value from the set denoting the user-selected deductible of coverage. This is dependent
+
+          on the product's configuration.
+        example: '1000'
+        type: string
+        pattern: ^[0-9]+(\.[0-9]{1,2})?$
+      policy_state:
+        $ref: '#/definitions/PolicyState2'
+      effective_date:
+        description: Effective date for when the resulting policy would go into effective should it be generated.
+        type: string
+        format: date-time
+      term_end_date:
+        description: The desired end date for the policy that results from this quote. The span from effective_date to this term_end_date must be allowable by the product's terms.
+        example: 2018-08-01T00:00:00+00:00
+        type: string
+        format: date-time
+      external_reference:
+        description: Any value you wish to associate with this policy such as an ID from your system.
+        example: 000000001
+        type: string
+      metadata:
+        description: Additional data about the policy. The required metadata fields are specific to the product.
+        type: object
+      bindable_on:
+        description: The date this quote was rated and set to bindable.
+        example: 2018-08-01T00:00:00+00:00
+        type: string
+        format: date-time
+      term_premium:
+        description: Boost generated term premium for this quote.
+        example: '123.45'
+        type: string
+        pattern: ^[0-9]+(\.[0-9]{1,2})?$
+      valid_until:
+        description: The date this quote is valid until after which point a new quote will need to be generated.
+        example: 2018-08-01T00:00:00+00:00
+        type: string
+        format: date-time
+      convertable_on:
+        description: The date this quote satisfied all its dependencies to become a policy.
+        example: 2018-08-01T00:00:00+00:00
+        type: string
+        format: date-time
+      converted_on:
+        description: The date this quote was converted into a policy.
+        example: 2018-08-01T00:00:00+00:00
+        type: string
+        format: date-time
+      status:
+        $ref: '#/definitions/Status2'
+      installment_plans:
+        description: Payment installment plans that are available for this quote
+        type: object
+        additionalProperties:
+          type: object
+      min_premium:
+        description: Boost generated minimum premium for this product.
+        example: '12.34'
+        type: string
+        pattern: ^[0-9]+(\.[0-9]{1,2})?$
+      state_tax:
+        description: Any state taxes that apply to this quote.
+        example: '12.34'
+        type: string
+        pattern: ^[0-9]+(\.[0-9]{1,2})?$
+      state_fees:
+        description: Any state fees that apply to this quote.
+        example: '12.34'
+        type: string
+        pattern: ^[0-9]+(\.[0-9]{1,2})?$
+      service_fees:
+        description: Any service fees that apply to this quote.
+        example: '12.34'
+        type: string
+        pattern: ^[0-9]+(\.[0-9]{1,2})?$
+      billing_fees:
+        description: Any billing fees that apply to this quote.
+        example: '12.34'
+        type: string
+        pattern: ^[0-9]+(\.[0-9]{1,2})?$
+    required:
+    - policy_state
+    - effective_date
+    - term_end_date
+  PolicyState2:
+    title: PolicyState2
+    description: The two letter state code (including Washington DC).
+    example: AZ
+    x-enum-elements:
+    - name: AL
+      description: ''
+    - name: AK
+      description: ''
+    - name: AZ
+      description: ''
+    - name: AR
+      description: ''
+    - name: CA
+      description: ''
+    - name: CO
+      description: ''
+    - name: CT
+      description: ''
+    - name: DC
+      description: ''
+    - name: DE
+      description: ''
+    - name: FL
+      description: ''
+    - name: GA
+      description: ''
+    - name: HI
+      description: ''
+    - name: ID
+      description: ''
+    - name: IL
+      description: ''
+    - name: IN
+      description: ''
+    - name: IA
+      description: ''
+    - name: KS
+      description: ''
+    - name: KY
+      description: ''
+    - name: LA
+      description: ''
+    - name: ME
+      description: ''
+    - name: MD
+      description: ''
+    - name: MA
+      description: ''
+    - name: MI
+      description: ''
+    - name: MN
+      description: ''
+    - name: MS
+      description: ''
+    - name: MO
+      description: ''
+    - name: MT
+      description: ''
+    - name: NE
+      description: ''
+    - name: NV
+      description: ''
+    - name: NH
+      description: ''
+    - name: NJ
+      description: ''
+    - name: NM
+      description: ''
+    - name: NY
+      description: ''
+    - name: NC
+      description: ''
+    - name: ND
+      description: ''
+    - name: OH
+      description: ''
+    - name: OK
+      description: ''
+    - name: OR
+      description: ''
+    - name: PA
+      description: ''
+    - name: RI
+      description: ''
+    - name: SC
+      description: ''
+    - name: SD
+      description: ''
+    - name: TN
+      description: ''
+    - name: TX
+      description: ''
+    - name: UT
+      description: ''
+    - name: VT
+      description: ''
+    - name: VA
+      description: ''
+    - name: WA
+      description: ''
+    - name: WV
+      description: ''
+    - name: WI
+      description: ''
+    - name: WY
+      description: ''
+    type: string
+    enum:
+    - AL
+    - AK
+    - AZ
+    - AR
+    - CA
+    - CO
+    - CT
+    - DC
+    - DE
+    - FL
+    - GA
+    - HI
+    - ID
+    - IL
+    - IN
+    - IA
+    - KS
+    - KY
+    - LA
+    - ME
+    - MD
+    - MA
+    - MI
+    - MN
+    - MS
+    - MO
+    - MT
+    - NE
+    - NV
+    - NH
+    - NJ
+    - NM
+    - NY
+    - NC
+    - ND
+    - OH
+    - OK
+    - OR
+    - PA
+    - RI
+    - SC
+    - SD
+    - TN
+    - TX
+    - UT
+    - VT
+    - VA
+    - WA
+    - WV
+    - WI
+    - WY
+  Status2:
+    title: Status2
+    description: The status of the quote.
+    example: draft
+    x-enum-elements:
+    - name: draft
+      description: ''
+    - name: bindable
+      description: ''
+    - name: convertable
+      description: ''
+    - name: converted
+      description: ''
+    - name: expired
+      description: ''
+    type: string
+    enum:
+    - draft
+    - bindable
+    - convertable
+    - converted
+    - expired
+  InstallmentPlan2:
+    title: InstallmentPlan2
+    type: object
+    properties:
+      billing_period:
+        description: The billing period for this installment plan entry.
+        example: 2018-08-01T00:00:00+00:00
+        type: string
+        format: date
+      amount_due:
+        description: Boost generated amount due for this installment plan entry.
+        example: '123.45'
+        type: string
+        pattern: ^[0-9]+(\.[0-9]{1,2})?$
+      due_date:
+        description: The date on which payment is due for this billing period.
+        example: 2018-08-01T00:00:00+00:00
+        type: string
+        format: date
+      taxes:
+        description: Boost generated taxes due for this installment plan entry.
+        example: '12.34'
+        type: string
+        pattern: ^[0-9]+(\.[0-9]{1,2})?$
+      fees:
+        description: Boost generated fees due for this installment plan entry.
+        example: '12.34'
+        type: string
+        pattern: ^[0-9]+(\.[0-9]{1,2})?$
+    required:
+    - billing_period
+    - amount_due
+    - due_date
+    - taxes
+    - fees
+  Relationships9:
+    title: Relationships9
+    description: Related items.
+    type: object
+    properties:
+      coverages:
+        $ref: '#/definitions/Coverages2'
+      customer:
+        $ref: '#/definitions/Customer2'
+      insured_risk:
+        $ref: '#/definitions/InsuredRisk2'
+      product:
+        $ref: '#/definitions/Product6'
+    required:
+    - customer
+    - product
+  Coverages2:
+    title: Coverages2
+    description: List of coverages that will be created at the same time as this resource.
+    type: object
+    properties:
+      data:
+        description: List of objects with coverage local IDs.
+        type: array
+        items:
+          $ref: '#/definitions/Data40'
+        uniqueItems: true
+    required:
+    - data
+  Data40:
+    title: Data40
+    type: object
+    properties:
+      type:
+        description: The type of resource being represented.
+        example: coverage
+        type: string
+        default: coverage
+      lid:
+        description: The local ID that ties this resource to a related object in `data.included`.
+        example: '2'
+        type: string
+    required:
+    - type
+    - lid
+  Customer2:
+    title: Customer2
+    description: Customer that will be created at the same time as this resource.
+    type: object
+    properties:
+      data:
+        $ref: '#/definitions/Data41'
+    required:
+    - data
+  Data41:
+    title: Data41
+    description: Provided data for this customer relationship with local ID.
+    type: object
+    properties:
+      type:
+        description: The type of resource being represented.
+        example: customer
+        type: string
+        default: customer
+      lid:
+        description: The local ID that ties this resource to a related object in `data.included`.
+        example: '2'
+        type: string
+    required:
+    - type
+    - lid
+  InsuredRisk2:
+    title: InsuredRisk2
+    description: Insured risk that will be created at the same time as this resource.
+    type: object
+    properties:
+      data:
+        $ref: '#/definitions/Data42'
+    required:
+    - data
+  Data42:
+    title: Data42
+    description: Provided data for this insured risk relationship with local ID.
+    type: object
+    properties:
+      type:
+        description: The type of resource being represented.
+        example: insured_risk
+        type: string
+        default: insured_risk
+      lid:
+        description: The local ID that ties this resource to a related object in `data.included`.
+        example: '2'
+        type: string
+    required:
+    - type
+    - lid
+  Product6:
+    title: Product6
+    description: >-
+      Boost supplied value representing the specific product type. The product's configuration
+
+      will determine allowable values for the Policy, such as limit and deductible.
+    type: object
+    properties:
+      data:
+        $ref: '#/definitions/Data43'
+    required:
+    - data
+  Data43:
+    title: Data43
+    description: Provided data for this product relationship.
+    type: object
+    properties:
+      type:
+        description: The type of resource being represented.
+        example: product
+        type: string
+        default: product
+      id:
+        description: Unique Boost-generated UUID that identifies this resource.
+        example: d64d47eb-c7a6-4128-985b-0ecc79284608
+        type: string
+        format: uuid
+    required:
+    - type
+    - id
+  Included3:
+    title: Included3
+    type: object
+    properties:
+      type:
+        description: The type of resource being represented.
+        example: coverage
+        type: string
+        default: coverage
+      lid:
+        description: The local ID that ties this resource to a related object in `data.relationships`.
+        example: '2'
+        type: string
+      attributes:
+        $ref: '#/definitions/Attributes10'
+      relationships:
+        $ref: '#/definitions/Relationships10'
+    required:
+    - type
+    - lid
+    - attributes
+    - relationships
+  Attributes10:
+    title: Attributes10
+    description: Attributes for this object.
+    type: object
+    properties:
+      deductible:
+        description: >-
+          A value from the set denoting the user-selected deductible of coverage. This is dependent
+
+          on the product's configuration.
+        example: '1000'
+        type: string
+        pattern: ^[0-9]+(\.[0-9]{1,2})?$
+      limit:
+        description: >-
+          A value from the set denoting the user-selected limit of coverage. This is dependent
+
+          on the product's configuration.
+        example: '1000'
+        type: string
+        pattern: ^[0-9]+(\.[0-9]{1,2})?$
+      premium:
+        description: Calculated premium for this coverage which is included in the policy's term premium.
+        example: '100.00'
+        type: string
+        pattern: ^[0-9]+(\.[0-9]{1,2})?$
+      metadata:
+        description: Additional data about the policy. The required metadata fields are specific to the product.
+        type: object
+  Relationships10:
+    title: Relationships10
+    description: Related items.
+    type: object
+    properties:
+      product_coverage:
+        $ref: '#/definitions/ProductCoverage'
+    required:
+    - product_coverage
+  ProductCoverage:
+    title: ProductCoverage
+    description: Product coverage that applies to this policy.
+    type: object
+    properties:
+      data:
+        $ref: '#/definitions/Data44'
+    required:
+    - data
+  Data44:
+    title: Data44
+    description: Provided data for this product coverage relationship.
+    type: object
+    properties:
+      type:
+        description: The type of resource being represented.
+        example: product_coverage
+        type: string
+        default: product_coverage
+      id:
+        description: Unique Boost-generated UUID that identifies this resource.
+        example: d64d47eb-c7a6-4128-985b-0ecc79284608
+        type: string
+        format: uuid
+    required:
+    - type
+    - id
+  Included31:
+    title: Included31
+    type: object
+    properties:
+      type:
+        description: The type of resource being represented.
+        example: customer
+        type: string
+        default: customer
+      lid:
+        description: The local ID that ties this resource to a related object in `data.relationships`.
+        example: '2'
+        type: string
+      attributes:
+        $ref: '#/definitions/Attributes11'
+    required:
+    - type
+    - lid
+    - attributes
+  Attributes11:
+    title: Attributes11
+    description: The insured entity.
+    type: object
+    properties:
+      external_reference:
+        description: A reference that can be used to identify this customer in your system.
+        example: d64d47eb-c7a6-4128-985b-0ecc79284608
+        type: string
+      entity_type:
+        $ref: '#/definitions/EntityType'
+      business_name:
+        description: The legal name of the business.
+        example: Acme, Inc.
+        type: string
+      first_name:
+        description: The first name of the contact.
+        example: John
+        type: string
+      last_name:
+        description: The last name of the contact.
+        example: Smith
+        type: string
+      email:
+        description: The email address of the contact.
+        example: john.smith@example.com
+        type: string
+      phone:
+        description: The primary phone number of the contact.
+        example: '9175551212'
+        type: string
+      website:
+        description: The website of the contact.
+        example: https://www.insurtech.dev
+        type: string
+      mailing_address:
+        $ref: '#/definitions/MailingAddress'
+      billing_address:
+        $ref: '#/definitions/BillingAddress'
+    required:
+    - entity_type
+    - first_name
+    - last_name
+    - email
+    - phone
+    - mailing_address
+  EntityType:
+    title: EntityType
+    description: The kind of customer this is.
+    example: business
+    x-enum-elements:
+    - name: person
+      description: ''
+    - name: business
+      description: ''
+    type: string
+    enum:
+    - person
+    - business
+  MailingAddress:
+    title: MailingAddress
+    description: The mailing address of this customer.
+    type: object
+    properties:
+      address1:
+        description: The first line of the address.
+        example: 123 Main St
+        type: string
+      address2:
+        description: The second line of the address.
+        example: Suite 123
+        type: string
+      city:
+        description: The city of the address.
+        example: New York
+        type: string
+      state:
+        $ref: '#/definitions/State'
+      zip:
+        description: 5 or 10 character postal code of the address.
+        example: '10016'
+        type: string
+        pattern: ^[0-9]{5}(-[0-9]{4})?$
+    required:
+    - address1
+    - city
+    - state
+    - zip
+  State:
+    title: State
+    description: Two letter state code of the address.
+    example: NY
+    x-enum-elements:
+    - name: AL
+      description: ''
+    - name: AK
+      description: ''
+    - name: AZ
+      description: ''
+    - name: AR
+      description: ''
+    - name: CA
+      description: ''
+    - name: CO
+      description: ''
+    - name: CT
+      description: ''
+    - name: DC
+      description: ''
+    - name: DE
+      description: ''
+    - name: FL
+      description: ''
+    - name: GA
+      description: ''
+    - name: HI
+      description: ''
+    - name: ID
+      description: ''
+    - name: IL
+      description: ''
+    - name: IN
+      description: ''
+    - name: IA
+      description: ''
+    - name: KS
+      description: ''
+    - name: KY
+      description: ''
+    - name: LA
+      description: ''
+    - name: ME
+      description: ''
+    - name: MD
+      description: ''
+    - name: MA
+      description: ''
+    - name: MI
+      description: ''
+    - name: MN
+      description: ''
+    - name: MS
+      description: ''
+    - name: MO
+      description: ''
+    - name: MT
+      description: ''
+    - name: NE
+      description: ''
+    - name: NV
+      description: ''
+    - name: NH
+      description: ''
+    - name: NJ
+      description: ''
+    - name: NM
+      description: ''
+    - name: NY
+      description: ''
+    - name: NC
+      description: ''
+    - name: ND
+      description: ''
+    - name: OH
+      description: ''
+    - name: OK
+      description: ''
+    - name: OR
+      description: ''
+    - name: PA
+      description: ''
+    - name: RI
+      description: ''
+    - name: SC
+      description: ''
+    - name: SD
+      description: ''
+    - name: TN
+      description: ''
+    - name: TX
+      description: ''
+    - name: UT
+      description: ''
+    - name: VT
+      description: ''
+    - name: VA
+      description: ''
+    - name: WA
+      description: ''
+    - name: WV
+      description: ''
+    - name: WI
+      description: ''
+    - name: WY
+      description: ''
+    type: string
+    enum:
+    - AL
+    - AK
+    - AZ
+    - AR
+    - CA
+    - CO
+    - CT
+    - DC
+    - DE
+    - FL
+    - GA
+    - HI
+    - ID
+    - IL
+    - IN
+    - IA
+    - KS
+    - KY
+    - LA
+    - ME
+    - MD
+    - MA
+    - MI
+    - MN
+    - MS
+    - MO
+    - MT
+    - NE
+    - NV
+    - NH
+    - NJ
+    - NM
+    - NY
+    - NC
+    - ND
+    - OH
+    - OK
+    - OR
+    - PA
+    - RI
+    - SC
+    - SD
+    - TN
+    - TX
+    - UT
+    - VT
+    - VA
+    - WA
+    - WV
+    - WI
+    - WY
+  BillingAddress:
+    title: BillingAddress
+    description: The billing address of this customer.
+    type: object
+    properties:
+      address1:
+        description: The first line of the address.
+        example: 123 Main St
+        type: string
+      address2:
+        description: The second line of the address.
+        example: Suite 123
+        type: string
+      city:
+        description: The city of the address.
+        example: New York
+        type: string
+      state:
+        $ref: '#/definitions/State'
+      zip:
+        description: 5 or 10 character postal code of the address.
+        example: '10016'
+        type: string
+        pattern: ^[0-9]{5}(-[0-9]{4})?$
+    required:
+    - address1
+    - city
+    - state
+    - zip
+  Included32:
+    title: Included32
+    type: object
+    properties:
+      type:
+        description: The type of resource being represented.
+        example: insured_risk
+        type: string
+        default: insured_risk
+      lid:
+        description: The local ID that ties this resource to a related object in `data.relationships`.
+        example: '2'
+        type: string
+      attributes:
+        $ref: '#/definitions/Attributes12'
+    required:
+    - type
+    - lid
+    - attributes
+  Attributes12:
+    title: Attributes12
+    description: The insured risk.
+    type: object
+    properties:
+      factors:
+        description: Object representation of the insured risk.
+        example:
+          key: value
+        type: object
+    required:
+    - factors
+  QuotesResponse:
+    title: QuotesResponse
+    description: Data representing a quote.
+    type: object
+    properties:
+      data:
+        $ref: '#/definitions/Data45'
+      included:
+        description: Array of included objects.
+        type: array
+        items:
+          type: object
+    required:
+    - data
+    - included
+  Data45:
+    title: Data45
+    description: All values for this quote are in this top-level object.
+    type: object
+    properties:
+      type:
+        description: The type of resource being represented.
+        example: quote
+        type: string
+        default: quote
+      id:
+        description: Unique Boost generated identifier for this resource that adheres to the above pattern.
+        example: BLU-XX-T63XWYHFE
+        type: string
+        pattern: ^BLU-[0-9a-zA-Z]{2}-[0-9a-zA-Z]{9}$
+      attributes:
+        $ref: '#/definitions/Attributes9'
+      relationships:
+        $ref: '#/definitions/Relationships11'
+    required:
+    - type
+    - id
+    - attributes
+    - relationships
+  Relationships11:
+    title: Relationships11
+    description: Related items.
+    type: object
+    properties:
+      coverages:
+        $ref: '#/definitions/Coverages3'
+      customer:
+        $ref: '#/definitions/Customer3'
+      insured_risk:
+        $ref: '#/definitions/InsuredRisk3'
+      product:
+        $ref: '#/definitions/Product6'
+      agent:
+        $ref: '#/definitions/Agent6'
+    required:
+    - customer
+    - insured_risk
+    - product
+  Coverages3:
+    title: Coverages3
+    description: List of coverages that were created.
+    type: object
+    properties:
+      data:
+        description: List of objects.
+        type: array
+        items:
+          $ref: '#/definitions/Data46'
+        uniqueItems: true
+    required:
+    - data
+  Data46:
+    title: Data46
+    type: object
+    properties:
+      type:
+        description: The type of resource being represented.
+        example: coverage
+        type: string
+        default: coverage
+      id:
+        description: Unique Boost-generated UUID that identifies this resource.
+        example: d64d47eb-c7a6-4128-985b-0ecc79284608
+        type: string
+        format: uuid
+    required:
+    - type
+    - id
+  Customer3:
+    title: Customer3
+    description: Customer that was created.
+    type: object
+    properties:
+      data:
+        $ref: '#/definitions/Data47'
+    required:
+    - data
+  Data47:
+    title: Data47
+    description: Provided data for this customer relationship.
+    type: object
+    properties:
+      type:
+        description: The type of resource being represented.
+        example: customer
+        type: string
+        default: customer
+      id:
+        description: Unique Boost-generated UUID that identifies this resource.
+        example: d64d47eb-c7a6-4128-985b-0ecc79284608
+        type: string
+        format: uuid
+    required:
+    - type
+    - id
+  InsuredRisk3:
+    title: InsuredRisk3
+    description: Insured risk attached to the quote.
+    type: object
+    properties:
+      data:
+        $ref: '#/definitions/Data47'
+    required:
+    - data
+  Agent6:
+    title: Agent6
+    description: The Boost UUID of the agent.
+    type: object
+    properties:
+      data:
+        $ref: '#/definitions/Data43'
+    required:
+    - data
+  Included4:
+    title: Included4
+    type: object
+    properties:
+      type:
+        description: The type of resource being represented.
+        example: coverage
+        type: string
+        default: coverage
+      id:
+        description: Unique Boost-generated UUID that identifies this resource.
+        example: d64d47eb-c7a6-4128-985b-0ecc79284608
+        type: string
+        format: uuid
+      lid:
+        description: The local ID that ties this resource to a related object in `data.relationships`.
+        example: '2'
+        type: string
+      attributes:
+        $ref: '#/definitions/Attributes10'
+      relationships:
+        $ref: '#/definitions/Relationships10'
+    required:
+    - type
+    - id
+    - lid
+    - attributes
+    - relationships
+  Included41:
+    title: Included41
+    type: object
+    properties:
+      type:
+        description: The type of resource being represented.
+        example: customer
+        type: string
+        default: customer
+      id:
+        description: Unique Boost-generated UUID that identifies this resource.
+        example: d64d47eb-c7a6-4128-985b-0ecc79284608
+        type: string
+        format: uuid
+      lid:
+        description: The local ID that ties this resource to a related object in `data.relationships`.
+        example: '2'
+        type: string
+      attributes:
+        $ref: '#/definitions/Attributes11'
+      relationships:
+        $ref: '#/definitions/Relationships13'
+    required:
+    - type
+    - id
+    - lid
+    - attributes
+    - relationships
+  Relationships13:
+    title: Relationships13
+    description: Related items.
+    type: object
+    properties:
+      agent:
+        $ref: '#/definitions/Agent6'
+    required:
+    - agent
+  Included42:
+    title: Included42
+    type: object
+    properties:
+      type:
+        description: The type of resource being represented.
+        example: insured_risk
+        type: string
+        default: insured_risk
+      id:
+        description: Unique Boost-generated UUID that identifies this resource.
+        example: d64d47eb-c7a6-4128-985b-0ecc79284608
+        type: string
+        format: uuid
+      lid:
+        description: The local ID that ties this resource to a related object in `data.relationships`.
+        example: '2'
+        type: string
+      attributes:
+        $ref: '#/definitions/Attributes12'
+      relationships:
+        $ref: '#/definitions/Relationships14'
+    required:
+    - type
+    - id
+    - lid
+    - attributes
+    - relationships
+  Relationships14:
+    title: Relationships14
+    description: Related items.
+    type: object
+    properties:
+      product:
+        $ref: '#/definitions/Product6'
+      agent:
+        $ref: '#/definitions/Agent6'
+    required:
+    - product
+    - agent
+  Quotes400Error1:
+    title: Quotes400Error1
+    type: object
+    properties:
+      errors:
+        type: array
+        items:
+          $ref: '#/definitions/Errors1'
+  Quotes401Error1:
+    title: Quotes401Error1
+    type: object
+    properties:
+      errors:
+        $ref: '#/definitions/Errors'
+  Quotes500Error1:
+    title: Quotes500Error1
+    type: object
+    properties:
+      errors:
+        type: array
+        items:
+          $ref: '#/definitions/Errors1'
+security:
+- auth: []
+tags:
+- name: authentication
+- name: quoting
+  description: Quote Management
+- name: policy
+  description: Policy Management
+- name: customer
+  description: Customer Management
+- name: insured-risk
+  description: Insured Risk Management
+- name: document
+  description: >
+    The endpoints to create and manage Document models. Documents are always a sub-resource to a primary object in the Boost Platform.
+
+    Documents can be created by uploading a supporting document or through the generation of a `primary` document as part of business logic
+
+    related to another operation.
