@@ -11,7 +11,7 @@ jobs:
     runs-on: ubuntu-latest
     
     env: 
-      API_ENTITY_ID: 618529593a1f4532cfd7e6a4
+      API_ENTITY_ID: 618529593a1f4532cfd7e6a4  # Replace this ID with the APIENTITYID of your published portal https://docs.apimatic.io/manage-apis/get-api-keys/
     steps:
     
     - name : checkout-repo
