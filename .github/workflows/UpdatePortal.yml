@@ -10,20 +10,12 @@ on:
 jobs:
   update-portal:
     runs-on: ubuntu-latest
-    
-    env: 
-      API_ENTITY_ID: 618529593a1f4532cfd7e6a4  #  Replace this ID with the APIENTITYID of your published portal https://docs.apimatic.io/manage-apis/get-api-keys/
+  
     steps:
     
     - name : checkout-repo
       uses: actions/checkout@v1
       id: checkout-repo 
-
-    - name: Install zip action
-      uses: montudor/action-zip@v0.1.1    
-      
-    - name: install zip 
-      run: sudo apt-get install zip unzip
       
     - name: zip files
       run: zip -r portal-input.zip *
@@ -34,7 +26,7 @@ jobs:
       working-directory: Specs
 
     - name: inplace-import
-      run: curl -X PUT --url 'https://www.apimatic.io/api/api-entities/${{ env.API_ENTITY_ID }}' -H 'content-type:multipart/form-data' -H 'Authorization:X-Auth-Key ${{ secrets.API_KEY }}' -F 'file=@Specs/portal-input.zip'
+      run: curl -X PUT --url 'https://www.apimatic.io/api/api-entities/${{ secrets.API_ENTITY_ID }}' -H 'content-type:multipart/form-data' -H 'Authorization:X-Auth-Key ${{ secrets.API_KEY }}' -F 'file=@Specs/portal-input.zip'
 
 # Uncomment the following step to publish your Portal. The portal must first be published manually for this step to work successfully.
 #     - name: publish-portal
