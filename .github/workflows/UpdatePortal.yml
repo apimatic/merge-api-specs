@@ -26,7 +26,7 @@ jobs:
       working-directory: Specs
 
     - name: inplace-import
-      run: curl -X PUT --url 'https://www.apimatic.io/api/api-entities/${{ secrets.API_ENTITY_ID }}' -H 'content-type:multipart/form-data' -H 'Authorization:X-Auth-Key ${{ secrets.API_KEY }}' -H "Accept:application/json" -F 'file=@Specs/portal-input.zip'
+      run: curl -X PUT --url 'https://api.apimatic.io/api-entities/${{ secrets.API_ENTITY_ID }}' -H 'content-type:multipart/form-data' -H 'Authorization:X-Auth-Key ${{ secrets.API_KEY }}' -H "Accept:application/json" -F 'file=@Specs/portal-input.zip'
 
 # Uncomment the following step to publish your Portal. The portal must first be published manually for this step to work successfully.
 #     - name: publish-portal
